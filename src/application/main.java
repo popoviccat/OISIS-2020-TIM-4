@@ -3,35 +3,41 @@ package application;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import lib.JTabbedPaneCloseButton;
+import utils.MyMouseListener;
+import utils.MyMouseListener;
 
 
 public class main extends JFrame {
-
-
-	
-
 		
 		private static final long serialVersionUID = -3987690974281770416L;
 		
 		private JPanel mainToolbar;
-		private JSplitPane mainSplitPane;
 		private JPanel leftPanel;
 		private JTabbedPaneCloseButton tabbedPane;
 		
@@ -44,7 +50,7 @@ public class main extends JFrame {
 
 		private main() {
 			this.createToolbar();
-			this.createSplitPane();
+			this.createMainPanel();
 			this.initPosition();
 		}
 		
@@ -63,36 +69,109 @@ public class main extends JFrame {
 
 		}
 
-		private void createSplitPane() {
+		private void createMainPanel() {
 			this.createLeftPanel();
 			this.createTabbedPane();
-		
+			JLayeredPane lpane = new JLayeredPane();
+			JPanel rightPanel = new JPanel();
+			
+			
 			
 			add(leftPanel,BorderLayout.WEST);
-			leftPanel.setPreferredSize(new Dimension(160,1200));
-			leftPanel.setBackground(mint);
-			add(tabbedPane,BorderLayout.CENTER);
+			leftPanel.setPreferredSize(new Dimension(200,600));
+			leftPanel.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
+			leftPanel.setBackground(Color.WHITE);
 			
-			tabbedPane.setBackground(Color.PINK);
+			
+			 ImagePanel panel = new ImagePanel(new ImageIcon("images/bg_image.jpg").getImage());
+		     rightPanel.add(panel);
+			
+		     add(lpane, BorderLayout.CENTER);
+		   
+			lpane.add(rightPanel,new Integer(0), 0);
+			rightPanel.setBorder(BorderFactory.createMatteBorder(1,0,1,1,Color.BLACK));
+			rightPanel.setBackground(mint);
+			rightPanel.setBounds(0, 0, 784, 535);
+			
+			lpane.add(tabbedPane, new Integer(1), 1);
+			tabbedPane.setPreferredSize(new Dimension(800,700));
+			tabbedPane.setBounds(0, 0, 784, 535);
+			tabbedPane.setBorder(BorderFactory.createEmptyBorder());
+			tabbedPane.setBackground(Color.WHITE);
+		}
+		
+		class ImagePanel extends JPanel {
+
+			  /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			private Image img;
+
+			  public ImagePanel(String img) {
+			    this(new ImageIcon(img).getImage());
+			  }
+
+			  public ImagePanel(Image img) {
+			    this.img = img;
+			    Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
+			    setPreferredSize(size);
+			    setMinimumSize(size);
+			    setMaximumSize(size);
+			    setSize(size);
+			    setLayout(null);
+			  }
+
+			  public void paintComponent(Graphics g) {
+			    g.drawImage(img, 0, 0, null);
+			  }
 		}
 
 		private void createLeftPanel() {
+			
 			leftPanel = new JPanel();
+			GridBagConstraints gbc = new GridBagConstraints();
+			leftPanel.setLayout(new GridBagLayout());
+			Icon icon = new ImageIcon("images/cart.png");
+			Icon logoI = new ImageIcon("images/Logo.png");
+			float f = 15;
+			
+			JLabel logo = new JLabel(logoI);
+			
 			JButton btn1= new JButton("Korisnici");
+			btn1.setFont(btn1.getFont().deriveFont(f));
 			btn1.setBackground(peach);
-			btn1.setPreferredSize(new Dimension(120,40));
+			btn1.setPreferredSize(new Dimension(130,40));
+			btn1.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+			btn1.addMouseListener(new MyMouseListener(btn1));
+			
 			JButton btn2= new JButton("Lekovi");
+			btn2.setFont(btn1.getFont().deriveFont(f));
 			btn2.setBackground(peach);
-			btn2.setPreferredSize(new Dimension(120,40));
+			btn2.setPreferredSize(new Dimension(130,40));
+			btn2.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+			btn2.addMouseListener(new MyMouseListener(btn2));
+			
 			JButton btn3= new JButton("Recepti");
+			btn3.setFont(btn1.getFont().deriveFont(f));
 			btn3.setBackground(peach);
-			btn3.setPreferredSize(new Dimension(120,40));
+			btn3.setPreferredSize(new Dimension(130,40));
+			btn3.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+			btn3.addMouseListener(new MyMouseListener(btn3));
+			
 			JButton btn4= new JButton("Izvestaj");
+			btn4.setFont(btn1.getFont().deriveFont(f));
 			btn4.setBackground(peach);
-			btn4.setPreferredSize(new Dimension(120,40));
-			JButton btn5= new JButton("Korpa");
+			btn4.setPreferredSize(new Dimension(130,40));
+			btn4.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+			btn4.addMouseListener(new MyMouseListener(btn4));
+			
+			JButton btn5= new JButton("Korpa", icon);
+			btn5.setFont(btn1.getFont().deriveFont(f));
 			btn5.setBackground(peach);
-			btn5.setPreferredSize(new Dimension(120,40));
+			btn5.setPreferredSize(new Dimension(130,40));
+			btn5.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+			btn5.addMouseListener(new MyMouseListener(btn5));
 			
 			btn1.addActionListener(new ActionListener() {
 				
@@ -112,11 +191,36 @@ public class main extends JFrame {
 				}
 			});
 			
-			leftPanel.add(btn1);
-			leftPanel.add(btn2);
-			leftPanel.add(btn3);
-			leftPanel.add(btn4);
-			leftPanel.add(btn5, BorderLayout.SOUTH);
+			gbc.insets = new Insets(10, 0, 10, 0);
+			
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.insets = new Insets (20,0,10,0);
+			leftPanel.add(logo, gbc);
+			
+			gbc.gridx = 0;
+			gbc.gridy = 1;
+			gbc.insets = new Insets (10,0,10,0);
+			leftPanel.add(btn1, gbc);
+			
+			gbc.gridx = 0;
+			gbc.gridy = 2;
+			leftPanel.add(btn2, gbc);
+			
+			gbc.gridx = 0;
+			gbc.gridy = 3;
+			leftPanel.add(btn3, gbc);
+			
+			gbc.gridx = 0;
+			gbc.gridy = 4;
+			leftPanel.add(btn4, gbc);
+		
+			gbc.gridx = 0;
+			gbc.gridy = 5;
+			gbc.weighty = 1.0;
+			gbc.anchor = GridBagConstraints.PAGE_END;
+			gbc.insets = new Insets (0,0,30,0);
+			leftPanel.add(btn5, gbc);
 		}
 		
 			
@@ -127,9 +231,10 @@ public class main extends JFrame {
 
 		
 		private void initPosition() {
-			this.setSize(800, 600);
+			this.setSize(1000, 600);
 			this.setLocationRelativeTo(null);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setTitle("Apoteka");
 			this.setVisible(true);
 		}
 		
