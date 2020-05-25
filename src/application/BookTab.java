@@ -69,5 +69,4 @@ public class BookTab extends JPanel {
 	public String getName() {
 		return this.bookName;
 	}
-
 }
