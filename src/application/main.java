@@ -24,13 +24,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import java.awt.Graphics2D;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import lib.JTabbedPaneCloseButton;
 import utils.MyMouseListener;
-import utils.MyMouseListener;
+import utils.MyWindowListener;
 
 
 public class main extends JFrame {
@@ -44,6 +44,7 @@ public class main extends JFrame {
 		int tabNumber = 0;
 		Color peach = new Color(249, 229, 222);
 		Color mint = new Color(140,208,172);
+		
 		
 		// ========================= Singleton obrazac
 		private static main instance = null;
@@ -247,6 +248,7 @@ public class main extends JFrame {
 			this.setSize(1000, 600);
 			this.setLocationRelativeTo(null);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			addWindowListener(new MyWindowListener());
 			setTitle("Apoteka");
 			this.setIconImage(icon.getImage());
 			this.setVisible(true);
