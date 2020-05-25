@@ -32,8 +32,6 @@ public class BookTab extends JPanel {
 		JPanel topPanel = new JPanel();
 		JPanel centerPanel = new JPanel();
 		JPanel downPanel = new JPanel();
-		JPanel LDPanel = new JPanel();
-		JPanel RDPanel = new JPanel();
 		add(BorderLayout.PAGE_START, topPanel);
 		add(BorderLayout.PAGE_END, downPanel);
 		
