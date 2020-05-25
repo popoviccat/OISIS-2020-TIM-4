@@ -57,14 +57,9 @@ public class BookTab extends JPanel {
 	    final JComboBox<String> cb = new JComboBox<String>(choices);
 
 	    cb.setVisible(true);
-	    
-	   
 	    topPanel.add(cb);
-
-	    JButton btn = new JButton("OK");
 	    
-	   
-		
+	    JButton btn = new JButton("OK");	   
 		topPanel.add(btn);
 	   
 		
