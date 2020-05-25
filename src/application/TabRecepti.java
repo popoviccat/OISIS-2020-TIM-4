@@ -6,18 +6,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-public class BookTab extends JPanel {
+public class TabRecepti extends JPanel{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 7445755320045782268L;
+	private static final long serialVersionUID = 1392769694146741116L;
 
 	private JPanel topPanel;
 	
 	private String bookName;
 	
-	public BookTab(String text) {
+	public TabRecepti(String text) {
 		this.bookName = text;
 		this.setLayout(new BorderLayout());;
 		
@@ -48,3 +48,4 @@ public class BookTab extends JPanel {
 	}
 
 }
+

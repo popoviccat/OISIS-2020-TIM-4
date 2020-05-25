@@ -159,7 +159,7 @@ public class main extends JFrame {
 			btn3.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			btn3.addMouseListener(new MyMouseListener(btn3));
 			
-			JButton btn4= new JButton("Izvestaj");
+			JButton btn4= new JButton("Izveštaj");
 			btn4.setFont(btn1.getFont().deriveFont(f));
 			btn4.setBackground(peach);
 			btn4.setPreferredSize(new Dimension(130,40));
@@ -174,20 +174,32 @@ public class main extends JFrame {
 			btn5.addMouseListener(new MyMouseListener(btn5));
 			
 			btn1.addActionListener(new ActionListener() {
-				
-				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					addMyTabToTabbedPane("Knjiga " + (++tabNumber));
+					addTab_KorisniciToTabbedPane();
 				}
 			});
 			
 			btn2.addActionListener(new ActionListener() {
-				
-				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					addMyTabToTabbedPane("Knjiga " + (++tabNumber));
+					addTab_LekoviToTabbedPane();
+				}
+			});
+			
+			btn3.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addTab_ReceptiToTabbedPane();
+				}
+			});
+			
+			btn4.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addTab_IzvestajToTabbedPane();
+				}
+			});
+			
+			btn5.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addTab_KorpaToTabbedPane();
 				}
 			});
 			
@@ -231,21 +243,52 @@ public class main extends JFrame {
 
 		
 		private void initPosition() {
+			ImageIcon icon = createImageIcon("images/logo.png", true);
 			this.setSize(1000, 600);
 			this.setLocationRelativeTo(null);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setTitle("Apoteka");
+			this.setIconImage(icon.getImage());
 			this.setVisible(true);
 		}
-		
+
 		// dodavanje taba u TabbedPaned
-		private void addMyTabToTabbedPane(String bookName) {
+		private void addTab_KorisniciToTabbedPane() {
+			String title = "Korisnici"; 
 			// ucitavanje ikonice
-			ImageIcon icon = createImageIcon("images/img.png", true);
+			ImageIcon icon = createImageIcon("images/users.png", true);
 			// kreiranje instance MyTab
-			BookTab mt = new BookTab(bookName);
+			BookTab mt = new BookTab(title);
 			// dodavanje taba
-			tabbedPane.addTab(bookName, icon, mt, "Prvi tab - Tooltip");
+			tabbedPane.addTab(title, icon, mt);
+		}
+		
+		private void addTab_LekoviToTabbedPane() {
+			String title = "Lekovi"; 
+			ImageIcon icon = createImageIcon("images/drugs.png", true);
+			TabLekovi mt = new TabLekovi(title);
+			tabbedPane.addTab(title, icon, mt);
+		}
+		
+		private void addTab_ReceptiToTabbedPane() {
+			String title = "Recepti"; 
+			ImageIcon icon = createImageIcon("images/presc.png", true);
+			TabRecepti mt = new TabRecepti(title);
+			tabbedPane.addTab(title, icon, mt);
+		}
+		
+		private void addTab_IzvestajToTabbedPane() {
+			String title = "Izveštaj"; 
+			ImageIcon icon = createImageIcon("images/report.png", true);
+			BookTab mt = new BookTab(title);
+			tabbedPane.addTab(title, icon, mt);
+		}
+		
+		private void addTab_KorpaToTabbedPane() {
+			String title = "Korpa"; 
+			ImageIcon icon = createImageIcon("images/cart.png", true);
+			BookTab mt = new BookTab(title);
+			tabbedPane.addTab(title, icon, mt);
 		}
 		
 		public static void main(String[] args) {

@@ -21,6 +21,8 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 	 */
 	private static final long serialVersionUID = 6162048567980039381L;
 	
+	public static int countKor, countLek, countRec, countIz, countKorpa = 0;
+	
 	public JTabbedPaneCloseButton() {
         super();
     }
@@ -35,7 +37,41 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 
     @Override
     public void addTab(String title, Icon icon, Component component) {
-        addTab(title, icon, component, null);
+    	switch(title) {
+		case "Korisnici":
+			if (countKor < 1) {
+				addTab(title, icon, component, null);
+				countKor ++;
+			} else {}
+		break;
+		case "Lekovi":
+			if (countLek < 1) {
+				addTab(title, icon, component, null);
+				countLek ++;
+			} else {}
+		break;
+		case "Recepti":
+			if (countRec < 1) {
+				addTab(title, icon, component, null);
+				countRec ++;
+			} else {}
+		break;
+		case "Izveštaj":
+			if (countIz < 1) {
+				addTab(title, icon, component, null);
+				countIz ++;
+			} else {}
+		break;
+		case "Korpa":
+			if (countKorpa < 1) {
+				addTab(title, icon, component, null);
+				countKorpa ++;
+			} else {}
+			break;
+		default:
+			break;
+    	}
+    	
     }
 
     @Override
@@ -93,8 +129,25 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
             if(e.getSource() instanceof JButton){
                 JButton clickedButton = (JButton) e.getSource();
                 JTabbedPane tabbedPane = (JTabbedPane) clickedButton.getParent().getParent().getParent();
-                if (tab instanceof BookTab) {
-                	((BookTab)tab).saveBookState();
+              
+                	switch((tab).getName()) {
+                		case "Korisnici":
+                			countKor --;
+                		break;
+                		case "Lekovi":
+                			countLek --;
+                		break;
+                		case "Recepti":
+                			countRec --;
+                		break;
+                		case "Izveštaj":
+                			countIz --;
+                		break;
+                		case "Korpa":
+                			countKorpa --;
+                		break;
+                		default:;
+         
                 }
                 tabbedPane.remove(tab);
             }
