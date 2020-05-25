@@ -59,7 +59,6 @@ public class BookTab extends JPanel {
 	    
 	    JButton btn = new JButton("OK");	   
 		topPanel.add(btn);
-	  
 	}
 	
 	public void saveBookState() {
