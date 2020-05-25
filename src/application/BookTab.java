@@ -13,7 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.border.Border;
 
 public class BookTab extends JPanel {
 
@@ -27,21 +30,23 @@ public class BookTab extends JPanel {
 		this.bookName = text;
 		
 		
-		this.setLayout(new BorderLayout());;
+		this.setLayout(new BorderLayout());
+		
 		
 		JPanel topPanel = new JPanel();
-		JPanel centerPanel = new JPanel();
+		//JPanel centerPanel = new JPanel();
 		JPanel downPanel = new JPanel();
 		add(BorderLayout.PAGE_START, topPanel);
 		add(BorderLayout.PAGE_END, downPanel);
 		
 		
-		this.add(topPanel, BorderLayout.WEST);
+		
+		this.add(topPanel, BorderLayout.NORTH);
 		this.add(downPanel, BorderLayout.SOUTH);
-		this.add(centerPanel, BorderLayout.CENTER);
+		//this.add(centerPanel, BorderLayout.CENTER);
 
 	
-		JButton btnn = new JButton("Sačuvaj");
+		JButton btnn = new JButton("SaÄ�uvaj");
 		
 	    downPanel.add(btnn);
 	  
@@ -59,6 +64,16 @@ public class BookTab extends JPanel {
 	    
 	    JButton btn = new JButton("OK");	   
 		topPanel.add(btn);
+		
+		Object[] columns = new Object[] { "Korisničko ime", "Ime", "Prezime", "Tip korisnika" };
+		Object[][] data = {{"pera", "pera" ,"pera", "pera" } };
+		JTable table = new JTable(data,columns);
+		table.setVisible(true);
+		JScrollPane centerPanel = new JScrollPane(table);
+		centerPanel.setPreferredSize(new Dimension(200,200));
+		this.add(centerPanel, BorderLayout.CENTER);
+		
+	
 	}
 	
 	public void saveBookState() {
