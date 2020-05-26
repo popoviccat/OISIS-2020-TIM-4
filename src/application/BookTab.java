@@ -41,7 +41,7 @@ public class BookTab extends JPanel {
 		
 		
 		
-		this.add(topPanel, BorderLayout.EAST);
+		this.add(topPanel, BorderLayout.NORTH);
 		this.add(downPanel, BorderLayout.SOUTH);
 		//this.add(centerPanel, BorderLayout.CENTER);
 
@@ -66,7 +66,9 @@ public class BookTab extends JPanel {
 		topPanel.add(btn);
 		
 		Object[] columns = new Object[] { "Korisničko ime", "Ime", "Prezime", "Tip korisnika" };
-		Object[][] data = {{"pera", "pera" ,"pera", "pera" } };
+		Object[][] data = {{"aleksandar123", "Aleksandar" ,"Kovačević", "Administrator" },
+				           {"drnikola", "Nikola" ,"Lazić", "Lekar" },
+		                   {"bokica", "Bojana" ,"Jović", "Apotekar" }};
 		JTable table = new JTable(data,columns);
 		table.setVisible(true);
 		JScrollPane centerPanel = new JScrollPane(table);
