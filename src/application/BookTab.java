@@ -41,12 +41,12 @@ public class BookTab extends JPanel {
 		
 		
 		
-		this.add(topPanel, BorderLayout.NORTH);
+		this.add(topPanel, BorderLayout.EAST);
 		this.add(downPanel, BorderLayout.SOUTH);
 		//this.add(centerPanel, BorderLayout.CENTER);
 
 	
-		JButton btnn = new JButton("SaÄ�uvaj");
+		JButton btnn = new JButton("Sačuvaj");
 		
 	    downPanel.add(btnn);
 	  
