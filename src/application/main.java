@@ -307,7 +307,7 @@ public class main extends JFrame {
 		}
 		
 		private void addTab_IzvestajToTabbedPane() {
-			String title = "Izve≈°taj"; 
+			String title = "Izveötaj"; 
 			ImageIcon icon = createImageIcon("images/report.png", true);
 			BookTab mt = new BookTab(title);
 			tabbedPane.addTab(title, icon, mt);

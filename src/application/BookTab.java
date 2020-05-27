@@ -31,6 +31,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
+import javax.swing.border.EmptyBorder;
 
 import utils.RowImeFilter;
 import utils.RowPrezimeFilter;
@@ -71,7 +72,7 @@ public class BookTab extends JPanel {
 		//this.add(centerPanel, BorderLayout.CENTER);
 
 	
-		JButton btnn = new JButton("SaÄ�uvaj");
+		JButton btnn = new JButton("Sačuvaj");
 		
 	    downPanel.add(btnn);
 	  
@@ -90,27 +91,26 @@ public class BookTab extends JPanel {
 	    JButton btn = new JButton("OK");	   
 		topPanel.add(btn);
 		
-		initTable();
+		
 		initTFFilter();
 		//initTable table = new initTable();
 		//initTable.setVisible(true);
 		//JScrollPane centerPanel = new JScrollPane(table);
 		//centerPanel.setPreferredSize(new Dimension(200,200));
 		
-		
 		createTable();
-
 	}
 	
 	public void createTable() {
-		
-
+		JPanel container = new JPanel();
 		initTable();
-		initTFFilter();
-
+		container.setBackground(Color.white);
+		
+		this.add(container);
 		// Zaglavlje kolone se ne mora ruÄ�no ubacivati. JScrollPane Ä‡e odraditi
 		// taj posao.
-		add(new JScrollPane(tblStudenti));
+		container.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
+		container.add(new JScrollPane(tblStudenti), BorderLayout.CENTER);
 		add(tfFilter, BorderLayout.NORTH);
 	
 	}
@@ -118,7 +118,8 @@ public class BookTab extends JPanel {
 	private void initTable() {
 		tableModel = new MyTableModel();
 		tblStudenti = new JTable(tableModel);
-
+		
+		
 		tableSorter = new TableRowSorter<MyTableModel>(tableModel);
 		tableSorter.setComparator(0, new Comparator<String>() {
 
@@ -159,7 +160,7 @@ public class BookTab extends JPanel {
 
 		// PoÅ¾eljna veliÄ�ina pogleda tabele u okviru scrollpane-a. Layout
 		// manager uzima ovu osobinu u obzir.
-		tblStudenti.setPreferredScrollableViewportSize(new Dimension(500, 400));
+		tblStudenti.setPreferredScrollableViewportSize(new Dimension(700, 400));
 
 		// Å irenje tabele kompletno po visini pogleda scrollpane-a.
 		tblStudenti.setFillsViewportHeight(true);
