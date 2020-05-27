@@ -3,7 +3,7 @@ package lib;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 
-import application.BookTab;
+import application.TabKorisnici;
 
 import java.awt.*;
 import java.awt.event.MouseListener;

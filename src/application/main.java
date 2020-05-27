@@ -75,7 +75,7 @@ public class main extends JFrame {
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
 			JLabel helloMessage = new JLabel("Zdravo, Petar Petroviæ!");
-		    helloMessage.setFont(new Font("Arial", Font.PLAIN, 20));
+		    helloMessage.setFont(new Font("Ariel", Font.ITALIC, 20));
 		    layout.insets = new Insets(5, 30, 5, 30);
 		    layout.gridx = 0;
 		    layout.gridy = 0;
@@ -287,7 +287,7 @@ public class main extends JFrame {
 			// ucitavanje ikonice
 			ImageIcon icon = createImageIcon("images/users.png", true);
 			// kreiranje instance MyTab
-			BookTab mt = new BookTab(title);
+			TabKorisnici mt = new TabKorisnici(title);
 			// dodavanje taba
 			tabbedPane.addTab(title, icon, mt);
 		}
@@ -309,14 +309,14 @@ public class main extends JFrame {
 		private void addTab_IzvestajToTabbedPane() {
 			String title = "Izveštaj"; 
 			ImageIcon icon = createImageIcon("images/report.png", true);
-			BookTab mt = new BookTab(title);
+			TabKorisnici mt = new TabKorisnici(title);
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
 		private void addTab_KorpaToTabbedPane() {
 			String title = "Korpa"; 
 			ImageIcon icon = createImageIcon("images/cart.png", true);
-			BookTab mt = new BookTab(title);
+			TabKorisnici mt = new TabKorisnici(title);
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
