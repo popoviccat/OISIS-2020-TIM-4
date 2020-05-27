@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.Stack;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -44,6 +46,7 @@ public class main extends JFrame {
 		int tabNumber = 0;
 		Color peach = new Color(249, 229, 222);
 		Color mint = new Color(140,208,172);
+
 		
 		
 		// ========================= Singleton obrazac
@@ -65,39 +68,32 @@ public class main extends JFrame {
 		
 		private void createToolbar() {
 			mainToolbar = new JPanel();
+			GridBagConstraints layout = new GridBagConstraints();
+			mainToolbar.setLayout(new GridBagLayout());
+			Icon logIn = new ImageIcon("images/login.png");
+			
 			mainToolbar.setBackground(Color.WHITE);
-			JPanel left= new JPanel(new GridBagLayout());
-			JLabel helloMessage = new JLabel("Zdravo, Petar PetroviÄ‡!");
-			GridBagConstraints helloMessageConstraints = new GridBagConstraints();
-	        helloMessageConstraints.insets = new Insets(5, 5, 0, 5);
-	        helloMessageConstraints.gridx = 0;
-	        helloMessageConstraints.gridy = 0;
-		    helloMessage.setFont(new Font("Arial", Font.PLAIN, 35));
-		    helloMessageConstraints.anchor = GridBagConstraints.WEST;
-		    left.add(helloMessage, helloMessageConstraints);
-		    mainToolbar.add(left, BorderLayout.WEST);
-			left.setOpaque(false);
+			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
+			JLabel helloMessage = new JLabel("Zdravo, Petar Petroviæ!");
+		    helloMessage.setFont(new Font("Arial", Font.PLAIN, 20));
+		    layout.insets = new Insets(5, 30, 5, 30);
+		    layout.gridx = 0;
+		    layout.gridy = 0;
+		    layout.weightx = 1.0;
+		    layout.anchor = GridBagConstraints.LINE_START;
+		    mainToolbar.add(helloMessage, layout);
 			
-			
-			JPanel right= new JPanel(new GridBagLayout());
-			JButton loginButton = new JButton("LOGIN");
+			JButton loginButton = new JButton("LOGIN", logIn);
 			loginButton.setFont(new Font("Arial", Font.BOLD, 15));
-			
 			loginButton.setBackground(peach);
-			loginButton.setPreferredSize(new Dimension(130,40));
+			loginButton.setPreferredSize(new Dimension(100, 35));
 			loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
-			GridBagConstraints loginButtonConstraints = new GridBagConstraints();
 			loginButton.addMouseListener(new MyMouseListener(loginButton));
-			loginButtonConstraints.insets = new Insets(5, 5, 0, 5);
-			loginButtonConstraints.gridx = 0;
-			loginButtonConstraints.gridy = 0;
-			loginButtonConstraints.anchor = GridBagConstraints.EAST;
-			right.add(loginButton, loginButtonConstraints);
-			mainToolbar.add(right, BorderLayout.EAST);
-			right.setOpaque(false);
+		    layout.gridx = 1;
+		    layout.gridy = 0;
+		    layout.anchor = GridBagConstraints.LINE_END;
+			mainToolbar.add(loginButton, layout);
 			this.add(mainToolbar, BorderLayout.NORTH);
-			
-
 		}
 
 		private void createMainPanel() {
@@ -107,7 +103,6 @@ public class main extends JFrame {
 			JPanel rightPanel = new JPanel();
 			
 			
-			
 			add(leftPanel,BorderLayout.WEST);
 			leftPanel.setPreferredSize(new Dimension(200,600));
 			leftPanel.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
@@ -115,20 +110,20 @@ public class main extends JFrame {
 			
 
 			ImagePanel panel = new ImagePanel(new ImageIcon("images/bg_image.jpg").getImage());
-		    rightPanel.add(panel, BorderLayout.CENTER);
+		    rightPanel.add(panel);
 		    
 		    
 			
-		    add(lpane);
+		    add(lpane, BorderLayout.CENTER);
 		   
 			lpane.add(rightPanel,new Integer(0), 0);
 			rightPanel.setBorder(BorderFactory.createMatteBorder(1,0,1,1,Color.BLACK));
 			rightPanel.setBackground(mint);
-			rightPanel.setBounds(0, 0, 784, 535);
+			rightPanel.setBounds(0, 0, 784, 515);
 			
 			lpane.add(tabbedPane, new Integer(1), 1);
 			tabbedPane.setPreferredSize(new Dimension(800,700));
-			tabbedPane.setBounds(0, 0, 784, 535);
+			tabbedPane.setBounds(0, 0, 784, 515);
 			tabbedPane.setBorder(BorderFactory.createEmptyBorder());
 			tabbedPane.setBackground(Color.WHITE);
 		}
@@ -192,7 +187,7 @@ public class main extends JFrame {
 			btn3.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			btn3.addMouseListener(new MyMouseListener(btn3));
 			
-			JButton btn4= new JButton("IzveÅ¡taj");
+			JButton btn4= new JButton("Izveštaj");
 			btn4.setFont(btn1.getFont().deriveFont(f));
 			btn4.setBackground(peach);
 			btn4.setPreferredSize(new Dimension(130,40));
