@@ -14,9 +14,14 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Date;
 import java.util.Stack;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -26,13 +31,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import com.thoughtworks.xstream.XStream;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import lib.JTabbedPaneCloseButton;
+
 import utils.MyMouseListener;
 import utils.MyWindowListener;
+import utils.LoginDialog;
+
+import model.Korisnik;
+import model.TipKorisnika;
+import controlers.readFromFile;
 
 
 public class main extends JFrame {
@@ -74,7 +89,7 @@ public class main extends JFrame {
 			
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
-			JLabel helloMessage = new JLabel("Zdravo, Petar Petroviæ!");
+			JLabel helloMessage = new JLabel("Zdravo, Petar PetroviÄ‡!");
 		    helloMessage.setFont(new Font("Ariel", Font.ITALIC, 20));
 		    layout.insets = new Insets(5, 30, 5, 30);
 		    layout.gridx = 0;
@@ -174,28 +189,28 @@ public class main extends JFrame {
 			btn1.addMouseListener(new MyMouseListener(btn1));
 			
 			JButton btn2= new JButton("Lekovi");
-			btn2.setFont(btn1.getFont().deriveFont(f));
+			btn2.setFont(btn2.getFont().deriveFont(f));
 			btn2.setBackground(peach);
 			btn2.setPreferredSize(new Dimension(130,40));
 			btn2.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			btn2.addMouseListener(new MyMouseListener(btn2));
 			
 			JButton btn3= new JButton("Recepti");
-			btn3.setFont(btn1.getFont().deriveFont(f));
+			btn3.setFont(btn3.getFont().deriveFont(f));
 			btn3.setBackground(peach);
 			btn3.setPreferredSize(new Dimension(130,40));
 			btn3.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			btn3.addMouseListener(new MyMouseListener(btn3));
 			
-			JButton btn4= new JButton("Izveštaj");
-			btn4.setFont(btn1.getFont().deriveFont(f));
+			JButton btn4= new JButton("IzveÅ¡taj");
+			btn4.setFont(btn4.getFont().deriveFont(f));
 			btn4.setBackground(peach);
 			btn4.setPreferredSize(new Dimension(130,40));
 			btn4.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			btn4.addMouseListener(new MyMouseListener(btn4));
 			
 			JButton btn5= new JButton("Korpa", icon);
-			btn5.setFont(btn1.getFont().deriveFont(f));
+			btn5.setFont(btn5.getFont().deriveFont(f));
 			btn5.setBackground(peach);
 			btn5.setPreferredSize(new Dimension(130,40));
 			btn5.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
@@ -279,6 +294,7 @@ public class main extends JFrame {
 			setTitle("Apoteka");
 			this.setIconImage(icon.getImage());
 			this.setVisible(true);
+			setResizable(false);
 		}
 
 		// dodavanje taba u TabbedPaned
@@ -307,7 +323,7 @@ public class main extends JFrame {
 		}
 		
 		private void addTab_IzvestajToTabbedPane() {
-			String title = "Izveštaj"; 
+			String title = "IzveÅ¡taj"; 
 			ImageIcon icon = createImageIcon("images/report.png", true);
 			TabKorisnici mt = new TabKorisnici(title);
 			tabbedPane.addTab(title, icon, mt);
@@ -320,9 +336,47 @@ public class main extends JFrame {
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
-		public static void main(String[] args) {
-			// TODO Auto-generated method stub
-			main.getInstance();
+		public static void main(String[] args) throws IOException {
+			
+		    final JFrame frame = new JFrame("Login to Apoteka");
+		    final JPanel cont = new JPanel(new GridBagLayout());
+		    GridBagConstraints gb = new GridBagConstraints();
+		    final JButton btnLogin = new JButton("Click to login");
+		    cont.setBackground(Color.white);
+		   // readFromFile.readFromFileKor();
+		   // readFromFile();
+		    
+		    btnLogin.addActionListener(
+		    		new ActionListener(){
+		    			public void actionPerformed(ActionEvent e) {
+		    				LoginDialog loginDlg = new LoginDialog(frame);
+		                    loginDlg.setVisible(true);
+		                    // if logon successfully
+		                    if(loginDlg.isSucceeded()){
+		                    	main.getInstance();
+		                    	frame.hide();
+		                    }
+		                }
+		    });
+		    
+		    btnLogin.setFont(new Font("Ariel", Font.BOLD, 20));
+		    btnLogin.setBackground(new Color(249, 229, 222));
+		    btnLogin.setPreferredSize(new Dimension(200,60));
+		    btnLogin.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		    btnLogin.addMouseListener(new MyMouseListener(btnLogin));
+		  
+		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		    frame.add(cont);
+		    
+		    gb.insets = new Insets(40, 60, 40, 60);
+	        gb.gridx = 0;
+	        gb.gridy = 0;
+	        gb.gridwidth = 1;
+		    cont.add(btnLogin, gb);
+		    frame.pack();
+	        frame.setResizable(false);
+		    frame.setVisible(true);
+		    frame.setLocationRelativeTo(null);
 		}
 
 		protected static ImageIcon createImageIcon(String path, boolean scaleImage) {
@@ -338,6 +392,34 @@ public class main extends JFrame {
 				return new ImageIcon(path);
 			}
 		}
+		
+		public static void readFromFile() throws IOException {
+			Korisnik kor1 = new Korisnik("Admin", "admin", "Administrator", "AdminoviÄ‡", TipKorisnika.ADMINISTRATOR);
+			Korisnik[] korisnici = new Korisnik[] { kor1};
 	
+			File f = new File("Korisnici.xml");
+			
+			OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
+			  
+			try {
 	
+				XStream xs = new XStream();
+				xs.alias("korisnik", Korisnik.class);
+	
+				String s = xs.toXML(korisnici); 
+				xs.toXML(korisnici, os); 
+				System.out.println(s);
+	
+				Korisnik[] ucitaniKorisnici = (Korisnik[]) xs.fromXML(s);
+				int br = ucitaniKorisnici.length;
+				for (int i = 0; i < br; i++) {
+					if (ucitaniKorisnici[i].getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
+						System.out.println(ucitaniKorisnici[i].getIme());
+						
+					}
+				}
+			} finally {
+				os.close();
+			}
+		}
 }

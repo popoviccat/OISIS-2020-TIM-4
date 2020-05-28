@@ -107,8 +107,7 @@ public class TabKorisnici extends JPanel {
 		container.setBackground(Color.white);
 		
 		this.add(container);
-		// Zaglavlje kolone se ne mora ruÄ�no ubacivati. JScrollPane Ä‡e odraditi
-		// taj posao.
+		// Zaglavlje kolone se ne mora ručno ubacivati. JScrollPane će odraditi taj posao.
 		container.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
 		container.add(new JScrollPane(tblStudenti), BorderLayout.CENTER);
 		add(tfFilter, BorderLayout.NORTH);
