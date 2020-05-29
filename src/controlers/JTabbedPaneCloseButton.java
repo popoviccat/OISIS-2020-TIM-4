@@ -56,7 +56,7 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 				countRec ++;
 			} else {}
 		break;
-		case "Izve�taj":
+		case "Izvestaj":
 			if (countIz < 1) {
 				addTab(title, icon, component, null);
 				countIz ++;
@@ -140,7 +140,7 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
                 		case "Recepti":
                 			countRec --;
                 		break;
-                		case "Izve�taj":
+                		case "Izvestaj":
                 			countIz --;
                 		break;
                 		case "Korpa":

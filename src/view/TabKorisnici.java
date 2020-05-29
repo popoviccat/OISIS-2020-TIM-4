@@ -58,7 +58,7 @@ public class TabKorisnici extends JPanel {
 		cs.gridy = 0;
 	    topPanel.add(delUser, cs);
 	    
-		JButton saveBtn = new JButton("Sačuvaj");
+		JButton saveBtn = new JButton("Sacuvaj");
 		saveBtn.setBackground(peach);
 		saveBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		saveBtn.setPreferredSize(new Dimension(100,26));

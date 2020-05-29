@@ -6,19 +6,16 @@ package controlers;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-/**
- * @author Danijel
- * 
- */
+
 public class MyTableModel implements TableModel {
 
-	private Object[] columns = new Object[] { "Korisničko ime", "Ime", "Prezime",
+	private Object[] columns = new Object[] { "Korisnicko ime", "Ime", "Prezime",
 			"Tip Korisnika" };
 
-	private Object[][] data = { { "pera", "Petar", "Petrović", "Apotekar" },
-			{ "laza", "Lazar", "Lazić", "Lekar" },
-			{ "mika", "Milan", "Mikić", "Apotekar" },
-			{ "ana", "Ana", "Petrović", "Administrator" },
+	private Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
+			{ "laza", "Lazar", "Lazic", "Lekar" },
+			{ "mika", "Milan", "Mikic", "Apotekar" },
+			{ "ana", "Ana", "Petrovic", "Administrator" },
 			 };
 
 	/*

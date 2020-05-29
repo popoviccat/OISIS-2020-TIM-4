@@ -38,7 +38,7 @@ public class CreateTable extends JPanel{
 	 */
 	private static final long serialVersionUID = 8915538830180476453L;
 	
-	private JTable tblStudenti;
+	private JTable tbl;
 	private MyTableModel tableModel;
 	private TableRowSorter<MyTableModel> tableSorter;
 	private RowImeFilter imeFilter;
@@ -62,8 +62,8 @@ public class CreateTable extends JPanel{
 		cs.gridy = 1;
 		cs.gridwidth = 3;
 		cs.weightx = 1.0;
-		add(new JScrollPane(tblStudenti),cs);
-		tblStudenti.setBackground(new Color(140,208,172));
+		add(new JScrollPane(tbl),cs);
+		tbl.setBackground(new Color(140,208,172));
 		
 		cs.insets = new Insets(0, 10, 15, 0);
 	    cs.gridx = 0;
@@ -88,7 +88,7 @@ public class CreateTable extends JPanel{
 
 	private void initTable() {
 		tableModel = new MyTableModel();
-		tblStudenti = new JTable(tableModel);
+		tbl = new JTable(tableModel);
 
 		tableSorter = new TableRowSorter<MyTableModel>(tableModel);
 		tableSorter.setComparator(0, new Comparator<String>() {
@@ -108,32 +108,32 @@ public class CreateTable extends JPanel{
 
 		tableSorter.setRowFilter(constructFilter());
 
-		tblStudenti.setRowSorter(tableSorter);
+		tbl.setRowSorter(tableSorter);
 
-		tblStudenti.getSelectionModel().addListSelectionListener(
+		tbl.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
 						if (!e.getValueIsAdjusting()
-								&& tblStudenti.getSelectedRow() != -1) {
-							System.out.println(tblStudenti.getValueAt(
-									tblStudenti.getSelectedRow(), 1)
+								&& tbl.getSelectedRow() != -1) {
+							System.out.println(tbl.getValueAt(
+									tbl.getSelectedRow(), 1)
 									+ " "
-									+ tblStudenti.getValueAt(
-											tblStudenti.getSelectedRow(), 2));
+									+ tbl.getValueAt(
+											tbl.getSelectedRow(), 2));
 						}
 					}
 				});
-		tblStudenti.getSelectionModel().setSelectionMode(
+		tbl.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
 		// Poželjna veličina pogleda tabele u okviru scrollpane-a. Layout
 		// manager uzima ovu osobinu u obzir.
-		tblStudenti.setPreferredScrollableViewportSize(new Dimension(650,260));
+		tbl.setPreferredScrollableViewportSize(new Dimension(650,260));
 
 		// Širenje tabele kompletno po visini pogleda scrollpane-a.
-		tblStudenti.setFillsViewportHeight(true);
+		tbl.setFillsViewportHeight(true);
 	}
 
 	private void initTFFilter() {

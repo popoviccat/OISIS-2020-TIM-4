@@ -38,7 +38,7 @@ public class MyWindowListener implements WindowListener{
 		UI.put("Button.background",new Color(249, 229, 222));
 		  
 		JFrame frame= (JFrame) arg0.getComponent();
-		int code=JOptionPane.showConfirmDialog(frame, "Da li ste sigurni da želite da zatvorite aplikaciju?","Zatvaranje aplikacije?",JOptionPane.YES_NO_OPTION);
+		int code=JOptionPane.showConfirmDialog(frame, "Da li ste sigurni da zelite da zatvorite aplikaciju?","Zatvaranje aplikacije?",JOptionPane.YES_NO_OPTION);
 		 
 		if (code!=JOptionPane.YES_OPTION){
 		

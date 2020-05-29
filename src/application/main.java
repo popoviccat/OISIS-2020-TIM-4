@@ -88,7 +88,7 @@ public class main extends JFrame {
 			
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
-			JLabel helloMessage = new JLabel("Zdravo, Petar Petrović!");
+			JLabel helloMessage = new JLabel("Zdravo, Petar Petrovic!");
 		    helloMessage.setFont(new Font("Ariel", Font.ITALIC, 20));
 		    layout.insets = new Insets(5, 30, 5, 30);
 		    layout.gridx = 0;
@@ -201,7 +201,7 @@ public class main extends JFrame {
 			btn3.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			btn3.addMouseListener(new MyMouseListener(btn3));
 			
-			JButton btn4= new JButton("Izveštaj");
+			JButton btn4= new JButton("Izvestaj");
 			btn4.setFont(btn4.getFont().deriveFont(f));
 			btn4.setBackground(peach);
 			btn4.setPreferredSize(new Dimension(130,40));
@@ -322,7 +322,7 @@ public class main extends JFrame {
 		}
 		
 		private void addTab_IzvestajToTabbedPane() {
-			String title = "Izveštaj"; 
+			String title = "Izvestaj"; 
 			ImageIcon icon = createImageIcon("images/report.png", true);
 			TabKorisnici mt = new TabKorisnici(title);
 			tabbedPane.addTab(title, icon, mt);
