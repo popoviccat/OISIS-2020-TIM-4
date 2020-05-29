@@ -5,6 +5,8 @@ package utils;
 
 import javax.swing.RowFilter;
 
+import controlers.MyTableModel;
+
 /**
  * @author Danijel
  * 

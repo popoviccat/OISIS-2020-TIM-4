@@ -1,124 +1,95 @@
-package application;
+package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
-import javax.swing.border.EmptyBorder;
 
+import controlers.MyTableModel;
 import utils.RowImeFilter;
 import utils.RowPrezimeFilter;
-import utils.MyTableModel;
-import utils.MyTableModel;
 
+public class CreateTable extends JPanel{
+	
 
-public class TabKorisnici extends JPanel {
-
-	private static final long serialVersionUID = 7445755320045782268L;
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8915538830180476453L;
+	
 	private JTable tblStudenti;
 	private MyTableModel tableModel;
 	private TableRowSorter<MyTableModel> tableSorter;
-	private JTextField tfFilter;
 	private RowImeFilter imeFilter;
 	private RowPrezimeFilter prezimeFilter;
-	
-	private String bookName;
-	
-	public TabKorisnici(String text) {
-		this.bookName = text;
-		
-		
-		this.setLayout(new BorderLayout());
-		
-		
-		JPanel topPanel = new JPanel();
-		//JPanel centerPanel = new JPanel();
-		JPanel downPanel = new JPanel();
-		add(BorderLayout.PAGE_START, topPanel);
-		add(BorderLayout.PAGE_END, downPanel);
-		
-		
-		
-		this.add(topPanel, BorderLayout.NORTH);
-		this.add(downPanel, BorderLayout.SOUTH);
-		//this.add(centerPanel, BorderLayout.CENTER);
 
-	
-		JButton btnn = new JButton("Sačuvaj");
-		
-	    downPanel.add(btnn);
-	  
-	    JLabel lbl = new JLabel("Sortiraj");
-	    lbl.setVisible(true);
-	   
-	    topPanel.add(lbl);
+	private JTextField tfFilter;
 
-	    String[] choices = { "Po imenu","Po prezimenu", "Po tipu korisnika"};
-
-	    final JComboBox<String> cb = new JComboBox<String>(choices);
-
-	    cb.setVisible(true);
-	    topPanel.add(cb);
-	    
-	    JButton btn = new JButton("OK");	   
-		topPanel.add(btn);
+	public CreateTable() {
+		Icon icon = new ImageIcon("images/search.png");
+		JLabel title = new JLabel("Pretraga");
+		JLabel pic = new JLabel( icon);
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints cs = new GridBagConstraints();
 		
-		
-		initTFFilter();
-		//initTable table = new initTable();
-		//initTable.setVisible(true);
-		//JScrollPane centerPanel = new JScrollPane(table);
-		//centerPanel.setPreferredSize(new Dimension(200,200));
-		
-		createTable();
-	}
-	
-	public void createTable() {
-		JPanel container = new JPanel();
 		initTable();
-		container.setBackground(Color.white);
+		initTFFilter();
+
+		// Zaglavlje kolone se ne mora ručno ubacivati. JScrollPane će odraditi
+		// taj posao.
+		cs.gridx = 0;
+		cs.gridy = 1;
+		cs.gridwidth = 3;
+		cs.weightx = 1.0;
+		add(new JScrollPane(tblStudenti),cs);
+		tblStudenti.setBackground(new Color(140,208,172));
 		
-		this.add(container);
-		// Zaglavlje kolone se ne mora ručno ubacivati. JScrollPane će odraditi taj posao.
-		container.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
-		container.add(new JScrollPane(tblStudenti), BorderLayout.CENTER);
-		add(tfFilter, BorderLayout.NORTH);
-	
+		cs.insets = new Insets(0, 10, 15, 0);
+	    cs.gridx = 0;
+		cs.gridy = 0;
+		cs.gridwidth = 1;
+		cs.anchor = GridBagConstraints.FIRST_LINE_START;
+		add(title,cs);
+		
+		cs.insets = new Insets(0, 5, 15, 18);
+	    cs.gridx = 1;
+		cs.gridy = 0;
+		add(pic,cs);
+		
+		cs.insets = new Insets(0, 0, 15, 415);
+	    cs.gridx = 2;
+		cs.gridy = 0;
+		tfFilter.setPreferredSize(new Dimension(180,20));
+		add(tfFilter,cs);
+		tfFilter.setBackground(Color.white);
+
 	}
-	
+
 	private void initTable() {
 		tableModel = new MyTableModel();
 		tblStudenti = new JTable(tableModel);
-		
-		
+
 		tableSorter = new TableRowSorter<MyTableModel>(tableModel);
 		tableSorter.setComparator(0, new Comparator<String>() {
 
@@ -157,14 +128,14 @@ public class TabKorisnici extends JPanel {
 		tblStudenti.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
-		// PoÅ¾eljna veliÄ�ina pogleda tabele u okviru scrollpane-a. Layout
+		// Poželjna veličina pogleda tabele u okviru scrollpane-a. Layout
 		// manager uzima ovu osobinu u obzir.
-		tblStudenti.setPreferredScrollableViewportSize(new Dimension(700, 400));
+		tblStudenti.setPreferredScrollableViewportSize(new Dimension(650,260));
 
-		// Å irenje tabele kompletno po visini pogleda scrollpane-a.
+		// Širenje tabele kompletno po visini pogleda scrollpane-a.
 		tblStudenti.setFillsViewportHeight(true);
 	}
-	
+
 	private void initTFFilter() {
 		tfFilter = new JTextField();
 		tfFilter.getDocument().addDocumentListener(new DocumentListener() {
@@ -204,11 +175,4 @@ public class TabKorisnici extends JPanel {
 		return orFilter;
 	}
 	
-	public void saveBookState() {
-		System.out.println("Cuvam sadrzaj knjige: " + this.bookName);
-	}
-	
-	public String getName() {
-		return this.bookName;
-	}
 }

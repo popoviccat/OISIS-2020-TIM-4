@@ -1,9 +1,9 @@
-package lib;
+package controlers;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalIconFactory;
 
-import application.TabKorisnici;
+import view.TabKorisnici;
 
 import java.awt.*;
 import java.awt.event.MouseListener;
@@ -56,7 +56,7 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 				countRec ++;
 			} else {}
 		break;
-		case "Izveštaj":
+		case "Izveï¿½taj":
 			if (countIz < 1) {
 				addTab(title, icon, component, null);
 				countIz ++;
@@ -140,7 +140,7 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
                 		case "Recepti":
                 			countRec --;
                 		break;
-                		case "Izveštaj":
+                		case "Izveï¿½taj":
                 			countIz --;
                 		break;
                 		case "Korpa":

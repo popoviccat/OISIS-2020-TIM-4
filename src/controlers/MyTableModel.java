@@ -1,7 +1,7 @@
 /**
  * 
  */
-package utils;
+package controlers;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;

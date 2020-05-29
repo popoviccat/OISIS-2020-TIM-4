@@ -39,14 +39,15 @@ import com.thoughtworks.xstream.XStream;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import lib.JTabbedPaneCloseButton;
-
-import utils.MyMouseListener;
-import utils.MyWindowListener;
-import utils.LoginDialog;
-
+import view.LoginDialog;
+import view.TabKorisnici;
+import view.TabLekovi;
+import view.TabRecepti;
 import model.Korisnik;
 import model.TipKorisnika;
+import controlers.JTabbedPaneCloseButton;
+import controlers.MyMouseListener;
+import controlers.MyWindowListener;
 import controlers.readFromFile;
 
 
@@ -61,8 +62,6 @@ public class main extends JFrame {
 		int tabNumber = 0;
 		Color peach = new Color(249, 229, 222);
 		Color mint = new Color(140,208,172);
-
-		
 		
 		// ========================= Singleton obrazac
 		private static main instance = null;
@@ -337,7 +336,7 @@ public class main extends JFrame {
 		}
 		
 		public static void main(String[] args) throws IOException {
-			
+			main.getInstance();
 		    final JFrame frame = new JFrame("Login to Apoteka");
 		    final JPanel cont = new JPanel(new GridBagLayout());
 		    GridBagConstraints gb = new GridBagConstraints();
@@ -345,7 +344,7 @@ public class main extends JFrame {
 		    cont.setBackground(Color.white);
 		   // readFromFile.readFromFileKor();
 		   // readFromFile();
-		    
+		    /*
 		    btnLogin.addActionListener(
 		    		new ActionListener(){
 		    			public void actionPerformed(ActionEvent e) {
@@ -376,7 +375,7 @@ public class main extends JFrame {
 		    frame.pack();
 	        frame.setResizable(false);
 		    frame.setVisible(true);
-		    frame.setLocationRelativeTo(null);
+		    frame.setLocationRelativeTo(null);*/
 		}
 
 		protected static ImageIcon createImageIcon(String path, boolean scaleImage) {
