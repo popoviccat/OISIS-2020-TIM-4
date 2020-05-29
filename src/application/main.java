@@ -89,7 +89,7 @@ public class main extends JFrame {
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
 			JLabel helloMessage = new JLabel("Zdravo, Petar Petrovic!");
-		    helloMessage.setFont(new Font("Ariel", Font.ITALIC, 20));
+		    helloMessage.setFont(new Font("Arial", Font.ITALIC, 20));
 		    layout.insets = new Insets(5, 30, 5, 30);
 		    layout.gridx = 0;
 		    layout.gridy = 0;

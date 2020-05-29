@@ -24,29 +24,42 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import controlers.MyTableModel;
+
 import utils.RowImeFilter;
 import utils.RowPrezimeFilter;
+import utils.RowTipKorisnikaFilter;
 
-public class CreateTable extends JPanel{
-	
+public class CreateTableKorisnik extends JPanel{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8915538830180476453L;
 	
-	private JTable tbl;
-	private MyTableModel tableModel;
-	private TableRowSorter<MyTableModel> tableSorter;
+	private Object[] columns = new Object[] { "Korisnicko ime",
+			"Ime",
+			"Prezime",
+			"Tip Korisnika" };
+
+	private Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
+			{ "laza", "Lazar", "Lazic", "Lekar" },
+			{ "mika", "Milan", "Mikic", "Apotekar" },
+			{ "ana", "Ana", "Petrovic", "Administrator" },
+			 };
+	
+	public DefaultTableModel model;
+	public JTable tbl;
+	private TableRowSorter<DefaultTableModel> tableSorter;
 	private RowImeFilter imeFilter;
 	private RowPrezimeFilter prezimeFilter;
+	private RowTipKorisnikaFilter tipFilter;
 
 	private JTextField tfFilter;
 
-	public CreateTable() {
+	public CreateTableKorisnik() {
 		Icon icon = new ImageIcon("images/search.png");
 		JLabel title = new JLabel("Pretraga");
 		JLabel pic = new JLabel( icon);
@@ -87,12 +100,12 @@ public class CreateTable extends JPanel{
 	}
 
 	private void initTable() {
-		tableModel = new MyTableModel();
-		tbl = new JTable(tableModel);
-
-		tableSorter = new TableRowSorter<MyTableModel>(tableModel);
+		model = new DefaultTableModel(data, columns);
+		tbl = new JTable(model);
+		
+		tableSorter = new TableRowSorter<DefaultTableModel>(model);
 		tableSorter.setComparator(0, new Comparator<String>() {
-
+			
 			@Override
 			public int compare(String o1, String o2) {
 				// Case sensitive.
@@ -160,18 +173,21 @@ public class CreateTable extends JPanel{
 	private void filter(String value) {
 		imeFilter.setValue(value);
 		prezimeFilter.setValue(value);
+		tipFilter.setValue(value);
 		tableSorter.sort();
 	}
 
-	private RowFilter<MyTableModel, Integer> constructFilter() {
+	private RowFilter<DefaultTableModel, Integer> constructFilter() {
 		imeFilter = new RowImeFilter();
 		prezimeFilter = new RowPrezimeFilter();
+		tipFilter = new RowTipKorisnikaFilter();
 
-		List<RowFilter<MyTableModel, Integer>> filters = new ArrayList<RowFilter<MyTableModel, Integer>>(
+		List<RowFilter<DefaultTableModel, Integer>> filters = new ArrayList<RowFilter<DefaultTableModel, Integer>>(
 				2);
 		filters.add(imeFilter);
 		filters.add(prezimeFilter);
-		RowFilter<MyTableModel, Integer> orFilter = RowFilter.orFilter(filters);
+		filters.add(tipFilter);
+		RowFilter<DefaultTableModel, Integer> orFilter = RowFilter.orFilter(filters);
 		return orFilter;
 	}
 	

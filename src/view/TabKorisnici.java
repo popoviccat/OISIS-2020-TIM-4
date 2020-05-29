@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,13 +16,13 @@ import javax.swing.border.LineBorder;
 
 import controlers.MyMouseListener;
 
-
 public class TabKorisnici extends JPanel {
 
 	private static final long serialVersionUID = 7445755320045782268L;
 
 	Color peach = new Color(249, 229, 222);
 	Color mint = new Color(140,208,172);
+	CreateTableKorisnik ct = new CreateTableKorisnik();
 	
 	private String bookName;
 	
@@ -42,6 +44,11 @@ public class TabKorisnici extends JPanel {
 		addUser.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		addUser.setPreferredSize(new Dimension(150,26));
 		addUser.addMouseListener(new MyMouseListener(addUser));
+		addUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ct.model.addRow(new Object[]{"Novi Korisnik", "Novi", "Korisnik", "Novi Korisnik"});
+			}
+		});
 		addUser.setVisible(true);
 		cs.insets = new Insets(20, 50, 0, 10);
 	    cs.gridx = 0;
@@ -53,6 +60,23 @@ public class TabKorisnici extends JPanel {
 	    delUser.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 	    delUser.setPreferredSize(new Dimension(150,26));
 	    delUser.addMouseListener(new MyMouseListener(delUser));
+	    delUser.addActionListener(new ActionListener() {
+	    	@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// check for selected row first
+		        if (ct.tbl.getSelectedRow() != -1) {
+		            // remove selected row from the model
+		        	
+		        	System.out.println(ct.tbl.getValueAt(
+		        			ct.tbl.getSelectedRow(), 1)
+							+ " "
+							+ ct.tbl.getValueAt(
+									ct.tbl.getSelectedRow(), 2));
+		        	ct.model.removeRow(ct.tbl.getSelectedRow());
+		        	
+		        }
+			}
+		});
 	    cs.insets = new Insets(20, 20, 0, 20);
 	    cs.gridx = 1;
 		cs.gridy = 0;
@@ -69,7 +93,7 @@ public class TabKorisnici extends JPanel {
 		cs.anchor = GridBagConstraints.LAST_LINE_END;
 	    topPanel.add(saveBtn, cs);
 		
-		CreateTable ct = new CreateTable();
+		
 		cs.insets = new Insets(0, 0, 0, 0);
 		cs.gridx = 0;
 		cs.gridy = 1;

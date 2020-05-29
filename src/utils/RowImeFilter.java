@@ -4,20 +4,16 @@
 package utils;
 
 import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
 
-import controlers.MyTableModel;
 
-/**
- * @author Danijel
- * 
- */
-public class RowImeFilter extends RowFilter<MyTableModel, Integer> {
+public class RowImeFilter extends RowFilter<DefaultTableModel, Integer> {
 
 	private String value;
 
 	@Override
 	public boolean include(
-			javax.swing.RowFilter.Entry<? extends MyTableModel, ? extends Integer> entry) {
+			javax.swing.RowFilter.Entry<? extends DefaultTableModel, ? extends Integer> entry) {
 		return entry.getStringValue(1).toLowerCase()
 				.contains(getValue().toLowerCase());
 	}

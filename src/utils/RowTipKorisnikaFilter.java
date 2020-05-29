@@ -7,14 +7,14 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 
 
-public class RowPrezimeFilter extends RowFilter<DefaultTableModel, Integer> {
+public class RowTipKorisnikaFilter extends RowFilter<DefaultTableModel, Integer> {
 
 	private String value;
 
 	@Override
 	public boolean include(
 			javax.swing.RowFilter.Entry<? extends DefaultTableModel, ? extends Integer> entry) {
-		return entry.getStringValue(2).toLowerCase()
+		return entry.getStringValue(3).toLowerCase()
 				.contains(getValue().toLowerCase());
 	}
 
