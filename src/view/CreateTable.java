@@ -25,6 +25,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
+<<<<<<< HEAD:src/view/CreateTable.java
+=======
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+>>>>>>> e878c505ac6500fbd80b6b11919a1b6e8ea0fbba:src/application/TabKorisnici.java
 
 import controlers.MyTableModel;
 import utils.RowImeFilter;
@@ -33,12 +38,20 @@ import utils.RowPrezimeFilter;
 public class CreateTable extends JPanel{
 	
 
+<<<<<<< HEAD:src/view/CreateTable.java
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8915538830180476453L;
 	
 	private JTable tblStudenti;
+=======
+public class TabKorisnici extends JPanel {
+
+	private static final long serialVersionUID = 7445755320045782268L;
+
+	private JTable korisnici;
+>>>>>>> e878c505ac6500fbd80b6b11919a1b6e8ea0fbba:src/application/TabKorisnici.java
 	private MyTableModel tableModel;
 	private TableRowSorter<MyTableModel> tableSorter;
 	private RowImeFilter imeFilter;
@@ -72,6 +85,7 @@ public class CreateTable extends JPanel{
 		cs.anchor = GridBagConstraints.FIRST_LINE_START;
 		add(title,cs);
 		
+<<<<<<< HEAD:src/view/CreateTable.java
 		cs.insets = new Insets(0, 5, 15, 18);
 	    cs.gridx = 1;
 		cs.gridy = 0;
@@ -84,18 +98,31 @@ public class CreateTable extends JPanel{
 		add(tfFilter,cs);
 		tfFilter.setBackground(Color.white);
 
+=======
+		this.add(container);
+		/*container.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );*/
+		container.add(new JScrollPane(korisnici), BorderLayout.CENTER);
+		container.setBorder(new LineBorder(Color.WHITE));
+		add(tfFilter, BorderLayout.NORTH);
+	
+>>>>>>> e878c505ac6500fbd80b6b11919a1b6e8ea0fbba:src/application/TabKorisnici.java
 	}
 
 	private void initTable() {
 		tableModel = new MyTableModel();
+<<<<<<< HEAD:src/view/CreateTable.java
 		tblStudenti = new JTable(tableModel);
 
+=======
+		korisnici = new JTable(tableModel);
+		
+		
+>>>>>>> e878c505ac6500fbd80b6b11919a1b6e8ea0fbba:src/application/TabKorisnici.java
 		tableSorter = new TableRowSorter<MyTableModel>(tableModel);
 		tableSorter.setComparator(0, new Comparator<String>() {
 
 			@Override
 			public int compare(String o1, String o2) {
-				// Case sensitive.
 				return o1.compareTo(o2);
 			}
 
@@ -108,32 +135,38 @@ public class CreateTable extends JPanel{
 
 		tableSorter.setRowFilter(constructFilter());
 
-		tblStudenti.setRowSorter(tableSorter);
+		korisnici.setRowSorter(tableSorter);
 
-		tblStudenti.getSelectionModel().addListSelectionListener(
+		korisnici.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
 						if (!e.getValueIsAdjusting()
-								&& tblStudenti.getSelectedRow() != -1) {
-							System.out.println(tblStudenti.getValueAt(
-									tblStudenti.getSelectedRow(), 1)
+								&& korisnici.getSelectedRow() != -1) {
+							System.out.println(korisnici.getValueAt(
+									korisnici.getSelectedRow(), 1)
 									+ " "
-									+ tblStudenti.getValueAt(
-											tblStudenti.getSelectedRow(), 2));
+									+ korisnici.getValueAt(
+											korisnici.getSelectedRow(), 2));
 						}
 					}
 				});
-		tblStudenti.getSelectionModel().setSelectionMode(
+		korisnici.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
+<<<<<<< HEAD:src/view/CreateTable.java
 		// Poželjna veličina pogleda tabele u okviru scrollpane-a. Layout
 		// manager uzima ovu osobinu u obzir.
 		tblStudenti.setPreferredScrollableViewportSize(new Dimension(650,260));
 
 		// Širenje tabele kompletno po visini pogleda scrollpane-a.
 		tblStudenti.setFillsViewportHeight(true);
+=======
+		korisnici.setPreferredScrollableViewportSize(new Dimension(700, 400));
+
+		korisnici.setFillsViewportHeight(true);
+>>>>>>> e878c505ac6500fbd80b6b11919a1b6e8ea0fbba:src/application/TabKorisnici.java
 	}
 
 	private void initTFFilter() {
