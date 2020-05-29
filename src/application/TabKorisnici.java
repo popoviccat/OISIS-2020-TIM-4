@@ -32,6 +32,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import utils.RowImeFilter;
 import utils.RowPrezimeFilter;
@@ -43,7 +44,7 @@ public class TabKorisnici extends JPanel {
 
 	private static final long serialVersionUID = 7445755320045782268L;
 
-	private JTable tblStudenti;
+	private JTable korisnici;
 	private MyTableModel tableModel;
 	private TableRowSorter<MyTableModel> tableSorter;
 	private JTextField tfFilter;
@@ -107,24 +108,22 @@ public class TabKorisnici extends JPanel {
 		container.setBackground(Color.white);
 		
 		this.add(container);
-		// Zaglavlje kolone se ne mora ručno ubacivati. JScrollPane će odraditi taj posao.
-		container.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );
-		container.add(new JScrollPane(tblStudenti), BorderLayout.CENTER);
+		/*container.setBorder( new EmptyBorder( 20, 20, 20, 20 ) );*/
+		container.add(new JScrollPane(korisnici), BorderLayout.CENTER);
+		container.setBorder(new LineBorder(Color.WHITE));
 		add(tfFilter, BorderLayout.NORTH);
 	
 	}
 	
 	private void initTable() {
 		tableModel = new MyTableModel();
-		tblStudenti = new JTable(tableModel);
+		korisnici = new JTable(tableModel);
 		
 		
 		tableSorter = new TableRowSorter<MyTableModel>(tableModel);
 		tableSorter.setComparator(0, new Comparator<String>() {
 
-			@Override
 			public int compare(String o1, String o2) {
-				// Case sensitive.
 				return o1.compareTo(o2);
 			}
 
@@ -137,49 +136,42 @@ public class TabKorisnici extends JPanel {
 
 		tableSorter.setRowFilter(constructFilter());
 
-		tblStudenti.setRowSorter(tableSorter);
+		korisnici.setRowSorter(tableSorter);
 
-		tblStudenti.getSelectionModel().addListSelectionListener(
+		korisnici.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 
-					@Override
 					public void valueChanged(ListSelectionEvent e) {
 						if (!e.getValueIsAdjusting()
-								&& tblStudenti.getSelectedRow() != -1) {
-							System.out.println(tblStudenti.getValueAt(
-									tblStudenti.getSelectedRow(), 1)
+								&& korisnici.getSelectedRow() != -1) {
+							System.out.println(korisnici.getValueAt(
+									korisnici.getSelectedRow(), 1)
 									+ " "
-									+ tblStudenti.getValueAt(
-											tblStudenti.getSelectedRow(), 2));
+									+ korisnici.getValueAt(
+											korisnici.getSelectedRow(), 2));
 						}
 					}
 				});
-		tblStudenti.getSelectionModel().setSelectionMode(
+		korisnici.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
-		// PoÅ¾eljna veliÄ�ina pogleda tabele u okviru scrollpane-a. Layout
-		// manager uzima ovu osobinu u obzir.
-		tblStudenti.setPreferredScrollableViewportSize(new Dimension(700, 400));
+		korisnici.setPreferredScrollableViewportSize(new Dimension(700, 400));
 
-		// Å irenje tabele kompletno po visini pogleda scrollpane-a.
-		tblStudenti.setFillsViewportHeight(true);
+		korisnici.setFillsViewportHeight(true);
 	}
 	
 	private void initTFFilter() {
 		tfFilter = new JTextField();
 		tfFilter.getDocument().addDocumentListener(new DocumentListener() {
 
-			@Override
 			public void removeUpdate(DocumentEvent e) {
 				filter(tfFilter.getText());
 			}
 
-			@Override
 			public void insertUpdate(DocumentEvent e) {
 				filter(tfFilter.getText());
 			}
 
-			@Override
 			public void changedUpdate(DocumentEvent e) {
 				filter(tfFilter.getText());
 			}

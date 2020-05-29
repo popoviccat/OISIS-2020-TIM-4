@@ -8,7 +8,6 @@ public class Korisnik {
 	private TipKorisnika tipKorisnika;
 	public Korisnik() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, TipKorisnika tipKorisnika) {
 		super();

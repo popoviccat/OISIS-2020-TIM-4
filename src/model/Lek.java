@@ -9,7 +9,6 @@ public class Lek {
 	
 	public Lek() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Lek(String sifra, String ime, String proizvodjac, boolean izdajeSeNaRecept, float cena) {
