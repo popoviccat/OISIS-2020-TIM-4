@@ -1,7 +1,9 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -20,11 +23,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 
@@ -76,7 +82,7 @@ public class CreateTableKorisnik extends JPanel{
 		cs.gridwidth = 3;
 		cs.weightx = 1.0;
 		add(new JScrollPane(tbl),cs);
-		tbl.setBackground(new Color(140,208,172));
+		tbl.setBackground(new Color(220, 239, 230));
 		
 		cs.insets = new Insets(0, 10, 15, 0);
 	    cs.gridx = 0;
@@ -101,7 +107,30 @@ public class CreateTableKorisnik extends JPanel{
 
 	private void initTable() {
 		model = new DefaultTableModel(data, columns);
-		tbl = new JTable(model);
+		
+		tbl = new JTable(model) {
+			public Component prepareRenderer (TableCellRenderer renderer,int Index_row, int Index_col) {
+				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				//even index, selected or not selected
+				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
+					comp.setBackground(new Color(203, 231, 218));
+				} else {
+					if (isCellSelected(Index_row, Index_col)) {
+						comp.setBackground(new Color(141, 191, 165));
+						comp.setFont(new Font("Arial", Font.PLAIN, 14));
+				} else
+					comp.setBackground(Color.white);
+			    }
+			  return comp;
+			}
+		};
+		JTableHeader header = tbl.getTableHeader();
+		header.setBackground(new Color(141, 191, 165));
+		header.setPreferredSize(new Dimension(650,30));
+		header.setFont(new Font("Arial", Font.ITALIC, 14));
+		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
+		
+		tbl.setRowHeight(23);
 		
 		tableSorter = new TableRowSorter<DefaultTableModel>(model);
 		tableSorter.setComparator(0, new Comparator<String>() {
