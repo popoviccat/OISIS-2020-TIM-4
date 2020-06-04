@@ -84,7 +84,7 @@ public class main extends JFrame {
 			mainToolbar = new JPanel();
 			GridBagConstraints layout = new GridBagConstraints();
 			mainToolbar.setLayout(new GridBagLayout());
-			Icon logIn = new ImageIcon("images/login.png");
+			Icon logOut = new ImageIcon("images/logout.png");
 			
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
@@ -97,10 +97,10 @@ public class main extends JFrame {
 		    layout.anchor = GridBagConstraints.LINE_START;
 		    mainToolbar.add(helloMessage, layout);
 			
-			JButton loginButton = new JButton("LOGIN", logIn);
-			loginButton.setFont(new Font("Arial", Font.BOLD, 15));
+			JButton loginButton = new JButton("Logout", logOut);
+			loginButton.setFont(new Font("Arial", Font.BOLD, 16));
 			loginButton.setBackground(peach);
-			loginButton.setPreferredSize(new Dimension(100, 35));
+			loginButton.setPreferredSize(new Dimension(110, 35));
 			loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			loginButton.addMouseListener(new MyMouseListener(loginButton));
 		    layout.gridx = 1;

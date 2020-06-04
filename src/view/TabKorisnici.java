@@ -11,8 +11,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 
 import controlers.MyMouseListener;
 
@@ -23,6 +29,7 @@ public class TabKorisnici extends JPanel {
 	Color peach = new Color(249, 229, 222);
 	Color mint = new Color(140,208,172);
 	CreateTableKorisnik ct = new CreateTableKorisnik();
+	JFrame frame = new JFrame();
 	
 	private String bookName;
 	
@@ -46,7 +53,14 @@ public class TabKorisnici extends JPanel {
 		addUser.addMouseListener(new MyMouseListener(addUser));
 		addUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ct.model.addRow(new Object[]{"Novi Korisnik", "Novi", "Korisnik", "Novi Korisnik"});
+				DodajKorisnika dkDlg = new DodajKorisnika(frame);
+                dkDlg.setVisible(true);
+				//ct.model.addRow(new Object[]{"Novi Korisnik", "Novi", "Korisnik", "Novi Korisnik"});
+                dkDlg.btnAdd.addActionListener(new ActionListener() {
+        			public void actionPerformed(ActionEvent e) {
+        				//ct.data = { { "pera", "Petar", "Petrovic", "Apotekar" }};
+        			}
+                });
 			}
 		});
 		addUser.setVisible(true);
@@ -62,21 +76,37 @@ public class TabKorisnici extends JPanel {
 	    delUser.addMouseListener(new MyMouseListener(delUser));
 	    delUser.addActionListener(new ActionListener() {
 	    	@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				// check for selected row first
 		        if (ct.tbl.getSelectedRow() != -1) {
 		            // remove selected row from the model
-		        	
-		        	System.out.println(ct.tbl.getValueAt(
-		        			ct.tbl.getSelectedRow(), 1)
-							+ " "
-							+ ct.tbl.getValueAt(
-									ct.tbl.getSelectedRow(), 2));
-		        	ct.model.removeRow(ct.tbl.getSelectedRow());
-		        	
+		        	Object data = ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 1);
+		        	int rowCount = ct.model.getRowCount();
+		        	for (int i = 0; i < rowCount; i++) {
+		        		
+		        			if (data == ct.model.getValueAt(i, 1)) {
+		        				
+		        				JFrame frame= new JFrame();
+		        				int code=JOptionPane.showConfirmDialog(frame, "Da li ste sigurni da zelite da obrisete korisnika " + "\n" +
+		        						ct.model.getValueAt(i, 1) + " " +
+		        						ct.model.getValueAt(i, 2) + "?",
+		        						"Obrisi korisnika?",JOptionPane.YES_NO_OPTION);
+		        				 
+		        				if (code == JOptionPane.YES_OPTION){
+		        					ct.model.removeRow(i);
+			        				JOptionPane.showMessageDialog(null, "Korisnik je obrisan.");
+			        				ct.model.fireTableDataChanged();
+			        				break;
+			        				
+		        				} else {
+		        					frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		        				}
+		        			}
+		        	}
 		        }
 			}
 		});
+	    
 	    cs.insets = new Insets(20, 20, 0, 20);
 	    cs.gridx = 1;
 		cs.gridy = 0;

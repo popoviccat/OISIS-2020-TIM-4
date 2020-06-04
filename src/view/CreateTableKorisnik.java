@@ -50,9 +50,11 @@ public class CreateTableKorisnik extends JPanel{
 			"Prezime",
 			"Tip Korisnika" };
 
-	private Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
+	public Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
 			{ "laza", "Lazar", "Lazic", "Lekar" },
 			{ "mika", "Milan", "Mikic", "Apotekar" },
+			{ "sara", "Sara", "Saric", "Apotekar" },
+			{ "barbara", "Barbara", "Barbaric", "Lekar" },
 			{ "ana", "Ana", "Petrovic", "Administrator" },
 			 };
 	
@@ -96,7 +98,7 @@ public class CreateTableKorisnik extends JPanel{
 		cs.gridy = 0;
 		add(pic,cs);
 		
-		cs.insets = new Insets(0, 0, 15, 415);
+		cs.insets = new Insets(0, 0, 16, 416);
 	    cs.gridx = 2;
 		cs.gridy = 0;
 		tfFilter.setPreferredSize(new Dimension(180,20));
@@ -146,6 +148,7 @@ public class CreateTableKorisnik extends JPanel{
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
 		tableSorter.setSortKeys(sortKeys);
 
 		tableSorter.setRowFilter(constructFilter());
@@ -157,13 +160,8 @@ public class CreateTableKorisnik extends JPanel{
 
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
-						if (!e.getValueIsAdjusting()
-								&& tbl.getSelectedRow() != -1) {
-							System.out.println(tbl.getValueAt(
-									tbl.getSelectedRow(), 1)
-									+ " "
-									+ tbl.getValueAt(
-											tbl.getSelectedRow(), 2));
+						if (!e.getValueIsAdjusting() && tbl.getSelectedRow() != -1) {
+							System.out.println("SELECTED"+tbl.getValueAt(tbl.getSelectedRow(), 1) + " " + tbl.getValueAt(tbl.getSelectedRow(), 2));
 						}
 					}
 				});
@@ -212,7 +210,7 @@ public class CreateTableKorisnik extends JPanel{
 		tipFilter = new RowTipKorisnikaFilter();
 
 		List<RowFilter<DefaultTableModel, Integer>> filters = new ArrayList<RowFilter<DefaultTableModel, Integer>>(
-				2);
+				3);
 		filters.add(imeFilter);
 		filters.add(prezimeFilter);
 		filters.add(tipFilter);
