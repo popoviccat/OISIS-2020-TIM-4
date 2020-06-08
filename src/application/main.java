@@ -3,25 +3,16 @@ package application;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Date;
-import java.util.Stack;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -31,24 +22,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import com.thoughtworks.xstream.XStream;
-
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import view.LoginDialog;
 import view.TabKorisnici;
 import view.TabLekovi;
 import view.TabRecepti;
 import model.Korisnik;
-import model.TipKorisnika;
 import controlers.JTabbedPaneCloseButton;
 import controlers.MyMouseListener;
 import controlers.MyWindowListener;
 import controlers.readFromFile;
+import controlers.writeToFile;
 
 
 public class main extends JFrame {
@@ -66,13 +50,13 @@ public class main extends JFrame {
 		// ========================= Singleton obrazac
 		private static main instance = null;
 
-		private main() {
+		private main() throws ClassNotFoundException, IOException {
 			this.createToolbar();
 			this.createMainPanel();
 			this.initPosition();
 		}
 		
-		public static main getInstance() {
+		public static main getInstance() throws ClassNotFoundException, IOException {
 			if (instance == null) {
 				instance = new main();
 			}
@@ -80,15 +64,17 @@ public class main extends JFrame {
 		}
 		// =========================
 		
-		private void createToolbar() {
+		private void createToolbar() throws ClassNotFoundException, IOException {
 			mainToolbar = new JPanel();
 			GridBagConstraints layout = new GridBagConstraints();
 			mainToolbar.setLayout(new GridBagLayout());
 			Icon logOut = new ImageIcon("images/logout.png");
 			
+			ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+			
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
-			JLabel helloMessage = new JLabel("Zdravo, Petar Petrovic!");
+			JLabel helloMessage = new JLabel("Zdravo, " + korisnici.get(0).getIme() + " " + korisnici.get(0).getPrezime() + "!");
 		    helloMessage.setFont(new Font("Arial", Font.ITALIC, 20));
 		    layout.insets = new Insets(5, 30, 5, 30);
 		    layout.gridx = 0;
@@ -217,7 +203,12 @@ public class main extends JFrame {
 			
 			btn1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					addTab_KorisniciToTabbedPane();
+					try {
+						addTab_KorisniciToTabbedPane();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			
@@ -235,13 +226,23 @@ public class main extends JFrame {
 			
 			btn4.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					addTab_IzvestajToTabbedPane();
+					try {
+						addTab_IzvestajToTabbedPane();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			
 			btn5.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					addTab_KorpaToTabbedPane();
+					try {
+						addTab_KorpaToTabbedPane();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			
@@ -297,7 +298,7 @@ public class main extends JFrame {
 		}
 
 		// dodavanje taba u TabbedPaned
-		private void addTab_KorisniciToTabbedPane() {
+		private void addTab_KorisniciToTabbedPane() throws ClassNotFoundException, IOException {
 			String title = "Korisnici"; 
 			// ucitavanje ikonice
 			ImageIcon icon = createImageIcon("images/users.png", true);
@@ -321,30 +322,28 @@ public class main extends JFrame {
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
-		private void addTab_IzvestajToTabbedPane() {
+		private void addTab_IzvestajToTabbedPane() throws ClassNotFoundException, IOException {
 			String title = "Izvestaj"; 
 			ImageIcon icon = createImageIcon("images/report.png", true);
 			TabKorisnici mt = new TabKorisnici(title);
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
-		private void addTab_KorpaToTabbedPane() {
+		private void addTab_KorpaToTabbedPane() throws ClassNotFoundException, IOException {
 			String title = "Korpa"; 
 			ImageIcon icon = createImageIcon("images/cart.png", true);
 			TabKorisnici mt = new TabKorisnici(title);
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
-		public static void main(String[] args) throws IOException {
-			main.getInstance();
+		public static void main(String[] args) throws IOException, ClassNotFoundException {
+			//main.getInstance();
 		    final JFrame frame = new JFrame("Login to Apoteka");
 		    final JPanel cont = new JPanel(new GridBagLayout());
 		    GridBagConstraints gb = new GridBagConstraints();
 		    final JButton btnLogin = new JButton("Click to login");
 		    cont.setBackground(Color.white);
-		   // readFromFile.readFromFileKor();
-		   // readFromFile();
-		    /*
+		    
 		    btnLogin.addActionListener(
 		    		new ActionListener(){
 		    			public void actionPerformed(ActionEvent e) {
@@ -352,7 +351,12 @@ public class main extends JFrame {
 		                    loginDlg.setVisible(true);
 		                    // if logon successfully
 		                    if(loginDlg.isSucceeded()){
-		                    	main.getInstance();
+		                    	try {
+									main.getInstance();
+								} catch (ClassNotFoundException | IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
 		                    	frame.hide();
 		                    }
 		                }
@@ -363,7 +367,7 @@ public class main extends JFrame {
 		    btnLogin.setPreferredSize(new Dimension(200,60));
 		    btnLogin.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		    btnLogin.addMouseListener(new MyMouseListener(btnLogin));
-		  
+		    
 		    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		    frame.add(cont);
 		    
@@ -375,7 +379,7 @@ public class main extends JFrame {
 		    frame.pack();
 	        frame.setResizable(false);
 		    frame.setVisible(true);
-		    frame.setLocationRelativeTo(null);*/
+		    frame.setLocationRelativeTo(null);
 		}
 
 		protected static ImageIcon createImageIcon(String path, boolean scaleImage) {
@@ -392,33 +396,5 @@ public class main extends JFrame {
 			}
 		}
 		
-		public static void readFromFile() throws IOException {
-			Korisnik kor1 = new Korisnik("Admin", "admin", "Administrator", "Adminović", TipKorisnika.ADMINISTRATOR);
-			Korisnik[] korisnici = new Korisnik[] { kor1};
-	
-			File f = new File("Korisnici.xml");
-			
-			OutputStream os = new BufferedOutputStream(new FileOutputStream(f));
-			  
-			try {
-	
-				XStream xs = new XStream();
-				xs.alias("korisnik", Korisnik.class);
-	
-				String s = xs.toXML(korisnici); 
-				xs.toXML(korisnici, os); 
-				System.out.println(s);
-	
-				Korisnik[] ucitaniKorisnici = (Korisnik[]) xs.fromXML(s);
-				int br = ucitaniKorisnici.length;
-				for (int i = 0; i < br; i++) {
-					if (ucitaniKorisnici[i].getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
-						System.out.println(ucitaniKorisnici[i].getIme());
-						
-					}
-				}
-			} finally {
-				os.close();
-			}
-		}
+		
 }

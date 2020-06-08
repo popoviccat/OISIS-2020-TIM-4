@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,7 +24,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -33,7 +33,8 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
-
+import controlers.readFromFile;
+import model.Korisnik;
 import utils.RowImeFilter;
 import utils.RowPrezimeFilter;
 import utils.RowTipKorisnikaFilter;
@@ -49,7 +50,7 @@ public class CreateTableKorisnik extends JPanel{
 			"Ime",
 			"Prezime",
 			"Tip Korisnika" };
-
+	/*
 	public Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
 			{ "laza", "Lazar", "Lazic", "Lekar" },
 			{ "mika", "Milan", "Mikic", "Apotekar" },
@@ -57,7 +58,7 @@ public class CreateTableKorisnik extends JPanel{
 			{ "barbara", "Barbara", "Barbaric", "Lekar" },
 			{ "ana", "Ana", "Petrovic", "Administrator" },
 			 };
-	
+	*/
 	public DefaultTableModel model;
 	public JTable tbl;
 	private TableRowSorter<DefaultTableModel> tableSorter;
@@ -67,7 +68,7 @@ public class CreateTableKorisnik extends JPanel{
 
 	private JTextField tfFilter;
 
-	public CreateTableKorisnik() {
+	public CreateTableKorisnik() throws ClassNotFoundException, IOException {
 		Icon icon = new ImageIcon("images/search.png");
 		JLabel title = new JLabel("Pretraga");
 		JLabel pic = new JLabel( icon);
@@ -107,8 +108,18 @@ public class CreateTableKorisnik extends JPanel{
 
 	}
 
-	private void initTable() {
-		model = new DefaultTableModel(data, columns);
+	private void initTable() throws ClassNotFoundException, IOException {
+		
+		ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+		int size = korisnici.size();
+		Object rowData[][] = new Object[size][100];
+		for (int i=0; i<size; i++) {
+			rowData[i][0] = korisnici.get(i).getKorisnickoIme();
+			rowData[i][1] = korisnici.get(i).getIme();
+			rowData[i][2] = korisnici.get(i).getPrezime();
+			rowData[i][3] = korisnici.get(i).getTipKorisnika();
+		}
+		model = new DefaultTableModel(rowData,columns);
 		
 		tbl = new JTable(model) {
 			public Component prepareRenderer (TableCellRenderer renderer,int Index_row, int Index_col) {
@@ -126,6 +137,7 @@ public class CreateTableKorisnik extends JPanel{
 			  return comp;
 			}
 		};
+		model.fireTableDataChanged();
 		JTableHeader header = tbl.getTableHeader();
 		header.setBackground(new Color(141, 191, 165));
 		header.setPreferredSize(new Dimension(650,30));

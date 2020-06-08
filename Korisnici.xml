@@ -1,9 +1,0 @@
-<korisnik-array>
-  <korisnik>
-    <korisnickoIme>Admin</korisnickoIme>
-    <lozinka>admin</lozinka>
-    <ime>Administrator</ime>
-    <prezime>Adminović</prezime>
-    <tipKorisnika>ADMINISTRATOR</tipKorisnika>
-  </korisnik>
-</korisnik-array>

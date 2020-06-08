@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,6 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import controlers.MyFocusListener;
+import controlers.writeToFile;
+import model.Korisnik;
 import model.TipKorisnika;
 
 public class DodajKorisnika extends JDialog{
@@ -41,11 +46,13 @@ public class DodajKorisnika extends JDialog{
     private JLabel lbLoz;
     public JButton btnAdd;
     private JButton btnCancel;
-    CreateTableKorisnik ct = new CreateTableKorisnik();
+    
  
-    public DodajKorisnika(Frame parent) {
+    public DodajKorisnika(Frame parent) throws ClassNotFoundException, IOException {
         super(parent, "Dodaj Korisnika", true);
-        //
+        CreateTableKorisnik ct = new CreateTableKorisnik();
+        MyFocusListener focusListener=new MyFocusListener();
+        
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints cs = new GridBagConstraints();
         Color peach = new Color(249, 229, 222);
@@ -73,6 +80,8 @@ public class DodajKorisnika extends JDialog{
         tfKorIme = new JTextField(20);
         tfKorIme.setFont(new Font("Arial", Font.PLAIN, 14));
         tfKorIme.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        tfKorIme.setName("txtKorIme");
+        tfKorIme.addFocusListener(focusListener);
         cs.gridx = 1;
         cs.gridy = 1;
         cs.gridwidth = 2;
@@ -152,10 +161,24 @@ public class DodajKorisnika extends JDialog{
         btnAdd.addActionListener(new ActionListener() {
  
         	public void actionPerformed(ActionEvent e) {
-               // if () {
-               // ct.model.addRow(new Object[]{"Novi Korisnik", "Novi", "Korisnik", "Novi Korisnik"});
-                    //JOptionPane.showMessageDialog(DodajKorisnika.this, "Uspešno ste dodali novog korisnika.", "Dodat korisnik", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+        		Korisnik kor = new Korisnik();
+                kor.setKorisnickoIme(tfKorIme.getText());
+                kor.setIme(tfIme.getText());
+                kor.setPrezime(tfPrez.getText());
+                kor.setLozinka(tfLoz.getText());
+                kor.setTipKorisnika((TipKorisnika) tipLista.getSelectedItem());
+                
+                try {
+					writeToFile.writeToFile(kor);
+					
+					
+				} catch (IOException | ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+                
+        		JOptionPane.showMessageDialog(DodajKorisnika.this, "Uspešno ste dodali novog korisnika.", "Dodat korisnik", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
                /* } else {
                     JOptionPane.showMessageDialog(DodajKorisnika.this,
                             "Netačno korisničko ime ili lozinka!",
@@ -167,7 +190,7 @@ public class DodajKorisnika extends JDialog{
                     succeeded = false;
  
                 }*/
-            }
+        	}
         });
         btnCancel = new JButton("Cancel");
         btnCancel.setPreferredSize(new Dimension(90,30));

@@ -2,6 +2,8 @@ package view;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -75,24 +77,29 @@ public class LoginDialog extends JDialog{
 	        btnLogin.addActionListener(new ActionListener() {
 	 
 	            public void actionPerformed(ActionEvent e) {
-	                if (Login.authenticate(getUsername(), getPassword())) {
-	                    JOptionPane.showMessageDialog(LoginDialog.this,
-	                            "Zdravo " + getUsername() + "! Uspešno ste se ulogovali.",
-	                            "Login to Apoteka",
-	                            JOptionPane.INFORMATION_MESSAGE);
-	                    succeeded = true;
-	                    dispose();
-	                } else {
-	                    JOptionPane.showMessageDialog(LoginDialog.this,
-	                            "Netačno korisničko ime ili lozinka!",
-	                            "Login to Apoteka",
-	                            JOptionPane.ERROR_MESSAGE);
-	                    // reset username and password
-	                    tfUsername.setText("");
-	                    pfPassword.setText("");
-	                    succeeded = false;
-	 
-	                }
+	                try {
+						if (Login.authenticate(getUsername(), getPassword())) {
+						    JOptionPane.showMessageDialog(LoginDialog.this,
+						            "Zdravo " + getUsername() + "! Uspešno ste se ulogovali.",
+						            "Login to Apoteka",
+						            JOptionPane.INFORMATION_MESSAGE);
+						    succeeded = true;
+						    dispose();
+						} else {
+						    JOptionPane.showMessageDialog(LoginDialog.this,
+						            "Netačno korisničko ime ili lozinka!",
+						            "Login to Apoteka",
+						            JOptionPane.ERROR_MESSAGE);
+						    // reset username and password
+						    tfUsername.setText("");
+						    pfPassword.setText("");
+						    succeeded = false;
+ 
+						}
+					} catch (HeadlessException | ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 	            }
 	        });
 	        btnCancel = new JButton("Cancel");

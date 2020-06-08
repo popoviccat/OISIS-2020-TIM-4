@@ -1,6 +1,15 @@
 package model;
 
-public class Korisnik {
+import java.io.Serializable;
+import java.util.Date;
+
+
+public class Korisnik implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9207254613509507944L;
 	private String korisnickoIme;
 	private String lozinka;
 	private String ime;
@@ -47,4 +56,11 @@ public class Korisnik {
 	public void setTipKorisnika(TipKorisnika tipKorisnika) {
 		this.tipKorisnika = tipKorisnika;
 	}
+	
+	@Override
+	public String toString() {
+		return "Korisnik [Korisnicko Ime=" + korisnickoIme + ", Lozinka=" + lozinka + ", Ime=" + ime + ", Prezime="
+				+ prezime + ", Tip Korisnika=" + tipKorisnika + "]";
+	}
+	
 }
