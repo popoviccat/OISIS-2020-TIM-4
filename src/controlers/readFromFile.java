@@ -21,7 +21,7 @@ public class readFromFile {
 			ArrayList<Korisnik> ucitaniKorisnici = new ArrayList<Korisnik>(); 
 			ucitaniKorisnici = (ArrayList<Korisnik>)ois.readObject();
 			
-			System.out.println(ucitaniKorisnici.get(ucitaniKorisnici.size()-1));/*
+			/*System.out.println(ucitaniKorisnici.get(ucitaniKorisnici.size()-1));/*
 			System.out.println(ucitaniKorisnici.get(1));
 			System.out.println(ucitaniKorisnici.get(2));
 			System.out.println(ucitaniKorisnici.get(2).getLozinka());
@@ -36,7 +36,6 @@ public class readFromFile {
 		} finally {
 			ois.close();
 		}
-		
 	}
 }
 /*

@@ -17,6 +17,4 @@ public class Login {
 		}
         return false;
     }
-	
-	
 }

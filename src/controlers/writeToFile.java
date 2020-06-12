@@ -19,7 +19,7 @@ import model.TipKorisnika;
 
 public class writeToFile {
 	
-	public static void writeToFile(Korisnik noviKorisnik) throws IOException, ClassNotFoundException {
+	public static void writeToFileKor(Korisnik noviKorisnik) throws IOException, ClassNotFoundException {
 		ArrayList<Korisnik> ucitaniKorisnici = readFromFile.readFromFileKor();
 		/*Korisnik kor1 = new Korisnik("admin", "admin", "Administrator", "Adminović", TipKorisnika.ADMINISTRATOR);
 		Korisnik kor2 = new Korisnik("ankic", "ankica", "Ana", "Peric", TipKorisnika.LEKAR);
@@ -39,5 +39,20 @@ public class writeToFile {
 			oos.close(); //Zatvara i tok nizeg nivoa.
 		}
 		
+	}
+	
+	public static void updateDatabaseKor(ArrayList<Korisnik> zapisiKorisnike) throws ClassNotFoundException, IOException {
+		/*ArrayList<Korisnik> zapisiKorisnike1 = new ArrayList<Korisnik>();
+		Korisnik kor1 = new Korisnik("admin", "admin", "Administrator", "Adminović", TipKorisnika.ADMINISTRATOR, false);
+		zapisiKorisnike1.add(kor1);*/		// obnavlja bazu
+		
+		File f = new File("Korisnici.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
+		
+		try {
+			oos.writeObject(zapisiKorisnike);
+		} finally {
+			oos.close(); //Zatvara i tok nizeg nivoa.
+		}
 	}
 }

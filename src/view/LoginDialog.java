@@ -3,11 +3,14 @@ package view;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.*;
 
 import controlers.Login;
+import controlers.readFromFile;
+import model.Korisnik;
 
 public class LoginDialog extends JDialog{
 	
@@ -24,6 +27,8 @@ public class LoginDialog extends JDialog{
 	    private JButton btnLogin;
 	    private JButton btnCancel;
 	    private boolean succeeded;
+	    private int totalAttempts= 3; 
+	    private Korisnik logedOn;
 	 
 	    public LoginDialog(Frame parent) {
 	        super(parent, "Login", true);
@@ -77,31 +82,42 @@ public class LoginDialog extends JDialog{
 	        btnLogin.addActionListener(new ActionListener() {
 	 
 	            public void actionPerformed(ActionEvent e) {
-	                try {
-						if (Login.authenticate(getUsername(), getPassword())) {
-						    JOptionPane.showMessageDialog(LoginDialog.this,
-						            "Zdravo " + getUsername() + "! Uspešno ste se ulogovali.",
-						            "Login to Apoteka",
-						            JOptionPane.INFORMATION_MESSAGE);
-						    succeeded = true;
-						    dispose();
-						} else {
-						    JOptionPane.showMessageDialog(LoginDialog.this,
-						            "Netačno korisničko ime ili lozinka!",
-						            "Login to Apoteka",
-						            JOptionPane.ERROR_MESSAGE);
-						    // reset username and password
-						    tfUsername.setText("");
-						    pfPassword.setText("");
-						    succeeded = false;
- 
+	            	if (totalAttempts != 0) {
+		                try {
+							if (Login.authenticate(getUsername(), getPassword())) {
+							    JOptionPane.showMessageDialog(LoginDialog.this,
+							            "Zdravo " + getUsername() + "! Uspešno ste se ulogovali.",
+							            "Login to Apoteka",
+							            JOptionPane.INFORMATION_MESSAGE);
+							    succeeded = true;
+							    dispose();
+							} else {
+							    JOptionPane.showMessageDialog(LoginDialog.this,
+							            "Netačno korisničko ime ili lozinka!",
+							            "Login to Apoteka",
+							            JOptionPane.ERROR_MESSAGE);
+							    // reset username and password
+							    tfUsername.setText("");
+							    pfPassword.setText("");
+							    succeeded = false;
+							    totalAttempts--;
+							    
+							}
+						} catch (HeadlessException | ClassNotFoundException | IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-					} catch (HeadlessException | ClassNotFoundException | IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+	            	} if(totalAttempts == 0){
+	                    
+	            		JOptionPane.showMessageDialog(LoginDialog.this,
+	    			            "Dostignut je maksimalan broj pokusaja!",
+	    			            "Error",
+	    			            JOptionPane.ERROR_MESSAGE);
+	                    System.exit(ERROR);
+	                }
 	            }
 	        });
+	       
 	        btnCancel = new JButton("Cancel");
 	        btnCancel.setBackground(peach);
 	        btnCancel.addActionListener(new ActionListener() {
@@ -134,6 +150,30 @@ public class LoginDialog extends JDialog{
 	        setResizable(false);
 	        setLocationRelativeTo(parent);
 	    }
+	    
+	    /*private Korisnik logedOn;
+		  private LoginDialog loginDlg;
+	      logedOn = loginDlg.getLogedOnKor();
+	     */
+	    
+	    public Korisnik getLogedOnKor() throws ClassNotFoundException, IOException {
+			
+			ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+			String korIme = tfUsername.getText();
+			for(int i=0; i<korisnici.size(); i++) {
+				if (korIme.equals((String)korisnici.get(i).getKorisnickoIme())) { //trazi isto ime
+					int index = i;
+					logedOn = new Korisnik(korisnici.get(i).getKorisnickoIme(),
+							korisnici.get(i).getLozinka(), 
+							korisnici.get(i).getIme(), 
+							korisnici.get(i).getPrezime(),  
+							korisnici.get(i).getTipKorisnika(),
+							korisnici.get(i).getLogickiObrisan());
+					break;
+				}
+			}
+			return logedOn;
+		}
 	 
 	    public String getUsername() {
 	        return tfUsername.getText().trim();

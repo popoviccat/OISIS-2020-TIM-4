@@ -35,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 
 import controlers.readFromFile;
 import model.Korisnik;
+import model.TipKorisnika;
 import utils.RowImeFilter;
 import utils.RowPrezimeFilter;
 import utils.RowTipKorisnikaFilter;
@@ -49,7 +50,8 @@ public class CreateTableKorisnik extends JPanel{
 	private Object[] columns = new Object[] { "Korisnicko ime",
 			"Ime",
 			"Prezime",
-			"Tip Korisnika" };
+			"Tip Korisnika", 
+			"Obrisan"};
 	/*
 	public Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
 			{ "laza", "Lazar", "Lazic", "Lekar" },
@@ -68,7 +70,7 @@ public class CreateTableKorisnik extends JPanel{
 
 	private JTextField tfFilter;
 
-	public CreateTableKorisnik() throws ClassNotFoundException, IOException {
+	public void CreateTableKorisnik() throws ClassNotFoundException, IOException {
 		Icon icon = new ImageIcon("images/search.png");
 		JLabel title = new JLabel("Pretraga");
 		JLabel pic = new JLabel( icon);
@@ -112,18 +114,56 @@ public class CreateTableKorisnik extends JPanel{
 		
 		ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
 		int size = korisnici.size();
-		Object rowData[][] = new Object[size][100];
+		int rows = 0;
+		/*for (int b=0; b<size; b++) {
+			if(korisnici.get(b).getLogickiObrisan() == false) {
+				rows ++;
+			}
+		}*/
+		//System.out.println(rows);
+		Object[][] rowData = new Object[size][10];
 		for (int i=0; i<size; i++) {
+			//if(korisnici.get(i).getLogickiObrisan() == false) {
+				//System.out.println("USAO");
 			rowData[i][0] = korisnici.get(i).getKorisnickoIme();
 			rowData[i][1] = korisnici.get(i).getIme();
 			rowData[i][2] = korisnici.get(i).getPrezime();
 			rowData[i][3] = korisnici.get(i).getTipKorisnika();
+			rowData[i][4] = korisnici.get(i).getLogickiObrisan();
+			//}
 		}
-		model = new DefaultTableModel(rowData,columns);
+		model = new DefaultTableModel(rowData,columns){
+		      public Class<?> getColumnClass(int column)
+		      {
+		        switch(column)
+		        {
+		        case 0:
+		          return String.class;
+		        case 1:
+		          return String.class;
+		        case 2:
+		          return String.class;
+		        case 3:
+		          return TipKorisnika.class;
+		        case 4:
+		          return Boolean.class;
+
+		          default:
+		            return String.class;
+		        }
+		      }
+		      @Override
+		      public boolean isCellEditable(int rowIndex, int columnIndex) {
+		    	  return columnIndex == 100;
+		      }
+		    };
+		
+		
 		
 		tbl = new JTable(model) {
 			public Component prepareRenderer (TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				if ((boolean) tbl.getValueAt(Index_row, 4) == false) {
 				//even index, selected or not selected
 				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
 					comp.setBackground(new Color(203, 231, 218));
@@ -131,12 +171,20 @@ public class CreateTableKorisnik extends JPanel{
 					if (isCellSelected(Index_row, Index_col)) {
 						comp.setBackground(new Color(141, 191, 165));
 						comp.setFont(new Font("Arial", Font.PLAIN, 14));
-				} else
-					comp.setBackground(Color.white);
+					} else {
+						comp.setBackground(Color.white);
+					}
 			    }
+				} else {
+					comp.setBackground(new Color(197, 197, 197));
+					/*
+					Class<?> col_class = tbl.getColumnClass(4);
+					super.setDefaultEditor(col_class,null);*/
+				}
 			  return comp;
 			}
 		};
+		//tbl.setEnabled(false);
 		model.fireTableDataChanged();
 		JTableHeader header = tbl.getTableHeader();
 		header.setBackground(new Color(141, 191, 165));
@@ -161,6 +209,8 @@ public class CreateTableKorisnik extends JPanel{
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(3, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(4, SortOrder.ASCENDING));
 		tableSorter.setSortKeys(sortKeys);
 
 		tableSorter.setRowFilter(constructFilter());
@@ -173,7 +223,7 @@ public class CreateTableKorisnik extends JPanel{
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
 						if (!e.getValueIsAdjusting() && tbl.getSelectedRow() != -1) {
-							System.out.println("SELECTED"+tbl.getValueAt(tbl.getSelectedRow(), 1) + " " + tbl.getValueAt(tbl.getSelectedRow(), 2));
+							//System.out.println("SELECTED"+tbl.getValueAt(tbl.getSelectedRow(), 1) + " " + tbl.getValueAt(tbl.getSelectedRow(), 2));
 						}
 					}
 				});
@@ -186,6 +236,46 @@ public class CreateTableKorisnik extends JPanel{
 
 		// Širenje tabele kompletno po visini pogleda scrollpane-a.
 		tbl.setFillsViewportHeight(true);
+	}
+	
+	public void TableUpdate() throws ClassNotFoundException, IOException {
+			
+		ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+		int size = korisnici.size();
+		
+		Object[][] rowData = new Object[size][10];
+		for (int i=0; i<size; i++) {
+			rowData[i][0] = korisnici.get(i).getKorisnickoIme();
+			rowData[i][1] = korisnici.get(i).getIme();
+			rowData[i][2] = korisnici.get(i).getPrezime();
+			rowData[i][3] = korisnici.get(i).getTipKorisnika();
+			rowData[i][4] = korisnici.get(i).getLogickiObrisan();
+		}
+		model = new DefaultTableModel(rowData,columns){
+		      public Class<?> getColumnClass(int column) {
+		    	  switch(column) {
+			    	  case 0:
+			    		  return String.class;
+			    	  case 1:
+			    		  return String.class;
+			    	  case 2:
+			    		  return String.class;
+			    	  case 3:
+			    		  return TipKorisnika.class;
+			    	  case 4:
+			    		  return Boolean.class;
+	
+			    	  default:
+			        	return String.class;
+		    	  }
+		      }
+		      @Override
+		      public boolean isCellEditable(int rowIndex, int columnIndex) {
+		    	  return columnIndex == 100;
+		      }
+		    };
+		    
+		tbl.setModel(model);
 	}
 
 	private void initTFFilter() {

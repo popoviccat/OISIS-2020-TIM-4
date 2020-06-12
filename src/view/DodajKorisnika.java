@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import controlers.MyFocusListener;
+import controlers.readFromFile;
 import controlers.writeToFile;
 import model.Korisnik;
 import model.TipKorisnika;
@@ -145,7 +146,8 @@ public class DodajKorisnika extends JDialog{
         cs.gridwidth = 1;
         panel.add(lbTip, cs);
         
-        JComboBox tipLista = new JComboBox(TipKorisnika.values());
+        TipKorisnika[] tip = {TipKorisnika.APOTEKAR,TipKorisnika.LEKAR};
+        JComboBox tipLista = new JComboBox(tip);
         cs.gridx = 1;
         cs.gridy = 5;
         cs.gridwidth = 2;
@@ -159,37 +161,44 @@ public class DodajKorisnika extends JDialog{
         btnAdd.setPreferredSize(new Dimension(90,30));
         btnAdd.setBackground(peach);
         btnAdd.addActionListener(new ActionListener() {
- 
         	public void actionPerformed(ActionEvent e) {
-        		Korisnik kor = new Korisnik();
-                kor.setKorisnickoIme(tfKorIme.getText());
-                kor.setIme(tfIme.getText());
-                kor.setPrezime(tfPrez.getText());
-                kor.setLozinka(tfLoz.getText());
-                kor.setTipKorisnika((TipKorisnika) tipLista.getSelectedItem());
-                
-                try {
-					writeToFile.writeToFile(kor);
-					
-					
-				} catch (IOException | ClassNotFoundException e1) {
+        		
+				try {
+					ArrayList<Korisnik> korisnici;
+					korisnici = readFromFile.readFromFileKor();
+	        		int size = korisnici.size();
+	        		boolean error = false;
+	        		System.out.println(error);
+	        		for (int i=0; i<size; i++) {
+		        		if (tfKorIme.getText().equals( korisnici.get(i).getKorisnickoIme() )){
+		        			System.out.println("POSTOJI ISTI");
+		        			error = true;
+		        			break;
+		        		}
+	        		}
+		        	if (error == false) {
+		        		System.out.println("novi");
+		        		Korisnik kor = new Korisnik();
+		                kor.setKorisnickoIme(tfKorIme.getText());
+		                kor.setIme(tfIme.getText());
+		                kor.setPrezime(tfPrez.getText());
+		                kor.setLozinka(tfLoz.getText());
+		                kor.setTipKorisnika((TipKorisnika) tipLista.getSelectedItem());
+		                
+						writeToFile.writeToFileKor(kor);
+		                
+		        		JOptionPane.showMessageDialog(DodajKorisnika.this, "Uspešno ste dodali novog korisnika.", "Dodat korisnik", JOptionPane.INFORMATION_MESSAGE);
+		                dispose();
+		        	} else {
+		        		System.out.println(error);
+		        		tfKorIme.setText("");
+	        			JOptionPane.showMessageDialog(DodajKorisnika.this, "Korisnik sa unetim korisnickim imenom vec postoji.", "Error", JOptionPane.ERROR_MESSAGE);
+		        	}
+		        	
+				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-                
-        		JOptionPane.showMessageDialog(DodajKorisnika.this, "Uspešno ste dodali novog korisnika.", "Dodat korisnik", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-               /* } else {
-                    JOptionPane.showMessageDialog(DodajKorisnika.this,
-                            "Netačno korisničko ime ili lozinka!",
-                            "Login to Apoteka",
-                            JOptionPane.ERROR_MESSAGE);
-                    // reset username and password
-                    tfUsername.setText("");
-                    pfPassword.setText("");
-                    succeeded = false;
- 
-                }*/
         	}
         });
         btnCancel = new JButton("Cancel");

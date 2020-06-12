@@ -28,6 +28,7 @@ import view.TabKorisnici;
 import view.TabLekovi;
 import view.TabRecepti;
 import model.Korisnik;
+import model.TipKorisnika;
 import controlers.JTabbedPaneCloseButton;
 import controlers.MyMouseListener;
 import controlers.MyWindowListener;
@@ -42,6 +43,8 @@ public class main extends JFrame {
 		private JPanel mainToolbar;
 		private JPanel leftPanel;
 		private JTabbedPaneCloseButton tabbedPane;
+		private Korisnik logedOn;
+		public static LoginDialog loginDlg;
 		
 		int tabNumber = 0;
 		Color peach = new Color(249, 229, 222);
@@ -69,12 +72,13 @@ public class main extends JFrame {
 			GridBagConstraints layout = new GridBagConstraints();
 			mainToolbar.setLayout(new GridBagLayout());
 			Icon logOut = new ImageIcon("images/logout.png");
+			logedOn = loginDlg.getLogedOnKor();
 			
 			ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
-			
+			//writeToFile.updateDatabaseKor(korisnici);
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
-			JLabel helloMessage = new JLabel("Zdravo, " + korisnici.get(0).getIme() + " " + korisnici.get(0).getPrezime() + "!");
+			JLabel helloMessage = new JLabel("Zdravo, " + logedOn.getIme() + " " + logedOn.getPrezime() + "!");
 		    helloMessage.setFont(new Font("Arial", Font.ITALIC, 20));
 		    layout.insets = new Insets(5, 30, 5, 30);
 		    layout.gridx = 0;
@@ -96,7 +100,7 @@ public class main extends JFrame {
 			this.add(mainToolbar, BorderLayout.NORTH);
 		}
 
-		private void createMainPanel() {
+		private void createMainPanel() throws ClassNotFoundException, IOException {
 			this.createLeftPanel();
 			this.createTabbedPane();
 			JLayeredPane lpane = new JLayeredPane();
@@ -155,8 +159,9 @@ public class main extends JFrame {
 			  }
 		}
 
-		private void createLeftPanel() {
+		private void createLeftPanel() throws ClassNotFoundException, IOException {
 			
+			logedOn = loginDlg.getLogedOnKor();
 			leftPanel = new JPanel();
 			GridBagConstraints gbc = new GridBagConstraints();
 			leftPanel.setLayout(new GridBagLayout());
@@ -200,6 +205,19 @@ public class main extends JFrame {
 			btn5.setPreferredSize(new Dimension(130,40));
 			btn5.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 			btn5.addMouseListener(new MyMouseListener(btn5));
+			
+			if(logedOn.getTipKorisnika() == TipKorisnika.LEKAR || logedOn.getTipKorisnika() == TipKorisnika.APOTEKAR) {
+				btn1.setVisible(false);
+				btn4.setVisible(false);
+			}
+			if(logedOn.getTipKorisnika() == TipKorisnika.LEKAR || logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
+				btn5.setIcon(null);
+				btn5.setEnabled(false);
+				btn5.setOpaque(false);
+				btn5.setContentAreaFilled(false);
+				btn5.setBorderPainted(false);
+				btn5.setText("");
+			}
 			
 			btn1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -246,10 +264,9 @@ public class main extends JFrame {
 				}
 			});
 			
-			gbc.insets = new Insets(10, 0, 10, 0);
-			
 			gbc.gridx = 0;
 			gbc.gridy = 0;
+			gbc.anchor = GridBagConstraints.PAGE_START;
 			gbc.insets = new Insets (20,0,10,0);
 			leftPanel.add(logo, gbc);
 			
@@ -337,7 +354,10 @@ public class main extends JFrame {
 		}
 		
 		public static void main(String[] args) throws IOException, ClassNotFoundException {
+			
+			
 			//main.getInstance();
+			
 		    final JFrame frame = new JFrame("Login to Apoteka");
 		    final JPanel cont = new JPanel(new GridBagLayout());
 		    GridBagConstraints gb = new GridBagConstraints();
@@ -347,7 +367,7 @@ public class main extends JFrame {
 		    btnLogin.addActionListener(
 		    		new ActionListener(){
 		    			public void actionPerformed(ActionEvent e) {
-		    				LoginDialog loginDlg = new LoginDialog(frame);
+		    				loginDlg = new LoginDialog(frame);
 		                    loginDlg.setVisible(true);
 		                    // if logon successfully
 		                    if(loginDlg.isSucceeded()){
@@ -395,6 +415,25 @@ public class main extends JFrame {
 				return new ImageIcon(path);
 			}
 		}
+		
+		/*public Korisnik getLogedOnKor() throws ClassNotFoundException, IOException {
+			
+			ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+			String korIme = loginDlg.getUsername();
+			for(int i=0; i<korisnici.size(); i++) {
+				if (korIme.equals((String)korisnici.get(i).getKorisnickoIme())) { //trazi isto ime
+					int index = i;
+					logedOn = new Korisnik(korisnici.get(i).getKorisnickoIme(),
+							korisnici.get(i).getLozinka(), 
+							korisnici.get(i).getIme(), 
+							korisnici.get(i).getPrezime(),  
+							korisnici.get(i).getTipKorisnika(),
+							korisnici.get(i).getLogickiObrisan());
+					break;
+				}
+			}
+			return logedOn;
+		}*/
 		
 		
 }
