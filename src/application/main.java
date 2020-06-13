@@ -28,6 +28,7 @@ import view.TabKorisnici;
 import view.TabLekovi;
 import view.TabRecepti;
 import model.Korisnik;
+import model.Lek;
 import model.TipKorisnika;
 import controlers.JTabbedPaneCloseButton;
 import controlers.MyMouseListener;
@@ -43,7 +44,7 @@ public class main extends JFrame {
 		private JPanel mainToolbar;
 		private JPanel leftPanel;
 		private JTabbedPaneCloseButton tabbedPane;
-		private Korisnik logedOn;
+		private Korisnik logedOn = new Korisnik("admin", "admin", "admin", "admin", TipKorisnika.ADMINISTRATOR, false);;
 		public static LoginDialog loginDlg;
 		
 		int tabNumber = 0;
@@ -72,10 +73,12 @@ public class main extends JFrame {
 			GridBagConstraints layout = new GridBagConstraints();
 			mainToolbar.setLayout(new GridBagLayout());
 			Icon logOut = new ImageIcon("images/logout.png");
-			logedOn = loginDlg.getLogedOnKor();
+			//logedOn = loginDlg.getLogedOnKor();
 			
 			ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+			//ArrayList<Lek> lek =  new ArrayList<Lek>(); 
 			//writeToFile.updateDatabaseKor(korisnici);
+			//writeToFile.updateDatabaseLek(lek);
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
 			JLabel helloMessage = new JLabel("Zdravo, " + logedOn.getIme() + " " + logedOn.getPrezime() + "!");
@@ -161,7 +164,7 @@ public class main extends JFrame {
 
 		private void createLeftPanel() throws ClassNotFoundException, IOException {
 			
-			logedOn = loginDlg.getLogedOnKor();
+			//logedOn = loginDlg.getLogedOnKor();
 			leftPanel = new JPanel();
 			GridBagConstraints gbc = new GridBagConstraints();
 			leftPanel.setLayout(new GridBagLayout());
@@ -232,7 +235,12 @@ public class main extends JFrame {
 			
 			btn2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					addTab_LekoviToTabbedPane();
+					try {
+						addTab_LekoviToTabbedPane();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			
@@ -325,7 +333,7 @@ public class main extends JFrame {
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
-		private void addTab_LekoviToTabbedPane() {
+		private void addTab_LekoviToTabbedPane() throws ClassNotFoundException, IOException {
 			String title = "Lekovi"; 
 			ImageIcon icon = createImageIcon("images/drugs.png", true);
 			TabLekovi mt = new TabLekovi(title);
@@ -354,11 +362,9 @@ public class main extends JFrame {
 		}
 		
 		public static void main(String[] args) throws IOException, ClassNotFoundException {
+			main.getInstance();
 			
-			
-			//main.getInstance();
-			
-		    final JFrame frame = new JFrame("Login to Apoteka");
+		   /* final JFrame frame = new JFrame("Login to Apoteka");
 		    final JPanel cont = new JPanel(new GridBagLayout());
 		    GridBagConstraints gb = new GridBagConstraints();
 		    final JButton btnLogin = new JButton("Click to login");
@@ -399,7 +405,7 @@ public class main extends JFrame {
 		    frame.pack();
 	        frame.setResizable(false);
 		    frame.setVisible(true);
-		    frame.setLocationRelativeTo(null);
+		    frame.setLocationRelativeTo(null);*/
 		}
 
 		protected static ImageIcon createImageIcon(String path, boolean scaleImage) {

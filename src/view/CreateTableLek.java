@@ -28,49 +28,48 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import controlers.readFromFile;
-import model.Korisnik;
-import model.TipKorisnika;
+import model.Lek;
+import utils.Row0Filter;
 import utils.Row1Filter;
 import utils.Row2Filter;
-import utils.Row3Filter;
+import utils.Row4Filter;
 
-public class CreateTableKorisnik extends JPanel{
+public class CreateTableLek extends JPanel{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8915538830180476453L;
-	
-	private Object[] columns = new Object[] { "Korisnicko ime",
+	private static final long serialVersionUID = 5583791462138578512L;
+
+	private Object[] columns = new Object[] { "Sifra",
 			"Ime",
-			"Prezime",
-			"Tip Korisnika", 
-			"Obrisan"};
-	/*
-	public Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
-			{ "laza", "Lazar", "Lazic", "Lekar" },
-			{ "mika", "Milan", "Mikic", "Apotekar" },
-			{ "sara", "Sara", "Saric", "Apotekar" },
-			{ "barbara", "Barbara", "Barbaric", "Lekar" },
-			{ "ana", "Ana", "Petrovic", "Administrator" },
-			 };
-	*/
+			"Proizvodjac",
+			"Izdaje se na recept", 
+			"Cena"};
+	
+	/*public Object[][] data = { { "N0000", "Brufen", "Galenika", true, 249, false },
+			{ "N0001", "Kafetin", "Alkaloid", false, 169, false },
+			{ "N0002", "Lorazepam", "Hemofarm", true, 409, false },
+			 };*/
+	
 	public DefaultTableModel model;
 	public JTable tbl;
 	private TableRowSorter<DefaultTableModel> tableSorter;
+	private Row0Filter sifraFilter;
 	private Row1Filter imeFilter;
-	private Row2Filter prezimeFilter;
-	private Row3Filter tipFilter;
+	private Row2Filter proizvFilter;
+	private Row4Filter cenaFilter;
 
 	private JTextField tfFilter;
 
-	public void CreateTableKorisnik() throws ClassNotFoundException, IOException {
+	public void CreateTableLek() throws ClassNotFoundException, IOException {
 		Icon icon = new ImageIcon("images/search.png");
 		JLabel title = new JLabel("Pretraga");
 		JLabel pic = new JLabel( icon);
@@ -112,24 +111,24 @@ public class CreateTableKorisnik extends JPanel{
 
 	private void initTable() throws ClassNotFoundException, IOException {
 		
-		ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
-		int size = korisnici.size();
+		ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
+		int size = lekovi.size();
 		int rows = 0;
 		/*for (int b=0; b<size; b++) {
-			if(korisnici.get(b).getLogickiObrisan() == false) {
+			if(lekovi.get(b).getLogickiObrisan() == false) {
 				rows ++;
 			}
 		}*/
 		//System.out.println(rows);
 		Object[][] rowData = new Object[size][10];
 		for (int i=0; i<size; i++) {
-			//if(korisnici.get(i).getLogickiObrisan() == false) {
+			//if(lekovi.get(i).getLogickiObrisan() == false) {
 				//System.out.println("USAO");
-			rowData[i][0] = korisnici.get(i).getKorisnickoIme();
-			rowData[i][1] = korisnici.get(i).getIme();
-			rowData[i][2] = korisnici.get(i).getPrezime();
-			rowData[i][3] = korisnici.get(i).getTipKorisnika();
-			rowData[i][4] = korisnici.get(i).getLogickiObrisan();
+			rowData[i][0] = lekovi.get(i).getSifra();
+			rowData[i][1] = lekovi.get(i).getIme();
+			rowData[i][2] = lekovi.get(i).getProizvodjac();
+			rowData[i][3] = lekovi.get(i).getIzdajeSeNaRecept();
+			rowData[i][4] = lekovi.get(i).getCena() + " din.";
 			//}
 		}
 		model = new DefaultTableModel(rowData,columns){
@@ -144,9 +143,9 @@ public class CreateTableKorisnik extends JPanel{
 		        case 2:
 		          return String.class;
 		        case 3:
-		          return TipKorisnika.class;
-		        case 4:
 		          return Boolean.class;
+		        case 4:
+		          return String.class;
 
 		          default:
 		            return String.class;
@@ -158,12 +157,11 @@ public class CreateTableKorisnik extends JPanel{
 		      }
 		    };
 		
-		
-		
 		tbl = new JTable(model) {
 			public Component prepareRenderer (TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
-				if ((boolean) tbl.getValueAt(Index_row, 4) == false) {
+				
+				
 				//even index, selected or not selected
 				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
 					comp.setBackground(new Color(203, 231, 218));
@@ -175,12 +173,7 @@ public class CreateTableKorisnik extends JPanel{
 						comp.setBackground(Color.white);
 					}
 			    }
-				} else {
-					comp.setBackground(new Color(197, 197, 197));
-					/*
-					Class<?> col_class = tbl.getColumnClass(4);
-					super.setDefaultEditor(col_class,null);*/
-				}
+				
 			  return comp;
 			}
 		};
@@ -193,6 +186,9 @@ public class CreateTableKorisnik extends JPanel{
 		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
 		
 		tbl.setRowHeight(23);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		tbl.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
 		
 		tableSorter = new TableRowSorter<DefaultTableModel>(model);
 		tableSorter.setComparator(0, new Comparator<String>() {
@@ -240,16 +236,16 @@ public class CreateTableKorisnik extends JPanel{
 	
 	public void TableUpdate() throws ClassNotFoundException, IOException {
 			
-		ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
-		int size = korisnici.size();
+		ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
+		int size = lekovi.size();
 		
 		Object[][] rowData = new Object[size][10];
 		for (int i=0; i<size; i++) {
-			rowData[i][0] = korisnici.get(i).getKorisnickoIme();
-			rowData[i][1] = korisnici.get(i).getIme();
-			rowData[i][2] = korisnici.get(i).getPrezime();
-			rowData[i][3] = korisnici.get(i).getTipKorisnika();
-			rowData[i][4] = korisnici.get(i).getLogickiObrisan();
+			rowData[i][0] = lekovi.get(i).getSifra();
+			rowData[i][1] = lekovi.get(i).getIme();
+			rowData[i][2] = lekovi.get(i).getProizvodjac();
+			rowData[i][3] = lekovi.get(i).getIzdajeSeNaRecept();
+			rowData[i][4] = lekovi.get(i).getCena();
 		}
 		model = new DefaultTableModel(rowData,columns){
 		      public Class<?> getColumnClass(int column) {
@@ -261,9 +257,9 @@ public class CreateTableKorisnik extends JPanel{
 			    	  case 2:
 			    		  return String.class;
 			    	  case 3:
-			    		  return TipKorisnika.class;
-			    	  case 4:
 			    		  return Boolean.class;
+			    	  case 4:
+			    		  return String.class;
 	
 			    	  default:
 			        	return String.class;
@@ -300,22 +296,25 @@ public class CreateTableKorisnik extends JPanel{
 	}
 
 	private void filter(String value) {
+		sifraFilter.setValue(value);
 		imeFilter.setValue(value);
-		prezimeFilter.setValue(value);
-		tipFilter.setValue(value);
+		proizvFilter.setValue(value);
+		cenaFilter.setValue(value);
 		tableSorter.sort();
 	}
 
 	private RowFilter<DefaultTableModel, Integer> constructFilter() {
+		sifraFilter = new Row0Filter();
 		imeFilter = new Row1Filter();
-		prezimeFilter = new Row2Filter();
-		tipFilter = new Row3Filter();
+		proizvFilter = new Row2Filter();
+		cenaFilter = new Row4Filter();
 
 		List<RowFilter<DefaultTableModel, Integer>> filters = new ArrayList<RowFilter<DefaultTableModel, Integer>>(
-				3);
+				4);
+		filters.add(sifraFilter);
 		filters.add(imeFilter);
-		filters.add(prezimeFilter);
-		filters.add(tipFilter);
+		filters.add(proizvFilter);
+		filters.add(cenaFilter);
 		RowFilter<DefaultTableModel, Integer> orFilter = RowFilter.orFilter(filters);
 		return orFilter;
 	}

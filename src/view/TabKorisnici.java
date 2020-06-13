@@ -8,26 +8,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import controlers.MyMouseListener;
 import controlers.ObrisiIzTabele;
-import controlers.readFromFile;
-import model.Korisnik;
 
 public class TabKorisnici extends JPanel {
 
@@ -38,13 +29,13 @@ public class TabKorisnici extends JPanel {
 	
 	JFrame frame = new JFrame();
 	
-	private String bookName;
+	private String tabName;
 	
 	public TabKorisnici(String text) throws ClassNotFoundException, IOException {
 		CreateTableKorisnik ct = new CreateTableKorisnik();
 		ct.CreateTableKorisnik();
 		
-		this.bookName = text;
+		this.tabName = text;
 		
 		this.setLayout(new BorderLayout());
 		JPanel topPanel = new JPanel();
@@ -73,7 +64,6 @@ public class TabKorisnici extends JPanel {
 					ct.TableUpdate();
 					
 					System.out.println("Poslednji dodat "+ ct.model.getValueAt(ct.model.getRowCount()-1, 0));
-					JOptionPane.showMessageDialog(frame, "Molimo ponovo otvorite tab kako biste videli azuriran prikaz tabele.", "Azuriranje prikaza", JOptionPane.INFORMATION_MESSAGE);
 					
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
@@ -98,7 +88,7 @@ public class TabKorisnici extends JPanel {
 	    	@Override
 			public void actionPerformed(ActionEvent e) {
 	    		try {
-	    			ObrisiIzTabele.Obrisi(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
+	    			ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
 					ct.TableUpdate();
 					
 				} catch (ClassNotFoundException | IOException e1) {
@@ -113,19 +103,19 @@ public class TabKorisnici extends JPanel {
 		cs.gridy = 0;
 	    topPanel.add(delUser, cs);
 	    
-		cs.insets = new Insets(0, 0, 0, 0);
+		cs.insets = new Insets(10, 0, 0, 0);
 		cs.gridx = 0;
 		cs.gridy = 1;
 		cs.gridwidth = 3;
 		cs.weightx = 1.0;
 		cs.weighty = 1.0;
-		cs.anchor = GridBagConstraints.PAGE_END;
+		cs.anchor = GridBagConstraints.NORTH;
 		topPanel.add(ct,cs);
 		ct.setBackground(Color.white);
-		ct.setPreferredSize(new Dimension(700,354));
+		ct.setPreferredSize(new Dimension(700,380));
 		ct.setVisible(true);
 		
-		JButton saveBtn = new JButton("Sacuvaj");
+		/*JButton saveBtn = new JButton("Sacuvaj");
 		saveBtn.setBackground(peach);
 		saveBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 		saveBtn.setPreferredSize(new Dimension(100,26));
@@ -133,7 +123,7 @@ public class TabKorisnici extends JPanel {
 		saveBtn.addActionListener(new ActionListener() {
 	    	@Override
 			public void actionPerformed(ActionEvent e) {
-	    		/*CreateTableKorisnik updated;
+	    		CreateTableKorisnik updated;
 				try {
 					updated = new CreateTableKorisnik();
 				
@@ -163,22 +153,18 @@ public class TabKorisnici extends JPanel {
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}*/
+				}
 	    	}  
 		});
 		cs.insets = new Insets(20, 20, 25, 40);
 		cs.gridx = 2;
 		cs.gridy = 2;
 		cs.anchor = GridBagConstraints.LAST_LINE_END;
-	    topPanel.add(saveBtn, cs);
+	    topPanel.add(saveBtn, cs);*/
 	    
 	}
 	
-	public void saveBookState() {
-		System.out.println("Cuvam sadrzaj knjige: " + this.bookName);
-	}
-	
 	public String getName() {
-		return this.bookName;
+		return this.tabName;
 	}
 }

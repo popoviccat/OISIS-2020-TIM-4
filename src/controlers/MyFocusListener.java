@@ -13,25 +13,26 @@ public class MyFocusListener implements FocusListener{
 		
 		JTextField txt=(JTextField) arg0.getComponent();
 		txt.setBackground(Color.WHITE);
-		
+		txt.setForeground(Color.BLACK);
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
 		JTextField txt=(JTextField) arg0.getComponent();
-		txt.setBackground(Color.GRAY);
+		txt.setBackground(Color.lightGray);
 		
 
-		//polje prezime je obavezno za unos:
+		//polje korIme je obavezno za unos:
 		if (txt.getName().equals("txtKorIme")){
+			System.out.println(txt.getName());
 
-		if (txt.getText().trim().equals("") || txt.getText().trim().equals("Obavezno polje...") ){
-			txt.setText("Obavezno polje...");
-			txt.requestFocus();
-			txt.setForeground(Color.RED);
-		}else{
-			txt.setForeground(Color.BLACK);
-		}
+			if (txt.getText().trim().equals("") || txt.getText().trim().equals("Obavezno polje...") ){
+				txt.setText("Obavezno polje...");
+				txt.requestFocus();
+				txt.setForeground(Color.RED);
+			}else{
+				txt.setForeground(Color.BLACK);
+			}
 		}
 		
 	}

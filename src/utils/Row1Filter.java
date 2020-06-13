@@ -1,13 +1,10 @@
-/**
- * 
- */
 package utils;
 
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 
 
-public class RowImeFilter extends RowFilter<DefaultTableModel, Integer> {
+public class Row1Filter extends RowFilter<DefaultTableModel, Integer> {
 
 	private String value;
 

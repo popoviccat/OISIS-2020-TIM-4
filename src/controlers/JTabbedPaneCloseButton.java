@@ -112,6 +112,8 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
             JButton button = new JButton(MetalIconFactory.getInternalFrameCloseIcon(16));
             button.setMargin(new Insets(0, 0, 0, 0));
             button.addMouseListener(new CloseListener(tab));
+            button.setBorderPainted(false);
+            button.setContentAreaFilled(false);
             add(button);
         }
     }

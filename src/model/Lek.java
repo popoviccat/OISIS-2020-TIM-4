@@ -1,23 +1,27 @@
 package model;
 
-public class Lek {
+import java.io.Serializable;
+
+public class Lek implements Serializable{
 	private String sifra;
 	private String ime;
 	private String proizvodjac;
 	private boolean izdajeSeNaRecept;
 	private float cena;
+	private boolean logickiObrisan;
 	
 	public Lek() {
 		super();
 	}
 
-	public Lek(String sifra, String ime, String proizvodjac, boolean izdajeSeNaRecept, float cena) {
+	public Lek(String sifra, String ime, String proizvodjac, boolean izdajeSeNaRecept, float cena, boolean logickiObrisan) {
 		super();
 		this.sifra = sifra;
 		this.ime = ime;
 		this.proizvodjac = proizvodjac;
 		this.izdajeSeNaRecept = izdajeSeNaRecept;
 		this.cena = cena;
+		this.logickiObrisan = false;
 	}
 
 	public String getSifra() {
@@ -44,7 +48,7 @@ public class Lek {
 		this.proizvodjac = proizvodjac;
 	}
 
-	public boolean isIzdajeSeNaRecept() {
+	public boolean getIzdajeSeNaRecept() {
 		return izdajeSeNaRecept;
 	}
 
@@ -58,6 +62,13 @@ public class Lek {
 
 	public void setCena(float cena) {
 		this.cena = cena;
+	}
+	
+	public boolean getLogickiObrisan() {
+		return logickiObrisan;
+	}
+	public void setLogickiObrisan(boolean logickiObrisan) {
+		this.logickiObrisan = logickiObrisan;
 	}
 
 	@Override
@@ -85,6 +96,10 @@ public class Lek {
 		return true;
 	}
 	
-	
+/*	@Override
+	public String toString() {
+		return "Korisnik [Korisnicko Ime=" + korisnickoIme + ", Lozinka=" + lozinka + ", Ime=" + ime + ", Prezime="
+				+ prezime + ", Tip Korisnika=" + tipKorisnika + "]";
+	}*/
 	
 }

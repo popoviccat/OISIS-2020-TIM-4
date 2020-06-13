@@ -13,7 +13,7 @@ import java.lang.String;
 
 public class ObrisiIzTabele {
 	
-	public static void Obrisi (int ct, String name) throws ClassNotFoundException, IOException{
+	public static void ObrisiKor (int ct, String name) throws ClassNotFoundException, IOException{
 		
 		ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
 		 if (ct != -1 ) {

@@ -16,10 +16,12 @@ public class Korisnik implements Serializable{
 	private String prezime;
 	private TipKorisnika tipKorisnika;
 	private boolean logickiObrisan;
+	
 	public Korisnik() {
 		super();
 	}
-	public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, TipKorisnika tipKorisnika,boolean logickiObrisan) {
+	
+	public Korisnik(String korisnickoIme, String lozinka, String ime, String prezime, TipKorisnika tipKorisnika, boolean logickiObrisan) {
 		super();
 		this.korisnickoIme = korisnickoIme;
 		this.lozinka = lozinka;

@@ -162,7 +162,6 @@ public class LoginDialog extends JDialog{
 			String korIme = tfUsername.getText();
 			for(int i=0; i<korisnici.size(); i++) {
 				if (korIme.equals((String)korisnici.get(i).getKorisnickoIme())) { //trazi isto ime
-					int index = i;
 					logedOn = new Korisnik(korisnici.get(i).getKorisnickoIme(),
 							korisnici.get(i).getLozinka(), 
 							korisnici.get(i).getIme(), 

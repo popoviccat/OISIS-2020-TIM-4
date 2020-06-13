@@ -15,6 +15,7 @@ import java.util.List;
 import com.thoughtworks.xstream.XStream;
 
 import model.Korisnik;
+import model.Lek;
 import model.TipKorisnika;
 
 public class writeToFile {
@@ -36,9 +37,8 @@ public class writeToFile {
 		try {
 			oos.writeObject(ucitaniKorisnici);
 		} finally {
-			oos.close(); //Zatvara i tok nizeg nivoa.
+			oos.close();
 		}
-		
 	}
 	
 	public static void updateDatabaseKor(ArrayList<Korisnik> zapisiKorisnike) throws ClassNotFoundException, IOException {
@@ -52,7 +52,41 @@ public class writeToFile {
 		try {
 			oos.writeObject(zapisiKorisnike);
 		} finally {
-			oos.close(); //Zatvara i tok nizeg nivoa.
+			oos.close();
+		}
+	}
+	
+	public static void writeToFileLek(Lek noviLek) throws IOException, ClassNotFoundException {
+		ArrayList<Lek> ucitaniLekovi = readFromFile.readFromFileLek();
+		ucitaniLekovi.add(noviLek);
+		  
+		File f = new File("Lekovi.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
+		
+		try {
+			oos.writeObject(ucitaniLekovi);
+		} finally {
+			oos.close();
+		}
+	}
+	
+	public static void updateDatabaseLek(ArrayList<Lek> Lekovi) throws ClassNotFoundException, IOException {
+		/*ArrayList<Lek> zapisiLekovi = new ArrayList<Lek>();
+		Lek lek1 = new Lek("N0000", "Brufen", "Galenika", true, 249, false);
+		Lek lek2 = new Lek("N0001", "Kafetin", "Alkaloid", false, 169, false);
+		Lek lek3 = new Lek("N0002", "Lorazepam", "Hemofarm", true, 409, false);
+		zapisiLekovi.add(lek1);		
+		zapisiLekovi.add(lek2);
+		zapisiLekovi.add(lek3);	*/		// obnavlja bazu
+		
+		
+		File f = new File("Lekovi.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
+		
+		try {
+			oos.writeObject(Lekovi);
+		} finally {
+			oos.close();
 		}
 	}
 }
