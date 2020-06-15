@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,19 +18,13 @@ import com.thoughtworks.xstream.XStream;
 
 import model.Korisnik;
 import model.Lek;
+import model.Recept;
 import model.TipKorisnika;
 
 public class writeToFile {
 	
 	public static void writeToFileKor(Korisnik noviKorisnik) throws IOException, ClassNotFoundException {
 		ArrayList<Korisnik> ucitaniKorisnici = readFromFile.readFromFileKor();
-		/*Korisnik kor1 = new Korisnik("admin", "admin", "Administrator", "Adminović", TipKorisnika.ADMINISTRATOR);
-		Korisnik kor2 = new Korisnik("ankic", "ankica", "Ana", "Peric", TipKorisnika.LEKAR);
-		Korisnik kor3 = new Korisnik("laki", "laki", "Laza", "Lazic", TipKorisnika.APOTEKAR);
-		//ArrayList<Korisnik> korisnici = new ArrayList<Korisnik>(); 
-		ucitaniKorisnici.add(kor1);
-		ucitaniKorisnici.add(kor2);
-		ucitaniKorisnici.add(kor3);*/
 		ucitaniKorisnici.add(noviKorisnik);
 		  
 		File f = new File("Korisnici.txt");
@@ -85,6 +81,48 @@ public class writeToFile {
 		
 		try {
 			oos.writeObject(Lekovi);
+		} finally {
+			oos.close();
+		}
+	}
+	
+	public static void writeToFileRec(Recept noviRec) throws IOException, ClassNotFoundException {
+		ArrayList<Recept> ucitaniRecepti = readFromFile.readFromFileRec();
+		ucitaniRecepti.add(noviRec);
+		  
+		File f = new File("Recepti.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
+		
+		try {
+			oos.writeObject(ucitaniRecepti);
+		} finally {
+			oos.close();
+		}
+	}
+	
+	public static void updateDatabaseRec(ArrayList<Recept> Recepti) throws ClassNotFoundException, IOException {
+		ArrayList<Recept> zapisiRecepti = new ArrayList<Recept>();
+		ArrayList<Korisnik> ucitanikor = readFromFile.readFromFileKor();
+		ArrayList<Lek> ucitanilek = readFromFile.readFromFileLek();
+		Date date = new Date(System.currentTimeMillis());
+		
+		Recept rec1 = new Recept(6080, ucitanikor.get(0).getKorisnickoIme(), "0501668836978", date);
+		rec1.dodajLek(ucitanilek.get(0), 1);
+		rec1.dodajLek(ucitanilek.get(1), 2);
+		Recept rec2 = new Recept(2021, ucitanikor.get(1).getKorisnickoIme(), "3018668836978", date);
+		rec2.dodajLek(ucitanilek.get(0), 3);
+		Recept rec3 = new Recept(2022, ucitanikor.get(2).getKorisnickoIme(), "1605668836978", date);
+		rec3.dodajLek(ucitanilek.get(2), 2);
+		zapisiRecepti.add(rec1);		
+		zapisiRecepti.add(rec2);
+		zapisiRecepti.add(rec3);			// obnavlja bazu
+		
+		
+		File f = new File("Recepti.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
+		
+		try {
+			oos.writeObject(zapisiRecepti);
 		} finally {
 			oos.close();
 		}

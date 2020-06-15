@@ -13,12 +13,13 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import controlers.MyMouseListener;
 import controlers.ObrisiIzTabele;
+import model.Korisnik;
+import model.TipKorisnika;
 
 public class TabLekovi extends JPanel{
 
@@ -31,7 +32,7 @@ public class TabLekovi extends JPanel{
 	
 	private String tabName;
 	
-	public TabLekovi(String text) throws ClassNotFoundException, IOException {
+	public TabLekovi(String text, Korisnik logedOn) throws ClassNotFoundException, IOException {
 		CreateTableLek ct = new CreateTableLek();
 		ct.CreateTableLek();
 		
@@ -57,8 +58,7 @@ public class TabLekovi extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					JFrame frame= new JFrame();
-					DodajLek dkDlg;
-					dkDlg = new DodajLek(frame);
+					DodajLek dkDlg = new DodajLek(frame);
 					dkDlg.setVisible(true);
 				
 					ct.TableUpdate();
@@ -148,7 +148,13 @@ public class TabLekovi extends JPanel{
 		ct.setPreferredSize(new Dimension(700,380));
 		ct.setVisible(true);
 		
-		
+		if(logedOn.getTipKorisnika() == TipKorisnika.LEKAR) {
+			addDrug.setVisible(false);
+			delDrug.setVisible(false);
+			editDrug.setVisible(false);
+			ct.setPreferredSize(new Dimension(700,440));
+			ct.tbl.setPreferredScrollableViewportSize(new Dimension(650,330));
+		}
 	    
 	}
 	

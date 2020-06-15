@@ -24,6 +24,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
@@ -34,27 +35,34 @@ import model.Korisnik;
 import model.Lek;
 import model.TipKorisnika;
 
-public class DodajLek extends JDialog{
+public class DodajRecept extends JDialog{
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -159924695243776854L;
 	private JTextField tfSifra;
-	private JTextField tfIme;
-	private JTextField tfProiz;
-	private JTextField tfCena;
+	private JTextField tfId;
+	private JTextField tfJmbg;
+	private JTextField tfLek;
+	private JTextField tfKol;
+	private JTextField tfDate;
     private JLabel lbSifra;
-    private JLabel lbIme;
-    private JLabel lbProiz;
-    private JLabel lbRec;
+    private JLabel lbId;
+    private JLabel lbJmbg;
+    private JLabel lbLek;
+    private JLabel lbKol;
+    private JLabel lbDate;
     private JLabel lbText;
-    private JLabel lbCena;
     public JButton btnAdd;
     private JButton btnCancel;
+    private JButton btnAddLek;
+    private JTextArea content;
+    
+    private int count = 1;
     
  
-    public DodajLek(Frame parent) throws ClassNotFoundException, IOException {
+    public DodajRecept(Frame parent) throws ClassNotFoundException, IOException {
         super(parent, "Dodaj Lek", true);
         
         JPanel panel = new JPanel(new GridBagLayout());
@@ -64,7 +72,7 @@ public class DodajLek extends JDialog{
  
         cs.fill = GridBagConstraints.HORIZONTAL;
         
-        lbText = new JLabel("Novi lek:");
+        lbText = new JLabel("Novi recept:");
         lbText.setFont(new Font("Arial", Font.BOLD, 25));
         cs.insets = new Insets(0, 0, 15, 0);
         cs.gridx = 0;
@@ -76,7 +84,7 @@ public class DodajLek extends JDialog{
         lbSifra = new JLabel("Sifra:  ");
         lbSifra.setFont(new Font("Arial", Font.PLAIN, 14));
         lbSifra.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        cs.insets = new Insets(20, 0, 20, 0);
+        cs.insets = new Insets(20, 0, 10, 0);
         cs.gridx = 0;
         cs.gridy = 1;
         cs.gridwidth = 1;
@@ -91,49 +99,39 @@ public class DodajLek extends JDialog{
         cs.gridwidth = 2;
         panel.add(tfSifra, cs);
  
-        lbIme = new JLabel("Ime:  ");
-        lbIme.setFont(new Font("Arial", Font.PLAIN, 14));
-        lbIme.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        cs.insets = new Insets(10, 0, 10, 0);
+        lbId = new JLabel("ID lekara:  ");
+        lbId.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbId.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        cs.insets = new Insets(20, 0, 10, 0);
         cs.gridx = 0;
         cs.gridy = 2;
         cs.gridwidth = 1;
-        panel.add(lbIme, cs);
+        panel.add(lbId, cs);
  
-        tfIme = new JTextField(20);
-        tfIme.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        tfId = new JTextField(20);
+        tfId.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
         cs.gridx = 1;
         cs.gridy = 2;
         cs.gridwidth = 2;
-        panel.add(tfIme, cs);
+        panel.add(tfId, cs);
         
-        lbProiz = new JLabel("Proizvodjac:  ");
-        lbProiz.setFont(new Font("Arial", Font.PLAIN, 14));
-        lbProiz.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        lbJmbg = new JLabel("JMBG pacijenta:  ");
+        lbJmbg.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbJmbg.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
         cs.insets = new Insets(20, 0, 10, 0);
         cs.gridx = 0;
         cs.gridy = 3;
         cs.gridwidth = 1;
-        panel.add(lbProiz, cs);
+        panel.add(lbJmbg, cs);
  
-        tfProiz = new JTextField(20);
-        tfProiz.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        tfJmbg = new JTextField(20);
+        tfJmbg.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
         cs.gridx = 1;
         cs.gridy = 3;
         cs.gridwidth = 2;
-        panel.add(tfProiz, cs);
+        panel.add(tfJmbg, cs);
         
-        lbCena = new JLabel("Cena:  ");
-        lbCena.setFont(new Font("Arial", Font.PLAIN, 14));
-        lbCena.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        cs.insets = new Insets(20, 0, 20, 0);
-        cs.gridx = 0;
-        cs.gridy = 4;
-        cs.gridwidth = 1;
-        panel.add(lbCena, cs);
- 
-        tfCena = new JTextField(100);
-        tfCena.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        /*
         tfCena.addKeyListener(new KeyListener() {
 			
 			@Override
@@ -153,34 +151,90 @@ public class DodajLek extends JDialog{
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
 			}
-		});
+		});*/
+        
+        lbDate = new JLabel("Datum i vreme izdavanja:  ");
+        lbDate.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbDate.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        cs.insets = new Insets(20, 0, 7, 0);
+        cs.gridx = 0;
+        cs.gridy = 4;
+        cs.gridwidth = 1;
+        panel.add(lbDate, cs);
+ 
+        tfDate = new JTextField(20);
+        tfDate.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
         cs.gridx = 1;
         cs.gridy = 4;
         cs.gridwidth = 2;
-        panel.add(tfCena, cs);
+        panel.add(tfDate, cs);
         
-        lbRec = new JLabel("Izdaje se na recept:  ");
-        lbRec.setFont(new Font("Arial", Font.PLAIN, 14));
-        lbRec.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        cs.insets = new Insets(10, 0, 0, 0);
+        lbLek = new JLabel("Lek:  ");
+        lbLek.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbLek.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        cs.insets = new Insets(20, 0, 8, 0);
         cs.gridx = 0;
         cs.gridy = 5;
         cs.gridwidth = 1;
-        panel.add(lbRec, cs);
+        panel.add(lbLek, cs);
         
-        Vector<String> booleanVector = new Vector<String>();
-        booleanVector.add("Da");
-        booleanVector.add("Ne");
-        JComboBox recLista = new JComboBox(booleanVector);
+        ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
+        JComboBox recLista = new JComboBox(lekovi.toArray());
         recLista.setSelectedIndex(0);
         cs.gridx = 1;
         cs.gridy = 5;
         cs.gridwidth = 2;
         panel.add(recLista, cs);
         
-        //panel.setBorder(new LineBorder(Color.gray, 0));
+        lbKol = new JLabel("Kolicina izabranog leka:  ");
+        lbKol.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbKol.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        cs.insets = new Insets(20, 0, 10, 0);
+        cs.gridx = 0;
+        cs.gridy = 6;
+        cs.gridwidth = 1;
+        panel.add(lbKol, cs);
+        
+        tfKol = new JTextField(20);
+        tfKol.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        cs.insets = new Insets(20, 0, 10, 0);
+        cs.gridx = 1;
+        cs.gridy = 6;
+        cs.gridwidth = 2;
+        panel.add(tfKol, cs);
+        
+        btnAddLek = new JButton("Dodaj lek");
+        btnAddLek.setToolTipText("Moguce je dodati najvise 3 leka");
+        btnAddLek.setPreferredSize(new Dimension(50,20));
+        btnAddLek.setBackground(peach);
+        btnAddLek.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		if(count < 4) {
+        			content.append("\n"+ " " +count + ". " + "dodato");
+        			count ++;
+        		}
+        	}
+        });
+        cs.insets = new Insets(10, 10, 10, 0);
+        cs.gridx = 2;
+        cs.gridy = 7;
+        cs.gridwidth = 1;
+        panel.add(btnAddLek, cs);
+        
+        content = new JTextArea(" Dodati lekovi: ");
+        content.setEditable(false);
+        content.setFont(new Font("Arial", Font.PLAIN, 13));
+        content.setBorder(BorderFactory.createMatteBorder(1, 5, 1, 1, new Color (111, 179, 143)));
+        content.setForeground(new Color (77, 77, 77));
+        content.setBackground(new Color(202, 232, 216));
+        cs.insets = new Insets(10, 0, 10, 10);
+        cs.gridx = 0;
+        cs.gridy = 7;
+        cs.gridwidth = 2;
+        panel.add(content, cs);
+        
         panel.setBackground(new Color(164, 218, 189));
-        panel.setPreferredSize(new Dimension(360,360));
+        panel.setPreferredSize(new Dimension(370,463));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
  
         btnAdd = new JButton("Add");
@@ -200,13 +254,12 @@ public class DodajLek extends JDialog{
 		        			break;
 		        		}
 	        		}
-	        		if( !(tfSifra.getText().equals("") || tfIme.getText().equals("") || tfProiz.getText().equals("") || tfCena.getText().equals("")) ) {
+	        		if( !(tfSifra.getText().equals("") || tfId.getText().equals("") || tfJmbg.getText().equals("") || tfLek.getText().equals("")) ) {
 			        	if (error == false) {
 			        		Lek lek = new Lek();
 			        		lek.setSifra(tfSifra.getText());
-			        		lek.setIme(tfIme.getText());
-			        		lek.setProizvodjac(tfProiz.getText());
-			        		lek.setCena(Float.parseFloat( tfCena.getText() ));
+			        		lek.setIme(tfId.getText());
+			        		lek.setProizvodjac(tfJmbg.getText());
 			        		if (recLista.getSelectedItem().equals("Da")) {
 			        			lek.setIzdajeSeNaRecept(true);
 			        		}
@@ -216,15 +269,15 @@ public class DodajLek extends JDialog{
 			                
 							writeToFile.writeToFileLek(lek);
 			                
-			        		JOptionPane.showMessageDialog(DodajLek.this, "Uspešno ste dodali novi lek.", "Dodat lek", JOptionPane.INFORMATION_MESSAGE);
+			        		JOptionPane.showMessageDialog(DodajRecept.this, "Uspešno ste dodali novi lek.", "Dodat lek", JOptionPane.INFORMATION_MESSAGE);
 			                dispose();
 			        	} else {
 			        		System.out.println(error);
 			        		tfSifra.setText("");
-		        			JOptionPane.showMessageDialog(DodajLek.this, "Lek sa unetom sifrom vec postoji!", "Error", JOptionPane.ERROR_MESSAGE);
+		        			JOptionPane.showMessageDialog(DodajRecept.this, "Lek sa unetom sifrom vec postoji!", "Error", JOptionPane.ERROR_MESSAGE);
 			        	}
 	        		} else {
-	        			JOptionPane.showMessageDialog(DodajLek.this, "Sva polja moraju biti popunjena!", "Error", JOptionPane.ERROR_MESSAGE);
+	        			JOptionPane.showMessageDialog(DodajRecept.this, "Sva polja moraju biti popunjena!", "Error", JOptionPane.ERROR_MESSAGE);
 	        		}
 	        		
 				} catch (ClassNotFoundException | IOException e1) {
@@ -273,15 +326,11 @@ public class DodajLek extends JDialog{
     }
  
     public String getIme() {
-        return tfIme.getText().trim();
+        return tfId.getText().trim();
     }
     
     public String getProiz() {
-        return tfProiz.getText().trim();
-    }
-    
-    public float getCena() {
-        return Float.parseFloat( tfCena.getText());
+        return tfJmbg.getText().trim();
     }
     
 }

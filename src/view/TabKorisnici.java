@@ -57,8 +57,7 @@ public class TabKorisnici extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					JFrame frame= new JFrame();
-					DodajKorisnika dkDlg;
-					dkDlg = new DodajKorisnika(frame);
+					DodajKorisnika dkDlg = new DodajKorisnika(frame);
 					dkDlg.setVisible(true);
 				
 					ct.TableUpdate();

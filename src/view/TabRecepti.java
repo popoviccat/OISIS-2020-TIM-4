@@ -1,51 +1,129 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
+import javax.swing.border.LineBorder;
+
+import controlers.MyMouseListener;
+import controlers.ObrisiIzTabele;
+import model.Korisnik;
+import model.TipKorisnika;
 
 public class TabRecepti extends JPanel{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1392769694146741116L;
-
-	private JPanel topPanel;
 	
-	private String bookName;
+	private static final long serialVersionUID = -6600124705287732081L;
 	
-	public TabRecepti(String text) {
-		this.bookName = text;
-		this.setLayout(new BorderLayout());;
-		
-		// panel za toolbar
-		this.topPanel = new JPanel();
-		topPanel.add(new JLabel("Toolbar za knjigu " + this.bookName));
-		this.add(topPanel, BorderLayout.NORTH);
-		
-		// panel za stablo
-		JPanel leftPanel = new JPanel();
-		leftPanel.add(new JLabel("Stablo knjige " + this.bookName));
-		
-		// panel za sadrzaj stranice
-		JPanel rightPanel = new JPanel();
-		rightPanel.add(new JLabel("Sadrzaj izabrane stranice knjige " + this.bookName));
-		
-		// split pane
-		this.add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel),
-				BorderLayout.CENTER);
-	}
+	Color peach = new Color(249, 229, 222);
+	Color mint = new Color(140,208,172);
 	
-	public void saveBookState() {
-		System.out.println("Cuvam sadrzaj knjige: " + this.bookName);
+	JFrame frame = new JFrame();
+	
+	private String tabName;
+	
+	public TabRecepti(String text, Korisnik logedOn) throws ClassNotFoundException, IOException {
+		CreateTableRecept ct = new CreateTableRecept();
+		ct.CreateTableRecept();
+		
+		this.tabName = text;
+		
+		this.setLayout(new BorderLayout());
+		JPanel topPanel = new JPanel();
+		add(BorderLayout.PAGE_START, topPanel);
+		
+		topPanel.setLayout(new GridBagLayout());
+		GridBagConstraints cs = new GridBagConstraints();
+		topPanel.setBorder(new LineBorder(Color.white, 0));
+		topPanel.setBackground(Color.white);
+		this.add(topPanel, BorderLayout.CENTER);
+	  
+		JButton addDrug = new JButton("Dodaj recept");
+		addDrug.setBackground(peach);
+		addDrug.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		addDrug.setPreferredSize(new Dimension(150,26));
+		addDrug.addMouseListener(new MyMouseListener(addDrug));
+		addDrug.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					JFrame frame= new JFrame();
+					DodajRecept dkDlg = new DodajRecept(frame);
+					dkDlg.setVisible(true);
+				
+					ct.TableUpdate();
+					
+					System.out.println("Poslednji dodat "+ ct.model.getValueAt(ct.model.getRowCount()-1, 0));
+					
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		addDrug.setVisible(true);
+		cs.insets = new Insets(20, 50, 0, 10);
+	    cs.gridx = 0;
+		cs.gridy = 0;
+	    topPanel.add(addDrug, cs);
+	    
+	    JButton delDrug = new JButton("Obrisi recept");
+	    delDrug.setBackground(peach);
+	    delDrug.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+	    delDrug.setPreferredSize(new Dimension(150,26));
+	    delDrug.addMouseListener(new MyMouseListener(delDrug));
+	    
+	    delDrug.addActionListener(new ActionListener() {
+	    	@Override
+			public void actionPerformed(ActionEvent e) {
+	    		try {
+	    			//ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
+					ct.TableUpdate();
+					
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    	}
+		});
+	    cs.insets = new Insets(20, 20, 0, 0);
+	    cs.gridx = 1;
+		cs.gridy = 0;
+	    topPanel.add(delDrug, cs);
+	    
+		cs.insets = new Insets(10, 0, 0, 0);
+		cs.gridx = 0;
+		cs.gridy = 1;
+		cs.gridwidth = 3;
+		cs.weightx = 1.0;
+		cs.weighty = 1.0;
+		cs.anchor = GridBagConstraints.NORTH;
+		topPanel.add(ct,cs);
+		ct.setBackground(Color.white);
+		ct.setPreferredSize(new Dimension(700,380));
+		ct.setVisible(true);
+		
+		/*if(logedOn.getTipKorisnika() == TipKorisnika.LEKAR) {
+			addDrug.setVisible(false);
+			delDrug.setVisible(false);
+			ct.setPreferredSize(new Dimension(700,440));
+			ct.tbl.setPreferredScrollableViewportSize(new Dimension(650,330));
+		}*/
+	    
 	}
 	
 	public String getName() {
-		return this.bookName;
+		return this.tabName;
 	}
-
 }
-

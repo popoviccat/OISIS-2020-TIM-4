@@ -21,7 +21,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import view.LoginDialog;
 import view.TabKorisnici;
@@ -29,6 +31,7 @@ import view.TabLekovi;
 import view.TabRecepti;
 import model.Korisnik;
 import model.Lek;
+import model.Recept;
 import model.TipKorisnika;
 import controlers.JTabbedPaneCloseButton;
 import controlers.MyMouseListener;
@@ -44,7 +47,7 @@ public class main extends JFrame {
 		private JPanel mainToolbar;
 		private JPanel leftPanel;
 		private JTabbedPaneCloseButton tabbedPane;
-		private Korisnik logedOn = new Korisnik("admin", "admin", "admin", "admin", TipKorisnika.ADMINISTRATOR, false);;
+		private Korisnik logedOn = new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.ADMINISTRATOR, false);
 		public static LoginDialog loginDlg;
 		
 		int tabNumber = 0;
@@ -75,10 +78,12 @@ public class main extends JFrame {
 			Icon logOut = new ImageIcon("images/logout.png");
 			//logedOn = loginDlg.getLogedOnKor();
 			
-			ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+			//ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
 			//ArrayList<Lek> lek =  new ArrayList<Lek>(); 
+			ArrayList<Recept> rec =  new ArrayList<Recept>(); 
 			//writeToFile.updateDatabaseKor(korisnici);
 			//writeToFile.updateDatabaseLek(lek);
+			writeToFile.updateDatabaseRec(rec);
 			mainToolbar.setBackground(Color.WHITE);
 			mainToolbar.setBorder(BorderFactory.createMatteBorder(1,1,0,1,Color.BLACK));
 			JLabel helloMessage = new JLabel("Zdravo, " + logedOn.getIme() + " " + logedOn.getPrezime() + "!");
@@ -90,16 +95,27 @@ public class main extends JFrame {
 		    layout.anchor = GridBagConstraints.LINE_START;
 		    mainToolbar.add(helloMessage, layout);
 			
-			JButton loginButton = new JButton("Logout", logOut);
-			loginButton.setFont(new Font("Arial", Font.BOLD, 16));
-			loginButton.setBackground(peach);
-			loginButton.setPreferredSize(new Dimension(110, 35));
-			loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
-			loginButton.addMouseListener(new MyMouseListener(loginButton));
+			JButton logoutButton = new JButton("Logout", logOut);
+			logoutButton.setFont(new Font("Arial", Font.BOLD, 16));
+			logoutButton.setBackground(peach);
+			logoutButton.setPreferredSize(new Dimension(110, 35));
+			logoutButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+			logoutButton.addMouseListener(new MyMouseListener(logoutButton));
+			logoutButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						logout();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			
 		    layout.gridx = 1;
 		    layout.gridy = 0;
 		    layout.anchor = GridBagConstraints.LINE_END;
-			mainToolbar.add(loginButton, layout);
+			mainToolbar.add(logoutButton, layout);
 			this.add(mainToolbar, BorderLayout.NORTH);
 		}
 
@@ -246,7 +262,12 @@ public class main extends JFrame {
 			
 			btn3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					addTab_ReceptiToTabbedPane();
+					try {
+						addTab_ReceptiToTabbedPane();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			
@@ -302,13 +323,10 @@ public class main extends JFrame {
 			gbc.insets = new Insets (0,0,30,0);
 			leftPanel.add(btn5, gbc);
 		}
-		
-			
 
 		private void createTabbedPane() {
 			this.tabbedPane = new JTabbedPaneCloseButton();
 		}
-
 		
 		private void initPosition() {
 			ImageIcon icon = createImageIcon("images/logo.png", true);
@@ -336,14 +354,14 @@ public class main extends JFrame {
 		private void addTab_LekoviToTabbedPane() throws ClassNotFoundException, IOException {
 			String title = "Lekovi"; 
 			ImageIcon icon = createImageIcon("images/drugs.png", true);
-			TabLekovi mt = new TabLekovi(title);
+			TabLekovi mt = new TabLekovi(title, logedOn);
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
-		private void addTab_ReceptiToTabbedPane() {
+		private void addTab_ReceptiToTabbedPane() throws ClassNotFoundException, IOException {
 			String title = "Recepti"; 
 			ImageIcon icon = createImageIcon("images/presc.png", true);
-			TabRecepti mt = new TabRecepti(title);
+			TabRecepti mt = new TabRecepti(title, logedOn);
 			tabbedPane.addTab(title, icon, mt);
 		}
 		
@@ -363,11 +381,16 @@ public class main extends JFrame {
 		
 		public static void main(String[] args) throws IOException, ClassNotFoundException {
 			main.getInstance();
+			//login();
+		}
+		
+		public static void login() {
 			
-		   /* final JFrame frame = new JFrame("Login to Apoteka");
+			final JFrame frame = new JFrame("Login to Apoteka");
 		    final JPanel cont = new JPanel(new GridBagLayout());
 		    GridBagConstraints gb = new GridBagConstraints();
 		    final JButton btnLogin = new JButton("Click to login");
+		    ImageIcon icon = createImageIcon("images/logo.png", true);
 		    cont.setBackground(Color.white);
 		    
 		    btnLogin.addActionListener(
@@ -379,6 +402,7 @@ public class main extends JFrame {
 		                    if(loginDlg.isSucceeded()){
 		                    	try {
 									main.getInstance();
+									main.getInstance().setVisible(true);;
 								} catch (ClassNotFoundException | IOException e1) {
 									// TODO Auto-generated catch block
 									e1.printStackTrace();
@@ -405,7 +429,23 @@ public class main extends JFrame {
 		    frame.pack();
 	        frame.setResizable(false);
 		    frame.setVisible(true);
-		    frame.setLocationRelativeTo(null);*/
+		    frame.setLocationRelativeTo(null);
+		    frame.setIconImage(icon.getImage());
+		}
+		
+		public static void logout() throws ClassNotFoundException, IOException {
+			
+			JFrame frame= main.getInstance();
+			int code=JOptionPane.showConfirmDialog(frame, "Da li ste sigurni da zelite da se odjavite?","Logout?",JOptionPane.YES_NO_OPTION);
+			 
+			if (code!=JOptionPane.YES_OPTION){
+				frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+			}
+			else{
+				frame.dispose();
+				instance = null;
+				login();
+			}
 		}
 
 		protected static ImageIcon createImageIcon(String path, boolean scaleImage) {

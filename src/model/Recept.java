@@ -1,9 +1,14 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Recept {
+public class Recept implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2426243396907236602L;
 	private int sifra;
 	private String idLekara;
 	private String jmbgPacijenta;

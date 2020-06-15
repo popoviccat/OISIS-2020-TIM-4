@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import model.Korisnik;
 import model.Lek;
+import model.Recept;
 import model.TipKorisnika;
 
 public class readFromFile {
@@ -50,6 +51,21 @@ public class readFromFile {
 			}*/
 				
 			return ucitaniLekovi;
+		} finally {
+			ois.close();
+		}
+	}
+	
+	public static ArrayList<Recept> readFromFileRec() throws IOException, ClassNotFoundException {
+		
+		File f = new File("Recepti.txt");
+		ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(f)));
+		
+		try {
+			ArrayList<Recept> ucitaniRecepti = new ArrayList<Recept>(); 
+			ucitaniRecepti = (ArrayList<Recept>)ois.readObject();
+	
+			return ucitaniRecepti;
 		} finally {
 			ois.close();
 		}

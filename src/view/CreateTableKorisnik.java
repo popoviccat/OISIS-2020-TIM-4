@@ -63,7 +63,7 @@ public class CreateTableKorisnik extends JPanel{
 	*/
 	public DefaultTableModel model;
 	public JTable tbl;
-	private TableRowSorter<DefaultTableModel> tableSorter;
+	public TableRowSorter<DefaultTableModel> tableSorter;
 	private Row1Filter imeFilter;
 	private Row2Filter prezimeFilter;
 	private Row3Filter tipFilter;
@@ -167,19 +167,23 @@ public class CreateTableKorisnik extends JPanel{
 				//even index, selected or not selected
 				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
 					comp.setBackground(new Color(203, 231, 218));
+					comp.setForeground(Color.black);
+					tbl.setRowHeight(Index_row, 23);
 				} else {
 					if (isCellSelected(Index_row, Index_col)) {
-						comp.setBackground(new Color(141, 191, 165));
+						comp.setBackground(new Color(108, 172, 139));
 						comp.setFont(new Font("Arial", Font.PLAIN, 14));
+						comp.setForeground(Color.white);
+						tbl.setRowHeight(Index_row, 27);
 					} else {
 						comp.setBackground(Color.white);
+						comp.setForeground(Color.black);
+						tbl.setRowHeight(Index_row, 23);
 					}
 			    }
 				} else {
 					comp.setBackground(new Color(197, 197, 197));
-					/*
-					Class<?> col_class = tbl.getColumnClass(4);
-					super.setDefaultEditor(col_class,null);*/
+					comp.setForeground(Color.black);
 				}
 			  return comp;
 			}
@@ -276,6 +280,27 @@ public class CreateTableKorisnik extends JPanel{
 		    };
 		    
 		tbl.setModel(model);
+		
+		tableSorter = new TableRowSorter<DefaultTableModel>(model);
+		tableSorter.setComparator(0, new Comparator<String>() {
+			
+			@Override
+			public int compare(String o1, String o2) {
+				// Case sensitive.
+				return o1.compareTo(o2);
+			}
+
+		});
+		
+		List<RowSorter.SortKey> sortKeys2 = new ArrayList<RowSorter.SortKey>();
+		sortKeys2.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
+		sortKeys2.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+		sortKeys2.add(new RowSorter.SortKey(2, SortOrder.ASCENDING));
+		sortKeys2.add(new RowSorter.SortKey(3, SortOrder.ASCENDING));
+		sortKeys2.add(new RowSorter.SortKey(4, SortOrder.ASCENDING));
+		tableSorter.setSortKeys(sortKeys2);
+
+		tbl.setRowSorter(tableSorter);
 	}
 
 	private void initTFFilter() {

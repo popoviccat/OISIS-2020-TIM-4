@@ -188,7 +188,6 @@ public class DodajKorisnika extends JDialog{
 		                
 		        		JOptionPane.showMessageDialog(DodajKorisnika.this, "Uspešno ste dodali novog korisnika.", "Dodat korisnik", JOptionPane.INFORMATION_MESSAGE);
 		                dispose();
-		                JOptionPane.showMessageDialog(DodajKorisnika.this, "Molimo ponovo otvorite tab kako biste videli azuriran prikaz tabele.", "Azuriranje prikaza", JOptionPane.INFORMATION_MESSAGE);
 		        	} else {
 		        		System.out.println(error);
 		        		tfKorIme.setText("");

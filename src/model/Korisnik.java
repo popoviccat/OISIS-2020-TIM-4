@@ -5,7 +5,6 @@ import java.util.Date;
 
 
 public class Korisnik implements Serializable{
-	
 	/**
 	 * 
 	 */

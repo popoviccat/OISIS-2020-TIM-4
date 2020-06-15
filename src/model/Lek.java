@@ -3,6 +3,10 @@ package model;
 import java.io.Serializable;
 
 public class Lek implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3563571097589402631L;
 	private String sifra;
 	private String ime;
 	private String proizvodjac;
@@ -96,10 +100,9 @@ public class Lek implements Serializable{
 		return true;
 	}
 	
-/*	@Override
+	@Override
 	public String toString() {
-		return "Korisnik [Korisnicko Ime=" + korisnickoIme + ", Lozinka=" + lozinka + ", Ime=" + ime + ", Prezime="
-				+ prezime + ", Tip Korisnika=" + tipKorisnika + "]";
-	}*/
+		return ime + " ";
+	}
 	
 }
