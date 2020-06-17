@@ -1,13 +1,17 @@
 package controlers;
 
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalIconFactory;
-
-import view.TabKorisnici;
-
-import java.awt.*;
-import java.awt.event.MouseListener;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.plaf.metal.MetalIconFactory;
 
 /**
  * @author 6dc
@@ -58,9 +62,17 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 		break;
 		case "Izvestaj":
 			if (countIz < 1) {
-				addTab(title, icon, component, null);
 				countIz ++;
-			} else {}
+			} else {
+				for (int i = 0; i < getTabCount(); i++) {
+					CloseButtonTab cbt = (CloseButtonTab) getTabComponentAt(i);
+					if (title.equals(cbt.getTitle())) {
+						removeTabAt(i);
+						break;
+					}
+				}
+			}
+			addTab(title, icon, component, null);
 		break;
 		case "Korpa":
 			if (countKorpa < 1) {
@@ -100,9 +112,11 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 		private static final long serialVersionUID = 4141334065998335653L;
 		
 		private Component tab;
-
+		private String title;
+		
         public CloseButtonTab(final Component tab, String title, Icon icon) {
             this.tab = tab;
+            this.title = title;
             setOpaque(false);
             FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER, 3, 3);
             setLayout(flowLayout);
@@ -115,6 +129,10 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
             button.setBorderPainted(false);
             button.setContentAreaFilled(false);
             add(button);
+        }
+        
+        public String getTitle() {
+        	return title;
         }
     }
     /* ClickListener */
