@@ -82,10 +82,10 @@ public class main extends JFrame {
 
 		// ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
 		// ArrayList<Lek> lek = new ArrayList<Lek>();
-		ArrayList<Recept> rec = new ArrayList<Recept>();
+		//ArrayList<Recept> rec = new ArrayList<Recept>();
 		// writeToFile.updateDatabaseKor(korisnici);
 		// writeToFile.updateDatabaseLek(lek);
-		writeToFile.updateDatabaseRec(rec);
+		//writeToFile.updateDatabaseRec(rec);
 		mainToolbar.setBackground(Color.WHITE);
 		mainToolbar.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, Color.BLACK));
 		JLabel helloMessage = new JLabel("Zdravo, " + logedOn.getIme() + " " + logedOn.getPrezime() + "!");
