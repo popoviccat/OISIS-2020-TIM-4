@@ -114,7 +114,7 @@ public class TabRecepti extends JPanel{
 		ct.setPreferredSize(new Dimension(700,380));
 		ct.setVisible(true);
 		
-		if(logedOn.getTipKorisnika() == TipKorisnika.LEKAR || logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
+		if(logedOn.getTipKorisnika() == TipKorisnika.APOTEKAR || logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
 			addDrug.setVisible(false);
 			delDrug.setVisible(false);
 			ct.setPreferredSize(new Dimension(700,440));
