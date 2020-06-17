@@ -10,10 +10,8 @@ import java.awt.Insets;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -22,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
@@ -29,8 +28,6 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -41,17 +38,14 @@ import javax.swing.table.TableRowSorter;
 import controlers.readFromFile;
 import model.Lek;
 import model.Recept;
+import utils.LineWrapCellRenderer;
 import utils.Row0Filter;
 import utils.Row1Filter;
 import utils.Row2Filter;
 import utils.Row3Filter;
-import utils.Row4Filter;
 
 public class CreateTableRecept extends JPanel{
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 9028813520244618421L;
 
 	private Object[] columns = new Object[] { "Sifra",
@@ -60,11 +54,6 @@ public class CreateTableRecept extends JPanel{
 			"Lekovi i kolicina", 
 			"Datum i vreme",
 			"Ukupna cena"};
-	
-	/*public Object[][] data = { { "N0000", "Brufen", "Galenika", true, 249, false },
-			{ "N0001", "Kafetin", "Alkaloid", false, 169, false },
-			{ "N0002", "Lorazepam", "Hemofarm", true, 409, false },
-			 };*/
 	
 	public DefaultTableModel model;
 	public JTable tbl;
@@ -131,12 +120,12 @@ public class CreateTableRecept extends JPanel{
 		for (int i=0; i<size; i++) {
 			//if(recepti.get(i).getLogickiObrisan() == false) {
 				//System.out.println("USAO");
-			rowData[i][0] = String.valueOf(recepti.get(i).getSifra());
+			rowData[i][0] = recepti.get(i).getSifra();
 			rowData[i][1] = recepti.get(i).getIdLekara();
 			rowData[i][2] = recepti.get(i).getJmbgPacijenta();
-			rowData[i][3] = recepti.get(i).getLekoviKolicina();
+			rowData[i][3] = getLekovi(i);
 			rowData[i][4] = formatter.format(recepti.get(i).getDatumVreme());
-			rowData[i][5] = recepti.get(i).getUkupnaCena() + " din.";
+			rowData[i][5] = recepti.get(i).getUkupnaCena();
 			//}
 		}
 		model = new DefaultTableModel(rowData,columns){
@@ -152,11 +141,11 @@ public class CreateTableRecept extends JPanel{
 		        case 2:
 		          return String.class;
 		        case 3:
-		          return HashMap.class;
+		          return JTextArea.class;
 		        case 4:
 		          return SimpleDateFormat.class;
 		        case 5:
-			      return String.class;
+			      return Float.class;
 
 		          default:
 		            return String.class;
@@ -171,62 +160,53 @@ public class CreateTableRecept extends JPanel{
 		tbl = new JTable(model) {
 			public Component prepareRenderer (TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+				rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
 				//even index, selected or not selected
 				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
 					comp.setBackground(new Color(203, 231, 218));
 					comp.setForeground(Color.black);
-					tbl.setRowHeight(Index_row, 23);
+					tbl.setRowHeight(Index_row, rowHeight+2);
 				} else {
 					if (isCellSelected(Index_row, Index_col)) {
 						comp.setBackground(new Color(108, 172, 139));
 						comp.setFont(new Font("Arial", Font.PLAIN, 14));
 						comp.setForeground(Color.white);
-						tbl.setRowHeight(Index_row, 27);
+						tbl.setRowHeight(Index_row, rowHeight+8);
 					} else {
 						comp.setBackground(Color.white);
 						comp.setForeground(Color.black);
-						tbl.setRowHeight(Index_row, 23);
+						tbl.setRowHeight(Index_row, rowHeight+2);
 					}
 			    }
 			  return comp;
 			}
 		};
-		//tbl.setEnabled(false);
 		model.fireTableDataChanged();
 		JTableHeader header = tbl.getTableHeader();
 		header.setBackground(new Color(141, 191, 165));
 		header.setPreferredSize(new Dimension(650,30));
 		header.setFont(new Font("Arial", Font.ITALIC, 14));
-		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
+		header.setBorder(BorderFactory.createMatteBorder(1,1,3,1,new Color(56, 97, 76)));
+		header.setReorderingAllowed(false);
 		
 		TableColumnModel columnModel = tbl.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(60);
 		columnModel.getColumn(1).setPreferredWidth(70);
-		columnModel.getColumn(2).setPreferredWidth(120);
-		columnModel.getColumn(3).setPreferredWidth(150);
-		columnModel.getColumn(4).setPreferredWidth(150);
+		columnModel.getColumn(2).setPreferredWidth(135);
+		columnModel.getColumn(3).setPreferredWidth(115);
+		columnModel.getColumn(4).setPreferredWidth(170);
 		columnModel.getColumn(5).setPreferredWidth(100);
 		
-		tbl.setRowHeight(23);
 		
 		centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		tbl.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
 		tbl.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
 		tbl.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
-		tbl.getColumnModel().getColumn(5).setCellRenderer( centerRenderer );
 		
 		tableSorter = new TableRowSorter<DefaultTableModel>(model);
-		tableSorter.setComparator(0, new Comparator<String>() {
-			
-			@Override
-			public int compare(String o1, String o2) {
-				// Case sensitive.
-				return o1.compareTo(o2);
-			}
-
-		});
-
+		tbl.setGridColor(new Color(141, 191, 165));
+		
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
@@ -239,19 +219,7 @@ public class CreateTableRecept extends JPanel{
 		tableSorter.setRowFilter(constructFilter());
 
 		tbl.setRowSorter(tableSorter);
-
-		tbl.getSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
-
-					@Override
-					public void valueChanged(ListSelectionEvent e) {
-						if (!e.getValueIsAdjusting() && tbl.getSelectedRow() != -1) {
-							//System.out.println("SELECTED"+tbl.getValueAt(tbl.getSelectedRow(), 1) + " " + tbl.getValueAt(tbl.getSelectedRow(), 2));
-						}
-					}
-				});
-		tbl.getSelectionModel().setSelectionMode(
-				ListSelectionModel.SINGLE_SELECTION);
+		tbl.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// Poželjna veličina pogleda tabele u okviru scrollpane-a. Layout
 		// manager uzima ovu osobinu u obzir.
@@ -259,6 +227,20 @@ public class CreateTableRecept extends JPanel{
 
 		// Širenje tabele kompletno po visini pogleda scrollpane-a.
 		tbl.setFillsViewportHeight(true);
+		
+		tbl.getColumnModel().getColumn(3).setCellRenderer(new LineWrapCellRenderer());
+		tbl.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		    	this.setHorizontalAlignment( JLabel.CENTER );
+		    	Float d = (Float)value;
+		        String s = String.valueOf(d.floatValue()) + " din.";
+		        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+		        return c;
+		    }
+		});
 	}
 	
 	public void TableUpdate() throws ClassNotFoundException, IOException {
@@ -268,12 +250,12 @@ public class CreateTableRecept extends JPanel{
 		
 		Object[][] rowData = new Object[size][10];
 		for (int i=0; i<size; i++) {
-			rowData[i][0] = String.valueOf(recepti.get(i).getSifra());
+			rowData[i][0] = recepti.get(i).getSifra();
 			rowData[i][1] = recepti.get(i).getIdLekara();
 			rowData[i][2] = recepti.get(i).getJmbgPacijenta();
-			rowData[i][3] = recepti.get(i).getLekoviKolicina();
+			rowData[i][3] = getLekovi(i);
 			rowData[i][4] = formatter.format(recepti.get(i).getDatumVreme());
-			rowData[i][5] = recepti.get(i).getUkupnaCena() + " din.";
+			rowData[i][5] = recepti.get(i).getUkupnaCena();
 		}
 		model = new DefaultTableModel(rowData,columns){
 			@Override
@@ -286,11 +268,11 @@ public class CreateTableRecept extends JPanel{
 			        case 2:
 			          return String.class;
 			        case 3:
-			          return HashMap.class;
+			          return JTextArea.class;
 			        case 4:
 			          return SimpleDateFormat.class;
 			        case 5:
-				      return String.class;
+				      return Float.class;
 	
 			    	  default:
 			        	return String.class;
@@ -302,32 +284,22 @@ public class CreateTableRecept extends JPanel{
 		      }
 		    };
 		    
-		tbl.setModel(model);tbl.setModel(model);
+		tbl.setModel(model);
 		
 		TableColumnModel columnModel = tbl.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(60);
 		columnModel.getColumn(1).setPreferredWidth(70);
-		columnModel.getColumn(2).setPreferredWidth(120);
-		columnModel.getColumn(3).setPreferredWidth(150);
-		columnModel.getColumn(4).setPreferredWidth(150);
+		columnModel.getColumn(2).setPreferredWidth(135);
+		columnModel.getColumn(3).setPreferredWidth(115);
+		columnModel.getColumn(4).setPreferredWidth(170);
 		columnModel.getColumn(5).setPreferredWidth(100);
 		
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		tbl.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
 		tbl.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
 		tbl.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
-		tbl.getColumnModel().getColumn(5).setCellRenderer( centerRenderer );
 		
 		tableSorter = new TableRowSorter<DefaultTableModel>(model);
-		tableSorter.setComparator(0, new Comparator<String>() {
-			
-			@Override
-			public int compare(String o1, String o2) {
-				// Case sensitive.
-				return o1.compareTo(o2);
-			}
-
-		});
 		
 		List<RowSorter.SortKey> sortKeys2 = new ArrayList<RowSorter.SortKey>();
 		sortKeys2.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -339,6 +311,19 @@ public class CreateTableRecept extends JPanel{
 		tableSorter.setSortKeys(sortKeys2);
 
 		tbl.setRowSorter(tableSorter);
+		columnModel.getColumn(3).setCellRenderer(new LineWrapCellRenderer());
+		tbl.getColumnModel().getColumn(5).setCellRenderer(new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		    	this.setHorizontalAlignment( JLabel.CENTER );
+		    	Float d = (Float)value;
+		        String s = String.valueOf(d.floatValue()) + " din.";
+		        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+		        return c;
+		    }
+		});
 	}
 
 	private void initTFFilter() {
@@ -384,6 +369,20 @@ public class CreateTableRecept extends JPanel{
 		filters.add(lekFilter);
 		RowFilter<DefaultTableModel, Integer> orFilter = RowFilter.orFilter(filters);
 		return orFilter;
+	}
+	
+	private String getLekovi (int index) throws ClassNotFoundException, IOException {
+		String list = new String();
+		ArrayList<Recept> recepti = readFromFile.readFromFileRec();
+		
+		for ( Map.Entry<Lek, Integer> entry : recepti.get(index).getLekoviKolicina().entrySet()) {
+			if(list.isEmpty() == true) {
+				list = list.concat(" "+ String.valueOf(entry.getKey()) + "[ "+ String.valueOf(entry.getValue()) + " ]");
+			} else {
+				list = list.concat("\n"+ " " +String.valueOf(entry.getKey()) + "[ "+ String.valueOf(entry.getValue()) + " ]" );
+			}
+		}
+		 return list;
 	}
 	
 }

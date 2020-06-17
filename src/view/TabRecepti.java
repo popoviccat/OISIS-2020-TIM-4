@@ -58,7 +58,7 @@ public class TabRecepti extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					JFrame frame= new JFrame();
-					DodajRecept dkDlg = new DodajRecept(frame);
+					DodajRecept dkDlg = new DodajRecept(frame, logedOn);
 					dkDlg.setVisible(true);
 				
 					ct.TableUpdate();
@@ -114,12 +114,12 @@ public class TabRecepti extends JPanel{
 		ct.setPreferredSize(new Dimension(700,380));
 		ct.setVisible(true);
 		
-		/*if(logedOn.getTipKorisnika() == TipKorisnika.LEKAR) {
+		if(logedOn.getTipKorisnika() == TipKorisnika.LEKAR || logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
 			addDrug.setVisible(false);
 			delDrug.setVisible(false);
 			ct.setPreferredSize(new Dimension(700,440));
 			ct.tbl.setPreferredScrollableViewportSize(new Dimension(650,330));
-		}*/
+		}
 	    
 	}
 	

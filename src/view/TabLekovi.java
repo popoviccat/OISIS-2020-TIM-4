@@ -88,7 +88,7 @@ public class TabLekovi extends JPanel{
 	    	@Override
 			public void actionPerformed(ActionEvent e) {
 	    		try {
-	    			ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
+	    			//ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
 					ct.TableUpdate();
 					
 				} catch (ClassNotFoundException | IOException e1) {

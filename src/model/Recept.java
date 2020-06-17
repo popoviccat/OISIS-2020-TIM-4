@@ -1,6 +1,8 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -58,10 +60,11 @@ public class Recept implements Serializable{
 	
 	public float getUkupnaCena() {
 		float cena = 0;
+		DecimalFormat twoDForm = new DecimalFormat("######.##");
 		for(Lek l:this.lekoviKolicina.keySet()) {
 			cena += l.getCena() * this.lekoviKolicina.get(l);
 		}
-		return cena;
+		return BigDecimal.valueOf(cena).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
 		
 	public void dodajLek (Lek lek, int kolicina) {
@@ -70,5 +73,11 @@ public class Recept implements Serializable{
 	
 	public void obrisiLek (Lek lek) {
 		this.lekoviKolicina.remove(lek);
+	}
+	
+	@Override
+	public String toString() {
+		return "Recept [Sifra=" + sifra + ", IDLekara=" + idLekara + ", jmbg=" + jmbgPacijenta + ", Datum i vreme="
+				+ datumVreme + ", Lekovi i kolicina=" + lekoviKolicina + ", Ukupna cena=" + getUkupnaCena() + "]";
 	}
 }
