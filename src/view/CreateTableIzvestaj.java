@@ -115,10 +115,7 @@ public class CreateTableIzvestaj extends JPanel{
 			rowData[i][4] = prodatiLekovi.get(i).getLek().getCena() + " din.";
 			rowData[i][5] = prodatiLekovi.get(i).getKolicina();
 			
-			float cena = 0;
-			for(Stavka s : prodatiLekovi) {
-				cena += s.getLek().getCena() * s.getKolicina();
-			}
+			float cena = prodatiLekovi.get(i).getLek().getCena() * prodatiLekovi.get(i).getKolicina();
 			
 			rowData[i][6] = cena + " din.";
 		}
