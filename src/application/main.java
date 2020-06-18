@@ -12,7 +12,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -28,17 +27,14 @@ import javax.swing.WindowConstants;
 import controlers.JTabbedPaneCloseButton;
 import controlers.MyMouseListener;
 import controlers.MyWindowListener;
-import controlers.readFromFile;
-import controlers.writeToFile;
 import model.Korisnik;
-import model.Lek;
-import model.Prodaja;
-import model.Recept;
-import model.Stavka;
+import model.Korpa;
 import model.TipKorisnika;
 import view.LoginDialog;
+import view.OdaberiNacinDodavanjaUKorpu;
 import view.TabIzvestaj;
 import view.TabKorisnici;
+import view.TabKorpa;
 import view.TabLekovi;
 import view.TabRecepti;
 
@@ -49,12 +45,14 @@ public class main extends JFrame {
 	private JPanel mainToolbar;
 	private JPanel leftPanel;
 	private JTabbedPaneCloseButton tabbedPane;
-	private Korisnik logedOn = new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.ADMINISTRATOR, false);
+	private Korisnik logedOn = new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.APOTEKAR, false);
 	public static LoginDialog loginDlg;
 
 	int tabNumber = 0;
 	Color peach = new Color(249, 229, 222);
 	Color mint = new Color(140, 208, 172);
+	
+	private Korpa korpa;
 
 	// ========================= Singleton obrazac
 	private static main instance = null;
@@ -178,6 +176,8 @@ public class main extends JFrame {
 
 	private void createLeftPanel() throws ClassNotFoundException, IOException {
 
+		this.korpa = new Korpa();
+		
 		// logedOn = loginDlg.getLogedOnKor();
 		leftPanel = new JPanel();
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -216,12 +216,19 @@ public class main extends JFrame {
 		btn4.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		btn4.addMouseListener(new MyMouseListener(btn4));
 
-		JButton btn5 = new JButton("Korpa", icon);
+		JButton btn5 = new JButton("Dodaj u korpu");
 		btn5.setFont(btn5.getFont().deriveFont(f));
 		btn5.setBackground(peach);
 		btn5.setPreferredSize(new Dimension(130, 40));
 		btn5.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		btn5.addMouseListener(new MyMouseListener(btn5));
+		
+		JButton btn6 = new JButton("Korpa", icon);
+		btn6.setFont(btn6.getFont().deriveFont(f));
+		btn6.setBackground(peach);
+		btn6.setPreferredSize(new Dimension(130, 40));
+		btn6.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+		btn6.addMouseListener(new MyMouseListener(btn6));
 
 		if (logedOn.getTipKorisnika() == TipKorisnika.LEKAR || logedOn.getTipKorisnika() == TipKorisnika.APOTEKAR) {
 			btn1.setVisible(false);
@@ -229,12 +236,8 @@ public class main extends JFrame {
 		}
 		if (logedOn.getTipKorisnika() == TipKorisnika.LEKAR
 				|| logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
-			btn5.setIcon(null);
-			btn5.setEnabled(false);
-			btn5.setOpaque(false);
-			btn5.setContentAreaFilled(false);
-			btn5.setBorderPainted(false);
-			btn5.setText("");
+			btn5.setVisible(false);
+			btn6.setVisible(false);
 		}
 
 		btn1.addActionListener(new ActionListener() {
@@ -280,8 +283,19 @@ public class main extends JFrame {
 				}
 			}
 		});
-
+		
 		btn5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					openDlgAddToCart();
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btn6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					addTab_KorpaToTabbedPane();
@@ -321,6 +335,11 @@ public class main extends JFrame {
 		gbc.anchor = GridBagConstraints.PAGE_END;
 		gbc.insets = new Insets(0, 0, 30, 0);
 		leftPanel.add(btn5, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		gbc.weighty = 0;
+		leftPanel.add(btn6, gbc);
 	}
 
 	private void createTabbedPane() {
@@ -374,8 +393,13 @@ public class main extends JFrame {
 	private void addTab_KorpaToTabbedPane() throws ClassNotFoundException, IOException {
 		String title = "Korpa";
 		ImageIcon icon = createImageIcon("images/cart.png", true);
-		TabKorisnici mt = new TabKorisnici(title);
+		TabKorpa mt = new TabKorpa(title);
 		tabbedPane.addTab(title, icon, mt);
+	}
+	
+	private void openDlgAddToCart() throws ClassNotFoundException, IOException {
+		OdaberiNacinDodavanjaUKorpu ondukDlg = new OdaberiNacinDodavanjaUKorpu(main.getInstance());
+		ondukDlg.setVisible(true);
 	}
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
@@ -459,6 +483,10 @@ public class main extends JFrame {
 		} else {
 			return new ImageIcon(path);
 		}
+	}
+
+	public Korpa getKorpa() {
+		return korpa;
 	}
 
 	/*

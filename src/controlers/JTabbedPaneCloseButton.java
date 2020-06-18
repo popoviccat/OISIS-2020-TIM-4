@@ -76,10 +76,18 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 		break;
 		case "Korpa":
 			if (countKorpa < 1) {
-				addTab(title, icon, component, null);
 				countKorpa ++;
-			} else {}
-			break;
+			} else {
+				for (int i = 0; i < getTabCount(); i++) {
+					CloseButtonTab cbt = (CloseButtonTab) getTabComponentAt(i);
+					if (title.equals(cbt.getTitle())) {
+						removeTabAt(i);
+						break;
+					}
+				}
+			}
+			addTab(title, icon, component, null);
+		break;
 		default:
 			break;
     	}
