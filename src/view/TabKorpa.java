@@ -89,7 +89,7 @@ public class TabKorpa extends JPanel{
 			JLabel lbUkupnaCena = new JLabel("Ukupna cena artikala u korpi: " + main.getInstance().getKorpa().getCenaSvihLekovaUKorpi());
 			lbUkupnaCena.setFont(new Font("Arial", Font.BOLD, 25));
 			cs.anchor = GridBagConstraints.EAST;
-			cs.insets = new Insets(10, 0, 10, 10);
+			cs.insets = new Insets(0, 0, 10, 10);
 			cs.gridx = 0;
 			cs.gridy = 1;
 			topPanel.add(lbUkupnaCena,cs);
