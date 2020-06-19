@@ -23,6 +23,7 @@ import controlers.readFromFile;
 import model.Korisnik;
 import model.Lek;
 import model.Prodaja;
+import model.Racun;
 import model.Stavka;
 import model.TipKorisnika;
 
@@ -55,7 +56,7 @@ public class TabIzvestaj extends JPanel{
 		prodaja = readFromFile.readFromFileProdaja();
 		CreateTableIzvestaj ct = new CreateTableIzvestaj();
 		try {
-			ct.CreateTableIzvestaj(prodaja.getProdatiLekovi());
+			ct.CreateTableIzvestaj(prodaja.getListaSvihProdatihStavki());
 		} catch (ClassNotFoundException | IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -173,8 +174,11 @@ public class TabIzvestaj extends JPanel{
 			}
 		}
 		
+		prodaja = readFromFile.readFromFileProdaja();
+
 		CreateTableIzvestaj ct = new CreateTableIzvestaj();
-		ArrayList<Stavka> stavkeOdabranogApotekara = stavkeOdabranogApotekara(apotekari.get(0));
+		
+		ArrayList<Stavka> stavkeOdabranogApotekara = prodaja.getListaSvihProdatihStavkiOdabranogApotekara(apotekari.get(0));
 		
 		try {
 			ct.CreateTableIzvestaj(stavkeOdabranogApotekara);
@@ -200,12 +204,7 @@ public class TabIzvestaj extends JPanel{
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					String apot = (String) prLista.getSelectedItem();
 					ArrayList<Stavka> stavkeOdabranogApotekara = new ArrayList<Stavka>();
-					try {
-						stavkeOdabranogApotekara = stavkeOdabranogApotekara(apot);
-					} catch (ClassNotFoundException | IOException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
+					stavkeOdabranogApotekara = prodaja.getListaSvihProdatihStavkiOdabranogApotekara(apot);
 					
 					try {
 						topPanel.remove(topPanel.getComponentCount() - 1);
@@ -246,27 +245,13 @@ public class TabIzvestaj extends JPanel{
 		
 		ArrayList<Stavka> stavkeOdabranogProizvodajca = new ArrayList<Stavka>();
 		
-		for (Stavka s : prodaja.getProdatiLekovi()) {
+		for (Stavka s : prodaja.getListaSvihProdatihStavki()) {
 			if (s.getLek().getProizvodjac().equals(proizvodjac)) {
 				stavkeOdabranogProizvodajca.add(s);
-			}
+			}				
 		}
 		
 		return stavkeOdabranogProizvodajca;
-	}
-	
-	public ArrayList<Stavka> stavkeOdabranogApotekara(String apotekar) throws ClassNotFoundException, IOException {
-		prodaja = readFromFile.readFromFileProdaja();
-		
-		ArrayList<Stavka> stavkeOdabranogApotekar = new ArrayList<Stavka>();
-		
-		for (Stavka s : prodaja.getProdatiLekovi()) {
-			if (s.getKorisnickoImeApotekara().equals(apotekar)) {
-				stavkeOdabranogApotekar.add(s);
-			}
-		}
-		
-		return stavkeOdabranogApotekar;
 	}
 	
 	public String getName() {

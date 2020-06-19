@@ -9,22 +9,58 @@ public class Prodaja implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3215483934076629356L;
-	private ArrayList<Stavka> prodatiLekovi;
+	private ArrayList<Racun> kupovine;
 	
 	public Prodaja() {
 		super();
-		prodatiLekovi = new ArrayList<Stavka>();
+		kupovine = new ArrayList<Racun>();
 	}
 
-	public ArrayList<Stavka> getProdatiLekovi() {
-		return prodatiLekovi;
+	public ArrayList<Racun> getKupovine() {
+		return kupovine;
+	}
+	
+	public ArrayList<Stavka> getListaSvihProdatihStavki() {
+		ArrayList<Stavka> stavke = new ArrayList<>();
+		for (Racun r : kupovine) {
+			for (Stavka s : r.getProdatiLekovi()) {
+				if (stavke.contains(s)) {
+					int staraKolicina = stavke.get(stavke.indexOf(s)).getKolicina();
+					s.setKolicina(staraKolicina + s.getKolicina());
+					stavke.set(stavke.indexOf(s), s);
+				} else {
+					stavke.add(s);
+				}
+			}
+		}
+		
+		return stavke;
+	}
+	
+	public ArrayList<Stavka> getListaSvihProdatihStavkiOdabranogApotekara(String apotekar) {
+		ArrayList<Stavka> stavke = new ArrayList<>();
+		for (Racun r : kupovine) {
+			if (r.getKorisnickoImeApotekara().equals(apotekar)) {
+				for (Stavka s : r.getProdatiLekovi()) {
+					if (stavke.contains(s)) {
+						int staraKolicina = stavke.get(stavke.indexOf(s)).getKolicina();
+						s.setKolicina(staraKolicina + s.getKolicina());
+						stavke.set(stavke.indexOf(s), s);
+					} else {
+						stavke.add(s);
+					}
+				}				
+			}
+		}
+		
+		return stavke;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((prodatiLekovi == null) ? 0 : prodatiLekovi.hashCode());
+		result = prime * result + ((kupovine == null) ? 0 : kupovine.hashCode());
 		return result;
 	}
 
@@ -37,10 +73,10 @@ public class Prodaja implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Prodaja other = (Prodaja) obj;
-		if (prodatiLekovi == null) {
-			if (other.prodatiLekovi != null)
+		if (kupovine == null) {
+			if (other.kupovine != null)
 				return false;
-		} else if (!prodatiLekovi.equals(other.prodatiLekovi))
+		} else if (!kupovine.equals(other.kupovine))
 			return false;
 		return true;
 	}

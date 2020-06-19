@@ -10,17 +10,15 @@ public class Stavka implements Serializable {
 	private static final long serialVersionUID = -536415371138067005L;
 	private Lek lek;
 	private int kolicina;
-	private String korisnickoImeApotekara;
 	
 	public Stavka() {
 		super();
 	}
 
-	public Stavka(Lek lek, int kolicina, String korisnickoImeApotekara) {
+	public Stavka(Lek lek, int kolicina) {
 		super();
 		this.lek = lek;
 		this.kolicina = kolicina;
-		this.korisnickoImeApotekara = korisnickoImeApotekara;
 	}
 
 	public Lek getLek() {
@@ -39,11 +37,28 @@ public class Stavka implements Serializable {
 		this.kolicina = kolicina;
 	}
 
-	public String getKorisnickoImeApotekara() {
-		return korisnickoImeApotekara;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((lek == null) ? 0 : lek.hashCode());
+		return result;
 	}
 
-	public void setKorisnickoImeApotekara(String korisnickoImeApotekara) {
-		this.korisnickoImeApotekara = korisnickoImeApotekara;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Stavka other = (Stavka) obj;
+		if (lek == null) {
+			if (other.lek != null)
+				return false;
+		} else if (!lek.equals(other.lek))
+			return false;
+		return true;
 	}
 }

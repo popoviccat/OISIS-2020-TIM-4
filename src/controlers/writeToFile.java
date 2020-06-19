@@ -5,12 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.sql.Date;
 import java.util.ArrayList;
 
 import model.Korisnik;
 import model.Lek;
 import model.Prodaja;
+import model.Racun;
 import model.Recept;
 
 public class writeToFile {
@@ -121,6 +121,20 @@ public class writeToFile {
 	}
 	
 	public static void writeToFileProdaja(Prodaja prodaja) throws IOException, ClassNotFoundException {
+		File f = new File("Prodaja.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
+		
+		try {
+			oos.writeObject(prodaja);
+		} finally {
+			oos.close();
+		}
+	}
+	
+	public static void writeToFileProdajaAddRacun(Racun racun) throws IOException, ClassNotFoundException {
+		Prodaja prodaja = readFromFile.readFromFileProdaja();
+		prodaja.getKupovine().add(racun);
+		
 		File f = new File("Prodaja.txt");
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
 		

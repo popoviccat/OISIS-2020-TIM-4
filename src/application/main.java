@@ -45,7 +45,8 @@ public class main extends JFrame {
 	private JPanel mainToolbar;
 	private JPanel leftPanel;
 	private JTabbedPaneCloseButton tabbedPane;
-	private Korisnik logedOn = new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.APOTEKAR, false);
+//	private Korisnik logedOn = new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.ADMINISTRATOR, false);
+	private Korisnik logedOn = new Korisnik("ana", "ana", "Ana", "Anic", TipKorisnika.APOTEKAR, false);
 	public static LoginDialog loginDlg;
 
 	int tabNumber = 0;
@@ -236,8 +237,19 @@ public class main extends JFrame {
 		}
 		if (logedOn.getTipKorisnika() == TipKorisnika.LEKAR
 				|| logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
-			btn5.setVisible(false);
-			btn6.setVisible(false);
+			btn5.setIcon(null);
+			btn5.setEnabled(false);
+			btn5.setOpaque(false);
+			btn5.setContentAreaFilled(false);
+			btn5.setBorderPainted(false);
+			btn5.setText("");
+			
+			btn6.setIcon(null);
+			btn6.setEnabled(false);
+			btn6.setOpaque(false);
+			btn6.setContentAreaFilled(false);
+			btn6.setBorderPainted(false);
+			btn6.setText("");
 		}
 
 		btn1.addActionListener(new ActionListener() {
@@ -333,12 +345,12 @@ public class main extends JFrame {
 		gbc.gridy = 5;
 		gbc.weighty = 1.0;
 		gbc.anchor = GridBagConstraints.PAGE_END;
-		gbc.insets = new Insets(0, 0, 30, 0);
 		leftPanel.add(btn5, gbc);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 6;
 		gbc.weighty = 0;
+		gbc.insets = new Insets(10, 0, 30, 0);
 		leftPanel.add(btn6, gbc);
 	}
 
@@ -487,6 +499,14 @@ public class main extends JFrame {
 
 	public Korpa getKorpa() {
 		return korpa;
+	}
+	
+	public void isprazniKorpu() {
+		korpa = new Korpa();
+	}
+	
+	public String getKorisnickoImeUlogovanogKorisnika() {
+		return logedOn.getKorisnickoIme();
 	}
 
 	/*

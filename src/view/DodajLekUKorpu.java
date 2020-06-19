@@ -136,6 +136,11 @@ public class DodajLekUKorpu extends JDialog{
         			return;
         		}
         		
+        		if (getKolicina() < 1) {
+        			JOptionPane.showMessageDialog(DodajLekUKorpu.this, "Najmanja dozvoljena kolicina je 1!", "Error", JOptionPane.ERROR_MESSAGE);
+        			return;
+        		}
+        		
         		for (Lek l : lekovi) {
         			if (l.getSifra().equals(getSifra())) {
         				
