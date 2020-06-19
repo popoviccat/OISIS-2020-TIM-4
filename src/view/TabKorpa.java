@@ -79,6 +79,7 @@ public class TabKorpa extends JPanel{
 			cs.gridy = 0;
 			cs.weightx = 1.0;
 			cs.weighty = 1.0;
+			cs.gridwidth = 2;
 			cs.anchor = GridBagConstraints.NORTH;
 			topPanel.add(ct,cs);
 			ct.setBackground(Color.white);
@@ -88,7 +89,7 @@ public class TabKorpa extends JPanel{
 			JLabel lbUkupnaCena = new JLabel("Ukupna cena artikala u korpi: " + main.getInstance().getKorpa().getCenaSvihLekovaUKorpi());
 			lbUkupnaCena.setFont(new Font("Arial", Font.BOLD, 25));
 			cs.anchor = GridBagConstraints.EAST;
-			cs.insets = new Insets(0, 0, 10, 10);
+			cs.insets = new Insets(10, 0, 10, 10);
 			cs.gridx = 0;
 			cs.gridy = 1;
 			topPanel.add(lbUkupnaCena,cs);
@@ -146,7 +147,52 @@ public class TabKorpa extends JPanel{
 			
 			cs.gridx = 0;
 			cs.gridy = 2;
+			cs.gridwidth = 1;
 			topPanel.add(btnZavrsiProdaju, cs);
+			
+			JButton btnBrisanjeKorpe = new JButton("Obrisi korpu");
+			btnBrisanjeKorpe.setBackground(peach);
+			btnBrisanjeKorpe.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			btnBrisanjeKorpe.setPreferredSize(new Dimension(150,26));
+			btnBrisanjeKorpe.addMouseListener(new MyMouseListener(btnBrisanjeKorpe));
+			btnBrisanjeKorpe.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int rezultat = JOptionPane.showConfirmDialog(TabKorpa.this, "Da li ste sigurni da zelite da obrisete sve artikle iz korpe?", "Brisanje artikala iz korpe", JOptionPane.YES_NO_OPTION);
+					if (rezultat == JOptionPane.YES_OPTION) {
+						try {
+							main.getInstance().isprazniKorpu();
+							
+							topPanel.removeAll();
+							
+							JLabel lbPraznaKorpa1 = new JLabel("Korpa je prazna!");
+							lbPraznaKorpa1.setFont(new Font("Arial", Font.BOLD, 35));
+							cs = new GridBagConstraints();
+							cs.gridx = 0;
+							cs.gridy = 0;
+							topPanel.add(lbPraznaKorpa1,cs);
+							
+							JLabel lbPraznaKorpa2 = new JLabel("Zapocnite prodaju lekova klikom na dugme Dodaj u korpu.");
+							lbPraznaKorpa2.setFont(new Font("Arial", Font.PLAIN, 25));
+							cs.insets = new Insets(20, 0, 0, 0);
+							cs.gridx = 0;
+							cs.gridy = 1;
+							topPanel.add(lbPraznaKorpa2,cs);
+							
+							SwingUtilities.updateComponentTreeUI(topPanel);
+							
+						} catch (ClassNotFoundException | IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
+			});
+			cs.gridx = 1;
+			cs.gridy = 2;
+			cs.weightx = 0;
+			topPanel.add(btnBrisanjeKorpe, cs);
 		}
 	}
 	
