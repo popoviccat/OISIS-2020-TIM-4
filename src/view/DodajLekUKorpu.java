@@ -83,6 +83,13 @@ public class DodajLekUKorpu extends JDialog{
         
         Collections.sort(sifreLekova);
         
+        cbSifreLekova = new JComboBox<String>(sifreLekova);
+        cbSifreLekova.setFont(new Font("Arial", Font.PLAIN, 14));
+        cs.gridx = 1;
+        cs.gridy = 1;
+        cs.gridwidth = 2;
+        panel.add(cbSifreLekova, cs);
+        
         lbKolicina = new JLabel("Kolicina:  ");
         lbKolicina.setFont(new Font("Arial", Font.PLAIN, 14));
         lbKolicina.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
