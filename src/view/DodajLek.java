@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import controlers.MyFocusListener;
 import controlers.readFromFile;
 import controlers.writeToFile;
 import model.Korisnik;

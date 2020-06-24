@@ -87,8 +87,10 @@ public class TabKorisnici extends JPanel {
 	    	@Override
 			public void actionPerformed(ActionEvent e) {
 	    		try {
-	    			ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
-					ct.TableUpdate();
+	    			if (ct.tbl.getSelectedRow() != -1 ) {
+		    			ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
+						ct.TableUpdate();
+	    			}
 					
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
@@ -113,53 +115,6 @@ public class TabKorisnici extends JPanel {
 		ct.setBackground(Color.white);
 		ct.setPreferredSize(new Dimension(700,380));
 		ct.setVisible(true);
-		
-		/*JButton saveBtn = new JButton("Sacuvaj");
-		saveBtn.setBackground(peach);
-		saveBtn.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-		saveBtn.setPreferredSize(new Dimension(100,26));
-		saveBtn.addMouseListener(new MyMouseListener(saveBtn));
-		saveBtn.addActionListener(new ActionListener() {
-	    	@Override
-			public void actionPerformed(ActionEvent e) {
-	    		CreateTableKorisnik updated;
-				try {
-					updated = new CreateTableKorisnik();
-				
-	    			cs.insets = new Insets(0, 0, 0, 0);
-	    			cs.gridx = 0;
-	    			cs.gridy = 1;
-	    			cs.gridwidth = 3;
-	    			cs.weightx = 1.0;
-	    			cs.weighty = 1.0;
-	    			cs.anchor = GridBagConstraints.PAGE_END;
-					topPanel.remove(ct);
-					topPanel.add(updated, cs, 1);
-					updated.setBackground(Color.CYAN);
-					updated.setPreferredSize(new Dimension(700,354));
-					updated.setVisible(true);
-				
-		    		topPanel.revalidate();
-		    		topPanel.repaint();
-					} catch (ClassNotFoundException | IOException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-	    		ArrayList<Korisnik> korisnici;
-	    		try {
-					korisnici = readFromFile.readFromFileKor();
-					System.out.println(korisnici.get(korisnici.size()-1));
-				} catch (ClassNotFoundException | IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-	    	}  
-		});
-		cs.insets = new Insets(20, 20, 25, 40);
-		cs.gridx = 2;
-		cs.gridy = 2;
-		cs.anchor = GridBagConstraints.LAST_LINE_END;
-	    topPanel.add(saveBtn, cs);*/
 	    
 	}
 	

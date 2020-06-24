@@ -37,7 +37,7 @@ public class OdaberiTipIzvestaja extends JDialog{
     
  
     public OdaberiTipIzvestaja(Frame parent, TabIzvestaj tabIzvestaj) throws ClassNotFoundException, IOException {
-        super(parent, "Odaberi tip izveštaja", true);
+        super(parent, "Odaberi tip izvestaja", true);
         
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints cs = new GridBagConstraints();
@@ -50,7 +50,7 @@ public class OdaberiTipIzvestaja extends JDialog{
         
         lbIzvestaj = new JLabel("Tip izvestaja:");
         lbIzvestaj.setFont(new Font("Arial", Font.BOLD, 25));
-        cs.insets = new Insets(40, 0, 30, 40);
+        cs.insets = new Insets(30, 20, 30, 20);
         cs.gridx = 0;
         cs.gridy = 0;
         panel.add(lbIzvestaj, cs);
@@ -58,6 +58,7 @@ public class OdaberiTipIzvestaja extends JDialog{
         radioBtnIzvestajOSvimLekovima = new JRadioButton("Ukupna prodaja svih lekova");
         radioBtnIzvestajOSvimLekovima.setFont(new Font("Arial", Font.PLAIN, 14));
         radioBtnIzvestajOSvimLekovima.setBackground(new Color(164, 218, 189));
+        cs.insets = new Insets(20, 20, 10, 20);
         cs.gridx = 0;
         cs.gridy = 1;
         buttonGroup.add(radioBtnIzvestajOSvimLekovima);
@@ -74,6 +75,7 @@ public class OdaberiTipIzvestaja extends JDialog{
         radioBtnIzvestajOLekovimaPoApotekaru = new JRadioButton("Ukupna prodaja svih lekova koje je odabrani apotekar prodao");
         radioBtnIzvestajOLekovimaPoApotekaru.setFont(new Font("Arial", Font.PLAIN, 14));
         radioBtnIzvestajOLekovimaPoApotekaru.setBackground(new Color(164, 218, 189));
+        cs.insets = new Insets(20, 20, 30, 20);
         cs.gridx = 0;
         cs.gridy = 3;
         buttonGroup.add(radioBtnIzvestajOLekovimaPoApotekaru);
@@ -126,6 +128,7 @@ public class OdaberiTipIzvestaja extends JDialog{
  
             public void actionPerformed(ActionEvent e) {
                 dispose();
+                tabIzvestaj.prazanPrikaz();
             }
         });
         
@@ -147,7 +150,7 @@ public class OdaberiTipIzvestaja extends JDialog{
         getContentPane().add(panel, BorderLayout.CENTER);
         getContentPane().add(bp, BorderLayout.PAGE_END);
  
-        setSize(600, 500);
+        setSize(500, 420);
         setResizable(false);
         setLocationRelativeTo(parent);
     }

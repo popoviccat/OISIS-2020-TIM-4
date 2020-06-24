@@ -65,7 +65,7 @@ public class DodajLekoveIzReceptaUKorpu extends JDialog{
         lbSifra = new JLabel("Sifra:  ");
         lbSifra.setFont(new Font("Arial", Font.PLAIN, 14));
         lbSifra.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        cs.insets = new Insets(20, 0, 20, 0);
+        cs.insets = new Insets(20, 0, 0, 0);
         cs.gridx = 0;
         cs.gridy = 1;
         cs.gridwidth = 1;
@@ -79,7 +79,7 @@ public class DodajLekoveIzReceptaUKorpu extends JDialog{
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == KeyEvent.VK_PERIOD) ) {
+				if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE) ) {
 					getToolkit().beep();
 					tfSifra.setToolTipText("Polje prima samo brojeve");
 					e.consume();
@@ -100,7 +100,7 @@ public class DodajLekoveIzReceptaUKorpu extends JDialog{
         panel.add(tfSifra, cs);
         
         panel.setBackground(new Color(164, 218, 189));
-        panel.setPreferredSize(new Dimension(360,360));
+        panel.setPreferredSize(new Dimension(360,170));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
  
         btnAdd = new JButton("Add");

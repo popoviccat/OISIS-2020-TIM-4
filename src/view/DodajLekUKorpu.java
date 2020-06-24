@@ -25,6 +25,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import application.main;
 import controlers.readFromFile;
@@ -38,15 +40,17 @@ public class DodajLekUKorpu extends JDialog{
 	private static final long serialVersionUID = -159924695243776854L;
 	private JComboBox<String> cbSifreLekova;
 	private JTextField tfKolicina;
+	private JTextField tfIme;
 	private JLabel lbText;
     private JLabel lbSifra;
     private JLabel lbKolicina;
+    private JLabel lbIme;
     public JButton btnAdd;
     private JButton btnCancel;
     
  
     public DodajLekUKorpu(Frame parent, TabKorpa tabKorpa) throws ClassNotFoundException, IOException {
-        super(parent, "Dodaj Lek u korpu", true);
+        super(parent, "Dodaj lek u korpu", true);
         
         ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
         
@@ -59,7 +63,7 @@ public class DodajLekUKorpu extends JDialog{
         
         lbText = new JLabel("Unesite sifru i kolicinu:");
         lbText.setFont(new Font("Arial", Font.BOLD, 25));
-        cs.insets = new Insets(0, 0, 15, 0);
+        cs.insets = new Insets(10, 0, 15, 0);
         cs.gridx = 0;
         cs.gridy = 0;
         cs.weightx = 1;
@@ -90,12 +94,42 @@ public class DodajLekUKorpu extends JDialog{
         cs.gridwidth = 2;
         panel.add(cbSifreLekova, cs);
         
+        lbIme = new JLabel("Ime izabranog leka:  ");
+        lbIme.setFont(new Font("Arial", Font.PLAIN, 14));
+        lbIme.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        cs.insets = new Insets(20, 0, 25, 0);
+        cs.gridx = 0;
+        cs.gridy = 2;
+        cs.gridwidth = 1;
+        panel.add(lbIme, cs);
+ 
+        tfIme = new JTextField(100);
+        tfIme.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        tfIme.setText(lekovi.get(0).getIme());
+        cbSifreLekova.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				for (Lek l : lekovi) {
+		        	if (l.getSifra().equals(getSifra())) {
+		        		tfIme.setText(l.getIme());
+		        	}
+		        }
+			}
+		}); 
+        tfIme.setEditable(false);
+        cs.gridx = 1;
+        cs.gridy = 2;
+        cs.gridwidth = 2;
+        panel.add(tfIme, cs);
+        
         lbKolicina = new JLabel("Kolicina:  ");
         lbKolicina.setFont(new Font("Arial", Font.PLAIN, 14));
         lbKolicina.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        cs.insets = new Insets(20, 0, 20, 0);
+        cs.insets = new Insets(20, 0, 0, 0);
         cs.gridx = 0;
-        cs.gridy = 2;
+        cs.gridy = 3;
         cs.gridwidth = 1;
         panel.add(lbKolicina, cs);
  
@@ -106,7 +140,7 @@ public class DodajLekUKorpu extends JDialog{
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE || c == KeyEvent.VK_PERIOD) ) {
+				if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE) ) {
 					getToolkit().beep();
 					tfKolicina.setToolTipText("Polje prima samo brojeve");
 					e.consume();
@@ -122,12 +156,12 @@ public class DodajLekUKorpu extends JDialog{
 			}
 		});
         cs.gridx = 1;
-        cs.gridy = 2;
+        cs.gridy = 3;
         cs.gridwidth = 2;
         panel.add(tfKolicina, cs);
         
         panel.setBackground(new Color(164, 218, 189));
-        panel.setPreferredSize(new Dimension(360,360));
+        panel.setPreferredSize(new Dimension(380,300));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
  
         btnAdd = new JButton("Add");

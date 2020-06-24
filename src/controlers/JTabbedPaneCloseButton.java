@@ -46,19 +46,45 @@ public class JTabbedPaneCloseButton extends JTabbedPane {
 			if (countKor < 1) {
 				addTab(title, icon, component, null);
 				countKor ++;
-			} else {}
+			} else {
+				for (int i = 0; i < getTabCount(); i++) {
+					CloseButtonTab cbt = (CloseButtonTab) getTabComponentAt(i);
+					if (title.equals(cbt.getTitle())) {
+						removeTabAt(i);
+						break;
+					}
+				}
+			}
+			addTab(title, icon, component, null);
 		break;
 		case "Lekovi":
 			if (countLek < 1) {
-				addTab(title, icon, component, null);
 				countLek ++;
-			} else {}
+			} else {
+				for (int i = 0; i < getTabCount(); i++) {
+					CloseButtonTab cbt = (CloseButtonTab) getTabComponentAt(i);
+					if (title.equals(cbt.getTitle())) {
+						removeTabAt(i);
+						break;
+					}
+				}
+			}
+			addTab(title, icon, component, null);
 		break;
 		case "Recepti":
 			if (countRec < 1) {
 				addTab(title, icon, component, null);
 				countRec ++;
-			} else {}
+			} else {
+				for (int i = 0; i < getTabCount(); i++) {
+					CloseButtonTab cbt = (CloseButtonTab) getTabComponentAt(i);
+					if (title.equals(cbt.getTitle())) {
+						removeTabAt(i);
+						break;
+					}
+				}
+			}
+			addTab(title, icon, component, null);
 		break;
 		case "Izvestaj":
 			if (countIz < 1) {

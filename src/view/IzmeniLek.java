@@ -20,19 +20,14 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
 
-import controlers.MyFocusListener;
 import controlers.readFromFile;
 import controlers.writeToFile;
-import model.Korisnik;
 import model.Lek;
-import model.TipKorisnika;
 
 public class IzmeniLek extends JDialog{
 	
@@ -188,7 +183,6 @@ public class IzmeniLek extends JDialog{
         cs.gridwidth = 2;
         panel.add(recLista, cs);
         
-        //panel.setBorder(new LineBorder(Color.gray, 0));
         panel.setBackground(new Color(164, 218, 189));
         panel.setPreferredSize(new Dimension(360,360));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 50));
@@ -223,7 +217,6 @@ public class IzmeniLek extends JDialog{
 		                
 		        		JOptionPane.showMessageDialog(IzmeniLek.this, "Lek je uspesno izmenjen.", "Izmenjen lek", JOptionPane.INFORMATION_MESSAGE);
 		                dispose();
-		                JOptionPane.showMessageDialog(IzmeniLek.this, "Molimo ponovo otvorite tab kako biste videli azuriran prikaz tabele.", "Azuriranje prikaza", JOptionPane.INFORMATION_MESSAGE);
 		        	
 		        	
 	        		} else {

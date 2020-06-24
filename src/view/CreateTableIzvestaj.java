@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +32,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import model.Stavka;
@@ -48,9 +51,9 @@ public class CreateTableIzvestaj extends JPanel{
 	private Object[] columns = new Object[] { "Sifra",
 			"Ime",
 			"Proizvodjac",
-			"Izdaje se na recept", 
+			"Na recept", 
 			"Cena",
-			"Prodata kolicina",
+			"Prodato",
 			"Zarada"};
 	
 	public DefaultTableModel model;
@@ -73,8 +76,6 @@ public class CreateTableIzvestaj extends JPanel{
 		initTable(prodatiLekovi);
 		initTFFilter();
 
-		// Zaglavlje kolone se ne mora ruÄ?no ubacivati. JScrollPane Ä‡e odraditi
-		// taj posao.
 		cs.gridx = 0;
 		cs.gridy = 1;
 		cs.gridwidth = 3;
@@ -112,12 +113,13 @@ public class CreateTableIzvestaj extends JPanel{
 			rowData[i][1] = prodatiLekovi.get(i).getLek().getIme();
 			rowData[i][2] = prodatiLekovi.get(i).getLek().getProizvodjac();
 			rowData[i][3] = prodatiLekovi.get(i).getLek().getIzdajeSeNaRecept();
-			rowData[i][4] = prodatiLekovi.get(i).getLek().getCena() + " din.";
+			rowData[i][4] = prodatiLekovi.get(i).getLek().getCena();
 			rowData[i][5] = prodatiLekovi.get(i).getKolicina();
 			
-			float cena = prodatiLekovi.get(i).getLek().getCena() * prodatiLekovi.get(i).getKolicina();
+			DecimalFormat twoDForm = new DecimalFormat("######.##");
+			float cena = BigDecimal.valueOf( prodatiLekovi.get(i).getLek().getCena() * prodatiLekovi.get(i).getKolicina() ).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 			
-			rowData[i][6] = cena + " din.";
+			rowData[i][6] = cena;
 		}
 		
 		model = new DefaultTableModel(rowData,columns){
@@ -134,11 +136,11 @@ public class CreateTableIzvestaj extends JPanel{
 		        case 3:
 		          return Boolean.class;
 		        case 4:
-		          return String.class;
+		          return Float.class;
 		        case 5:
 			      return Integer.class;
 		        case 6:
-			      return String.class;
+			      return Float.class;
 
 		          default:
 		            return String.class;
@@ -180,23 +182,20 @@ public class CreateTableIzvestaj extends JPanel{
 		header.setPreferredSize(new Dimension(650,30));
 		header.setFont(new Font("Arial", Font.ITALIC, 14));
 		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
+		header.setReorderingAllowed(false);
 		
-		tbl.setRowHeight(23);
+		TableColumnModel columnModel = tbl.getColumnModel();
+		columnModel.getColumn(0).setPreferredWidth(40);
 		
 		centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-		tbl.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
+		tbl.getColumnModel().getColumn(5).setCellRenderer( centerRenderer );
 		
 		tableSorter = new TableRowSorter<DefaultTableModel>(model);
-		tableSorter.setComparator(0, new Comparator<String>() {
-			
-			@Override
-			public int compare(String o1, String o2) {
-				// Case sensitive.
-				return o1.compareTo(o2);
-			}
-
-		});
+		tbl.setGridColor(new Color(141, 191, 165));
+		
+		tbl.setRowHeight(23);
+		
 
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -213,9 +212,34 @@ public class CreateTableIzvestaj extends JPanel{
 		tbl.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
-		tbl.setPreferredScrollableViewportSize(new Dimension(650,283));
+		tbl.setPreferredScrollableViewportSize(new Dimension(650,250));
 
 		tbl.setFillsViewportHeight(true);
+		
+		tbl.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		    	this.setHorizontalAlignment( JLabel.CENTER );
+		    	Float d = (Float)value;
+		        String s = String.valueOf(d.floatValue()) + " din.";
+		        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+		        return c;
+		    }
+		});
+		tbl.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		    	this.setHorizontalAlignment( JLabel.CENTER );
+		    	Float d = (Float)value;
+		        String s = String.valueOf(d.floatValue()) + " din.";
+		        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+		        return c;
+		    }
+		});
 	}
 	
 	private void initTFFilter() {

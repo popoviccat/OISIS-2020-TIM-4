@@ -79,7 +79,7 @@ public class TabKorpa extends JPanel{
 		cs.gridx = 0;
 		cs.gridy = 0;
 		cs.anchor = GridBagConstraints.WEST;
-		cs.insets = new Insets(5, 20, 5, 0);
+		cs.insets = new Insets(20, 20, 5, 10);
 		mainPanel.add(btnDodajLek,cs);
 		
 		JButton btnDodajRecept = new JButton("Dodaj recept");
@@ -103,6 +103,7 @@ public class TabKorpa extends JPanel{
 		
 		cs.gridx = 1;
 		cs.gridy = 0;
+		cs.insets = new Insets(20, 20, 5, 0);
 		mainPanel.add(btnDodajRecept,cs);
 		
 		cs.insets = new Insets(0, 0, 0, 0);
@@ -133,6 +134,7 @@ public class TabKorpa extends JPanel{
 			centerPanelConstr.gridy = 2;
 			centerPanel.add(lbPraznaKorpa2,centerPanelConstr);
 			
+			centerPanel.setPreferredSize(new Dimension(700,350));
 			mainPanel.add(centerPanel, cs);
 		} else {
 			CreateTableKorpa ct = new CreateTableKorpa();
@@ -146,7 +148,7 @@ public class TabKorpa extends JPanel{
 			mainPanel.add(ct,cs);
 			ct.setBackground(Color.white);
 			
-			JLabel lbUkupnaCena = new JLabel("Ukupna cena artikala u korpi: " + main.getInstance().getKorpa().getCenaSvihLekovaUKorpi());
+			JLabel lbUkupnaCena = new JLabel("Ukupna cena artikala u korpi: " + main.getInstance().getKorpa().getCenaSvihLekovaUKorpi() + " din.");
 			lbUkupnaCena.setFont(new Font("Arial", Font.BOLD, 22));
 			cs.anchor = GridBagConstraints.EAST;
 			cs.insets = new Insets(0, 0, 10, 20);
@@ -181,7 +183,7 @@ public class TabKorpa extends JPanel{
 		cs.gridwidth = 1;
 		cs.weighty = 0;
 		cs.anchor = GridBagConstraints.WEST;
-		cs.insets = new Insets(0, 20, 5, 0);
+		cs.insets = new Insets(0, 20, 20, 0);
 		mainPanel.add(btnBrisanjeKorpe, cs);
 		
 		
@@ -220,7 +222,7 @@ public class TabKorpa extends JPanel{
 		cs.gridx = 1;
 		cs.gridy = 3;
 		cs.anchor = GridBagConstraints.EAST;
-		cs.insets = new Insets(0, 0, 5, 20);
+		cs.insets = new Insets(0, 0, 20, 20);
 		mainPanel.add(btnZavrsiProdaju, cs);
 		
 		if (korpa.getLekoviUKorpi().isEmpty()) {

@@ -52,15 +52,7 @@ public class CreateTableKorisnik extends JPanel{
 			"Prezime",
 			"Tip Korisnika", 
 			"Obrisan"};
-	/*
-	public Object[][] data = { { "pera", "Petar", "Petrovic", "Apotekar" },
-			{ "laza", "Lazar", "Lazic", "Lekar" },
-			{ "mika", "Milan", "Mikic", "Apotekar" },
-			{ "sara", "Sara", "Saric", "Apotekar" },
-			{ "barbara", "Barbara", "Barbaric", "Lekar" },
-			{ "ana", "Ana", "Petrovic", "Administrator" },
-			 };
-	*/
+	
 	public DefaultTableModel model;
 	public JTable tbl;
 	public TableRowSorter<DefaultTableModel> tableSorter;
@@ -113,24 +105,15 @@ public class CreateTableKorisnik extends JPanel{
 	private void initTable() throws ClassNotFoundException, IOException {
 		
 		ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
+		
 		int size = korisnici.size();
-		int rows = 0;
-		/*for (int b=0; b<size; b++) {
-			if(korisnici.get(b).getLogickiObrisan() == false) {
-				rows ++;
-			}
-		}*/
-		//System.out.println(rows);
 		Object[][] rowData = new Object[size][10];
 		for (int i=0; i<size; i++) {
-			//if(korisnici.get(i).getLogickiObrisan() == false) {
-				//System.out.println("USAO");
 			rowData[i][0] = korisnici.get(i).getKorisnickoIme();
 			rowData[i][1] = korisnici.get(i).getIme();
 			rowData[i][2] = korisnici.get(i).getPrezime();
 			rowData[i][3] = korisnici.get(i).getTipKorisnika();
 			rowData[i][4] = korisnici.get(i).getLogickiObrisan();
-			//}
 		}
 		model = new DefaultTableModel(rowData,columns){
 		      public Class<?> getColumnClass(int column)
@@ -164,23 +147,23 @@ public class CreateTableKorisnik extends JPanel{
 			public Component prepareRenderer (TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
 				if ((boolean) tbl.getValueAt(Index_row, 4) == false) {
-				//even index, selected or not selected
-				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
-					comp.setBackground(new Color(203, 231, 218));
-					comp.setForeground(Color.black);
-					tbl.setRowHeight(Index_row, 23);
-				} else {
-					if (isCellSelected(Index_row, Index_col)) {
-						comp.setBackground(new Color(108, 172, 139));
-						comp.setFont(new Font("Arial", Font.PLAIN, 14));
-						comp.setForeground(Color.white);
-						tbl.setRowHeight(Index_row, 27);
-					} else {
-						comp.setBackground(Color.white);
+					//even index, selected or not selected
+					if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
+						comp.setBackground(new Color(203, 231, 218));
 						comp.setForeground(Color.black);
 						tbl.setRowHeight(Index_row, 23);
-					}
-			    }
+					} else {
+						if (isCellSelected(Index_row, Index_col)) {
+							comp.setBackground(new Color(108, 172, 139));
+							comp.setFont(new Font("Arial", Font.PLAIN, 14));
+							comp.setForeground(Color.white);
+							tbl.setRowHeight(Index_row, 27);
+						} else {
+							comp.setBackground(Color.white);
+							comp.setForeground(Color.black);
+							tbl.setRowHeight(Index_row, 23);
+						}
+				    }
 				} else {
 					comp.setBackground(new Color(197, 197, 197));
 					comp.setForeground(Color.black);
@@ -195,19 +178,13 @@ public class CreateTableKorisnik extends JPanel{
 		header.setPreferredSize(new Dimension(650,30));
 		header.setFont(new Font("Arial", Font.ITALIC, 14));
 		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
+		header.setReorderingAllowed(false);
+		
+		tableSorter = new TableRowSorter<DefaultTableModel>(model);
+		tbl.setGridColor(new Color(141, 191, 165));
 		
 		tbl.setRowHeight(23);
 		
-		tableSorter = new TableRowSorter<DefaultTableModel>(model);
-		tableSorter.setComparator(0, new Comparator<String>() {
-			
-			@Override
-			public int compare(String o1, String o2) {
-				// Case sensitive.
-				return o1.compareTo(o2);
-			}
-
-		});
 
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -221,16 +198,6 @@ public class CreateTableKorisnik extends JPanel{
 
 		tbl.setRowSorter(tableSorter);
 
-		tbl.getSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
-
-					@Override
-					public void valueChanged(ListSelectionEvent e) {
-						if (!e.getValueIsAdjusting() && tbl.getSelectedRow() != -1) {
-							//System.out.println("SELECTED"+tbl.getValueAt(tbl.getSelectedRow(), 1) + " " + tbl.getValueAt(tbl.getSelectedRow(), 2));
-						}
-					}
-				});
 		tbl.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
@@ -282,15 +249,6 @@ public class CreateTableKorisnik extends JPanel{
 		tbl.setModel(model);
 		
 		tableSorter = new TableRowSorter<DefaultTableModel>(model);
-		tableSorter.setComparator(0, new Comparator<String>() {
-			
-			@Override
-			public int compare(String o1, String o2) {
-				// Case sensitive.
-				return o1.compareTo(o2);
-			}
-
-		});
 		
 		List<RowSorter.SortKey> sortKeys2 = new ArrayList<RowSorter.SortKey>();
 		sortKeys2.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));

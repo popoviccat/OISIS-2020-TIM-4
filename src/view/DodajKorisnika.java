@@ -10,6 +10,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,8 +26,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-import controlers.MyFocusListener;
 import controlers.readFromFile;
 import controlers.writeToFile;
 import model.Korisnik;
@@ -51,7 +56,6 @@ public class DodajKorisnika extends JDialog{
  
     public DodajKorisnika(Frame parent) throws ClassNotFoundException, IOException {
         super(parent, "Dodaj Korisnika", true);
-        MyFocusListener focusListener=new MyFocusListener();
         
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints cs = new GridBagConstraints();
@@ -80,8 +84,6 @@ public class DodajKorisnika extends JDialog{
         tfKorIme = new JTextField(20);
         tfKorIme.setFont(new Font("Arial", Font.PLAIN, 14));
         tfKorIme.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        tfKorIme.setName("txtKorIme");
-        tfKorIme.addFocusListener(focusListener);
         cs.gridx = 1;
         cs.gridy = 1;
         cs.gridwidth = 2;
@@ -97,6 +99,7 @@ public class DodajKorisnika extends JDialog{
         panel.add(lbIme, cs);
  
         tfIme = new JTextField(20);
+        tfIme.setFont(new Font("Arial", Font.PLAIN, 14));
         tfIme.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
         cs.gridx = 1;
         cs.gridy = 2;
@@ -113,6 +116,7 @@ public class DodajKorisnika extends JDialog{
         panel.add(lbPrez, cs);
  
         tfPrez = new JTextField(20);
+        tfPrez.setFont(new Font("Arial", Font.PLAIN, 14));
         tfPrez.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
         cs.gridx = 1;
         cs.gridy = 3;
@@ -129,8 +133,27 @@ public class DodajKorisnika extends JDialog{
         panel.add(lbLoz, cs);
  
         tfLoz = new JTextField(20);
-        tfLoz.setToolTipText("Lozinka bi trebala da sadrzati barem 8 karaktera");
+        tfLoz.setFont(new Font("Arial", Font.PLAIN, 14));
+        tfLoz.setToolTipText("Lozinka mora da sadrzati barem 4 karaktera");
         tfLoz.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
+        tfLoz.addFocusListener(new FocusListener() {
+			
+			@Override
+			public void focusLost(FocusEvent e) {
+				int lenght = tfLoz.getText().length();
+				 if(lenght < 4) {
+					 JOptionPane.showMessageDialog(null,
+					          "Warning: Lozinka treba da sadrzi najmanje 4 karaktera", "Warning Message",
+					          JOptionPane.WARNING_MESSAGE);
+				} 
+			}
+			
+			@Override
+			public void focusGained(FocusEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
         cs.gridx = 1;
         cs.gridy = 4;
         cs.gridwidth = 2;
@@ -167,32 +190,39 @@ public class DodajKorisnika extends JDialog{
 					korisnici = readFromFile.readFromFileKor();
 	        		int size = korisnici.size();
 	        		boolean error = false;
-	        		System.out.println(error);
 	        		for (int i=0; i<size; i++) {
 		        		if (tfKorIme.getText().equals( korisnici.get(i).getKorisnickoIme() )){
-		        			System.out.println("POSTOJI ISTI");
 		        			error = true;
 		        			break;
 		        		}
 	        		}
-		        	if (error == false) {
-		        		System.out.println("novi");
-		        		Korisnik kor = new Korisnik();
-		                kor.setKorisnickoIme(tfKorIme.getText());
-		                kor.setIme(tfIme.getText());
-		                kor.setPrezime(tfPrez.getText());
-		                kor.setLozinka(tfLoz.getText());
-		                kor.setTipKorisnika((TipKorisnika) tipLista.getSelectedItem());
-		                
-						writeToFile.writeToFileKor(kor);
-		                
-		        		JOptionPane.showMessageDialog(DodajKorisnika.this, "Uspešno ste dodali novog korisnika.", "Dodat korisnik", JOptionPane.INFORMATION_MESSAGE);
-		                dispose();
-		        	} else {
-		        		System.out.println(error);
-		        		tfKorIme.setText("");
-	        			JOptionPane.showMessageDialog(DodajKorisnika.this, "Korisnik sa unetim korisnickim imenom vec postoji.", "Error", JOptionPane.ERROR_MESSAGE);
-		        	}
+	        		if (tfLoz.getText().length() < 4) {
+	        			JOptionPane.showMessageDialog(DodajKorisnika.this, "Lozinka mora sadrzati najmanje 4 karaktera!", "Error", JOptionPane.ERROR_MESSAGE);
+	        			
+	        		}else {
+		        		if( !(tfKorIme.getText().equals("") || tfIme.getText().equals("") || tfPrez.getText().equals("") || tfLoz.getText().equals("")) ) {
+				        	if (error == false) {
+				        		
+				        		Korisnik kor = new Korisnik();
+				                kor.setKorisnickoIme(tfKorIme.getText());
+				                kor.setIme(tfIme.getText());
+				                kor.setPrezime(tfPrez.getText());
+				                kor.setLozinka(tfLoz.getText());
+				                kor.setTipKorisnika((TipKorisnika) tipLista.getSelectedItem());
+				                
+								writeToFile.writeToFileKor(kor);
+				                
+				        		JOptionPane.showMessageDialog(DodajKorisnika.this, "Uspešno ste dodali novog korisnika.", "Dodat korisnik", JOptionPane.INFORMATION_MESSAGE);
+				                dispose();
+				        	} else {
+				        		System.out.println(error);
+				        		tfKorIme.setText("");
+			        			JOptionPane.showMessageDialog(DodajKorisnika.this, "Korisnik sa unetim korisnickim imenom vec postoji.", "Error", JOptionPane.ERROR_MESSAGE);
+				        	}
+		        		} else {
+		        			JOptionPane.showMessageDialog(DodajKorisnika.this, "Sva polja moraju biti popunjena!", "Error", JOptionPane.ERROR_MESSAGE);
+		        		}
+	        		}
 		        	
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block

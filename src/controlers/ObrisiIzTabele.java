@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 import model.Korisnik;
+import model.Lek;
 import view.CreateTableKorisnik;
 import java.lang.String;
 
@@ -32,15 +33,40 @@ public class ObrisiIzTabele {
 	        			korisnici.get(i).setLogickiObrisan(true);
 	        			writeToFile.updateDatabaseKor(korisnici);
 	        			int br = korisnici.size();
-	        			System.out.println("OBRISAN" + korisnici.get(i).getIme() + " " + korisnici.get(i).getPrezime());
-	        				
-	        			/*for (int j = 0; j < br; j++) {	// OBRISANI
-	        				if (korisnici.get(j).getLogickiObrisan() == true) {
-	        					System.out.println(korisnici.get(j).getKorisnickoIme() + korisnici.get(j).getPrezime());
-	        				}
-	        			}*/
-	        			System.out.println("BRISANJE");
+	        			
 		        		JOptionPane.showMessageDialog(null, "Korisnik je obrisan.");
+		        		break;
+		        				
+	        		} else {
+	        			frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	        		}
+	        	}
+	        }
+		 }
+	}
+	
+	public static void ObrisiLek (int ct, String name) throws ClassNotFoundException, IOException{
+		
+		ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
+		 if (ct != -1 ) {
+	        int size = lekovi.size();
+	        for (int i = 0; i < size; i++) {
+	        	if (name.equals((String)lekovi.get(i).getSifra())) { //trazi istu sifru
+	        		
+	        		JFrame frame= new JFrame();
+	        		int code=JOptionPane.showConfirmDialog(frame, "Da li ste sigurni da zelite da obrisete lek " + "\n" +
+	        				lekovi.get(i).getIme() +
+	        				", proizvodjaca " +
+	        				lekovi.get(i).getProizvodjac() + "?",
+	        				"Obrisi lek?",JOptionPane.YES_NO_OPTION);
+	        				 
+	        		if (code == JOptionPane.YES_OPTION){ //brisanje
+	        				
+	        			lekovi.get(i).setLogickiObrisan(true);
+	        			writeToFile.updateDatabaseLek(lekovi);
+	        			int br = lekovi.size();
+	        			
+		        		JOptionPane.showMessageDialog(null, "Lek je obrisan.");
 		        		break;
 		        				
 	        		} else {

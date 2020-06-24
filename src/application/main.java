@@ -27,8 +27,10 @@ import javax.swing.WindowConstants;
 import controlers.JTabbedPaneCloseButton;
 import controlers.MyMouseListener;
 import controlers.MyWindowListener;
+import controlers.writeToFile;
 import model.Korisnik;
 import model.Korpa;
+import model.Prodaja;
 import model.TipKorisnika;
 import view.LoginDialog;
 import view.TabIzvestaj;
@@ -43,9 +45,10 @@ public class main extends JFrame {
 
 	private JPanel mainToolbar;
 	private JPanel leftPanel;
-	private JTabbedPaneCloseButton tabbedPane;
-//	private Korisnik logedOn = new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.ADMINISTRATOR, false);
-	private Korisnik logedOn = new Korisnik("ana", "ana", "Ana", "Anic", TipKorisnika.APOTEKAR, false);
+	private static JTabbedPaneCloseButton tabbedPane;
+	private Korisnik logedOn; //= new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.ADMINISTRATOR, false);
+//	private Korisnik logedOn = new Korisnik("ana", "ana", "Ana", "Anic", TipKorisnika.APOTEKAR, false);
+//	private Korisnik logedOn = new Korisnik("laza", "laza", "Laza", "Lazic", TipKorisnika.APOTEKAR, false);
 	public static LoginDialog loginDlg;
 
 	int tabNumber = 0;
@@ -72,18 +75,21 @@ public class main extends JFrame {
 	// =========================
 
 	private void createToolbar() throws ClassNotFoundException, IOException {
+		
 		mainToolbar = new JPanel();
 		GridBagConstraints layout = new GridBagConstraints();
 		mainToolbar.setLayout(new GridBagLayout());
 		Icon logOut = new ImageIcon("images/logout.png");
-		// logedOn = loginDlg.getLogedOnKor();
+		logedOn = loginDlg.getLogedOnKor();
 
 		// ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
 		// ArrayList<Lek> lek = new ArrayList<Lek>();
 		//ArrayList<Recept> rec = new ArrayList<Recept>();
+		//Prodaja prodaja = new Prodaja();
 		// writeToFile.updateDatabaseKor(korisnici);
 		// writeToFile.updateDatabaseLek(lek);
 		//writeToFile.updateDatabaseRec(rec);
+		//writeToFile.writeToFileProdaja(prodaja);
 		mainToolbar.setBackground(Color.WHITE);
 		mainToolbar.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, Color.BLACK));
 		JLabel helloMessage = new JLabel("Zdravo, " + logedOn.getIme() + " " + logedOn.getPrezime() + "!");
@@ -120,6 +126,7 @@ public class main extends JFrame {
 	}
 
 	private void createMainPanel() throws ClassNotFoundException, IOException {
+
 		this.createLeftPanel();
 		this.createTabbedPane();
 		JLayeredPane lpane = new JLayeredPane();
@@ -178,7 +185,7 @@ public class main extends JFrame {
 
 		this.korpa = new Korpa();
 		
-		// logedOn = loginDlg.getLogedOnKor();
+		logedOn = loginDlg.getLogedOnKor();
 		leftPanel = new JPanel();
 		GridBagConstraints gbc = new GridBagConstraints();
 		leftPanel.setLayout(new GridBagLayout());
@@ -348,6 +355,7 @@ public class main extends JFrame {
 		TabKorisnici mt = new TabKorisnici(title);
 		// dodavanje taba
 		tabbedPane.addTab(title, icon, mt);
+		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 	}
 
 	private void addTab_LekoviToTabbedPane() throws ClassNotFoundException, IOException {
@@ -355,6 +363,7 @@ public class main extends JFrame {
 		ImageIcon icon = createImageIcon("images/drugs.png", true);
 		TabLekovi mt = new TabLekovi(title, logedOn);
 		tabbedPane.addTab(title, icon, mt);
+		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 	}
 
 	private void addTab_ReceptiToTabbedPane() throws ClassNotFoundException, IOException {
@@ -362,6 +371,7 @@ public class main extends JFrame {
 		ImageIcon icon = createImageIcon("images/presc.png", true);
 		TabRecepti mt = new TabRecepti(title, logedOn);
 		tabbedPane.addTab(title, icon, mt);
+		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 	}
 
 	private void addTab_IzvestajToTabbedPane() throws ClassNotFoundException, IOException {
@@ -369,6 +379,7 @@ public class main extends JFrame {
 		ImageIcon icon = createImageIcon("images/report.png", true);
 		TabIzvestaj mt = new TabIzvestaj(title);
 		tabbedPane.addTab(title, icon, mt);
+		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 	}
 
 	private void addTab_KorpaToTabbedPane() throws ClassNotFoundException, IOException {
@@ -376,11 +387,12 @@ public class main extends JFrame {
 		ImageIcon icon = createImageIcon("images/cart.png", true);
 		TabKorpa mt = new TabKorpa(title);
 		tabbedPane.addTab(title, icon, mt);
+		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 	}
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		main.getInstance();
-		// login();
+		//main.getInstance();
+		 login();
 	}
 
 	public static void login() {
@@ -443,13 +455,13 @@ public class main extends JFrame {
 		} else {
 			frame.dispose();
 			instance = null;
+			tabbedPane = new JTabbedPaneCloseButton();
 			login();
 		}
 	}
 
 	protected static ImageIcon createImageIcon(String path, boolean scaleImage) {
 		if (scaleImage) {
-			// ukoliko vam je potrebno skaliranje slike
 			ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
 			Image image = imageIcon.getImage(); // transform it
 			Image newimg = image.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
@@ -472,19 +484,6 @@ public class main extends JFrame {
 	public String getKorisnickoImeUlogovanogKorisnika() {
 		return logedOn.getKorisnickoIme();
 	}
-
-	/*
-	 * public Korisnik getLogedOnKor() throws ClassNotFoundException, IOException {
-	 * 
-	 * ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor(); String korIme
-	 * = loginDlg.getUsername(); for(int i=0; i<korisnici.size(); i++) { if
-	 * (korIme.equals((String)korisnici.get(i).getKorisnickoIme())) { //trazi isto
-	 * ime int index = i; logedOn = new
-	 * Korisnik(korisnici.get(i).getKorisnickoIme(), korisnici.get(i).getLozinka(),
-	 * korisnici.get(i).getIme(), korisnici.get(i).getPrezime(),
-	 * korisnici.get(i).getTipKorisnika(), korisnici.get(i).getLogickiObrisan());
-	 * break; } } return logedOn; }
-	 */
 }
 	
 

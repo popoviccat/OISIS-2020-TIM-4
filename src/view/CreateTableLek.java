@@ -35,7 +35,9 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import controlers.readFromFile;
+import model.Korisnik;
 import model.Lek;
+import model.TipKorisnika;
 import utils.Row0Filter;
 import utils.Row1Filter;
 import utils.Row2Filter;
@@ -51,13 +53,9 @@ public class CreateTableLek extends JPanel{
 	private Object[] columns = new Object[] { "Sifra",
 			"Ime",
 			"Proizvodjac",
-			"Izdaje se na recept", 
-			"Cena"};
-	
-	/*public Object[][] data = { { "N0000", "Brufen", "Galenika", true, 249, false },
-			{ "N0001", "Kafetin", "Alkaloid", false, 169, false },
-			{ "N0002", "Lorazepam", "Hemofarm", true, 409, false },
-			 };*/
+			"Na recept", 
+			"Cena",
+			"Obrisan"};
 	
 	public DefaultTableModel model;
 	public JTable tbl;
@@ -69,14 +67,14 @@ public class CreateTableLek extends JPanel{
 	private DefaultTableCellRenderer centerRenderer;
 	private JTextField tfFilter;
 
-	public void CreateTableLek() throws ClassNotFoundException, IOException {
+	public void CreateTableLek(Korisnik logedOn) throws ClassNotFoundException, IOException {
 		Icon icon = new ImageIcon("images/search.png");
 		JLabel title = new JLabel("Pretraga");
 		JLabel pic = new JLabel( icon);
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints cs = new GridBagConstraints();
 		
-		initTable();
+		initTable(logedOn);
 		initTFFilter();
 
 		// Zaglavlje kolone se ne mora ručno ubacivati. JScrollPane će odraditi
@@ -109,27 +107,39 @@ public class CreateTableLek extends JPanel{
 
 	}
 
-	private void initTable() throws ClassNotFoundException, IOException {
+	private void initTable(Korisnik logedOn) throws ClassNotFoundException, IOException {
 		
 		ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
+		ArrayList<Lek> lekoviO = new ArrayList<Lek>();
 		int size = lekovi.size();
-		int rows = 0;
-		/*for (int b=0; b<size; b++) {
-			if(lekovi.get(b).getLogickiObrisan() == false) {
-				rows ++;
+		Object[][] rowData;
+		if(logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
+			rowData = new Object[size][10];
+			for (int i=0; i<size; i++) {
+				rowData[i][0] = lekovi.get(i).getSifra();
+				rowData[i][1] = lekovi.get(i).getIme();
+				rowData[i][2] = lekovi.get(i).getProizvodjac();
+				rowData[i][3] = lekovi.get(i).getIzdajeSeNaRecept();
+				rowData[i][4] = lekovi.get(i).getCena();
+				rowData[i][5] = lekovi.get(i).getLogickiObrisan();
 			}
-		}*/
-		//System.out.println(rows);
-		Object[][] rowData = new Object[size][10];
-		for (int i=0; i<size; i++) {
-			//if(lekovi.get(i).getLogickiObrisan() == false) {
-				//System.out.println("USAO");
-			rowData[i][0] = lekovi.get(i).getSifra();
-			rowData[i][1] = lekovi.get(i).getIme();
-			rowData[i][2] = lekovi.get(i).getProizvodjac();
-			rowData[i][3] = lekovi.get(i).getIzdajeSeNaRecept();
-			rowData[i][4] = lekovi.get(i).getCena() + " din.";
-			//}
+			
+		} else {
+			for (int b=0; b<size; b++) {
+				if(lekovi.get(b).getLogickiObrisan() == false) {
+					lekoviO.add(lekovi.get(b));
+				}
+			}
+			int sizeO = lekoviO.size();
+			rowData = new Object[sizeO][5];
+			for (int i=0; i<sizeO; i++) {
+				rowData[i][0] = lekoviO.get(i).getSifra();
+				rowData[i][1] = lekoviO.get(i).getIme();
+				rowData[i][2] = lekoviO.get(i).getProizvodjac();
+				rowData[i][3] = lekoviO.get(i).getIzdajeSeNaRecept();
+				rowData[i][4] = lekoviO.get(i).getCena();
+			}
+			columns = new Object[] { "Sifra", "Ime", "Proizvodjac", "Na recept", "Cena"};
 		}
 		model = new DefaultTableModel(rowData,columns){
 		      public Class<?> getColumnClass(int column)
@@ -145,7 +155,9 @@ public class CreateTableLek extends JPanel{
 		        case 3:
 		          return Boolean.class;
 		        case 4:
-		          return String.class;
+		          return Float.class;
+		        case 5:
+			      return Boolean.class;
 
 		          default:
 		            return String.class;
@@ -160,7 +172,6 @@ public class CreateTableLek extends JPanel{
 		tbl = new JTable(model) {
 			public Component prepareRenderer (TableCellRenderer renderer,int Index_row, int Index_col) {
 				Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
-				//even index, selected or not selected
 				if (Index_row % 2 == 0 && !isCellSelected(Index_row, Index_col)) {
 					comp.setBackground(new Color(203, 231, 218));
 					comp.setForeground(Color.black);
@@ -176,17 +187,27 @@ public class CreateTableLek extends JPanel{
 						comp.setForeground(Color.black);
 						tbl.setRowHeight(Index_row, 23);
 					}
-			    }
+				}
+				if (logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
+					if ((boolean) tbl.getValueAt(Index_row, 5) == true) {
+						comp.setBackground(new Color(197, 197, 197));
+						comp.setForeground(Color.black);
+					}
+				}
 			  return comp;
 			}
 		};
-		//tbl.setEnabled(false);
+		
 		model.fireTableDataChanged();
 		JTableHeader header = tbl.getTableHeader();
 		header.setBackground(new Color(141, 191, 165));
 		header.setPreferredSize(new Dimension(650,30));
 		header.setFont(new Font("Arial", Font.ITALIC, 14));
 		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
+		header.setReorderingAllowed(false);
+		
+		tableSorter = new TableRowSorter<DefaultTableModel>(model);
+		tbl.setGridColor(new Color(141, 191, 165));
 		
 		tbl.setRowHeight(23);
 		
@@ -194,16 +215,6 @@ public class CreateTableLek extends JPanel{
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		tbl.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
 		
-		tableSorter = new TableRowSorter<DefaultTableModel>(model);
-		tableSorter.setComparator(0, new Comparator<String>() {
-			
-			@Override
-			public int compare(String o1, String o2) {
-				// Case sensitive.
-				return o1.compareTo(o2);
-			}
-
-		});
 
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -217,16 +228,6 @@ public class CreateTableLek extends JPanel{
 
 		tbl.setRowSorter(tableSorter);
 
-		tbl.getSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
-
-					@Override
-					public void valueChanged(ListSelectionEvent e) {
-						if (!e.getValueIsAdjusting() && tbl.getSelectedRow() != -1) {
-							//System.out.println("SELECTED"+tbl.getValueAt(tbl.getSelectedRow(), 1) + " " + tbl.getValueAt(tbl.getSelectedRow(), 2));
-						}
-					}
-				});
 		tbl.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
@@ -236,20 +237,54 @@ public class CreateTableLek extends JPanel{
 
 		// Širenje tabele kompletno po visini pogleda scrollpane-a.
 		tbl.setFillsViewportHeight(true);
+		
+		tbl.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		    	this.setHorizontalAlignment( JLabel.CENTER );
+		    	Float d = (Float)value;
+		        String s = String.valueOf(d.floatValue()) + " din.";
+		        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+		        return c;
+		    }
+		});
 	}
 	
-	public void TableUpdate() throws ClassNotFoundException, IOException {
+	public void TableUpdate(Korisnik logedOn) throws ClassNotFoundException, IOException {
 			
 		ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
+		ArrayList<Lek> lekoviO = new ArrayList<Lek>();
 		int size = lekovi.size();
-		
-		Object[][] rowData = new Object[size][10];
-		for (int i=0; i<size; i++) {
-			rowData[i][0] = lekovi.get(i).getSifra();
-			rowData[i][1] = lekovi.get(i).getIme();
-			rowData[i][2] = lekovi.get(i).getProizvodjac();
-			rowData[i][3] = lekovi.get(i).getIzdajeSeNaRecept();
-			rowData[i][4] = lekovi.get(i).getCena() + " din.";
+		Object[][] rowData;
+		if(logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
+			rowData = new Object[size][10];
+			for (int i=0; i<size; i++) {
+				rowData[i][0] = lekovi.get(i).getSifra();
+				rowData[i][1] = lekovi.get(i).getIme();
+				rowData[i][2] = lekovi.get(i).getProizvodjac();
+				rowData[i][3] = lekovi.get(i).getIzdajeSeNaRecept();
+				rowData[i][4] = lekovi.get(i).getCena();
+				rowData[i][5] = lekovi.get(i).getLogickiObrisan();
+			}
+			
+		} else {
+			for (int b=0; b<size; b++) {
+				if(lekovi.get(b).getLogickiObrisan() == false) {
+					lekoviO.add(lekovi.get(b));
+				}
+			}
+			int sizeO = lekoviO.size();
+			rowData = new Object[sizeO][5];
+			for (int i=0; i<sizeO; i++) {
+				rowData[i][0] = lekoviO.get(i).getSifra();
+				rowData[i][1] = lekoviO.get(i).getIme();
+				rowData[i][2] = lekoviO.get(i).getProizvodjac();
+				rowData[i][3] = lekoviO.get(i).getIzdajeSeNaRecept();
+				rowData[i][4] = lekoviO.get(i).getCena();
+			}
+			columns = new Object[] { "Sifra", "Ime", "Proizvodjac", "Na recept", "Cena"};
 		}
 		model = new DefaultTableModel(rowData,columns){
 		      public Class<?> getColumnClass(int column) {
@@ -263,7 +298,9 @@ public class CreateTableLek extends JPanel{
 			    	  case 3:
 			    		  return Boolean.class;
 			    	  case 4:
-			    		  return String.class;
+			    		  return Float.class;
+			    	  case 5:
+					      return Boolean.class;
 	
 			    	  default:
 			        	return String.class;
@@ -281,15 +318,7 @@ public class CreateTableLek extends JPanel{
 			tbl.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
 		    
 			tableSorter = new TableRowSorter<DefaultTableModel>(model);
-			tableSorter.setComparator(0, new Comparator<String>() {
-				
-				@Override
-				public int compare(String o1, String o2) {
-					// Case sensitive.
-					return o1.compareTo(o2);
-				}
-
-			});
+			
 			
 			List<RowSorter.SortKey> sortKeys2 = new ArrayList<RowSorter.SortKey>();
 			sortKeys2.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -300,6 +329,19 @@ public class CreateTableLek extends JPanel{
 			tableSorter.setSortKeys(sortKeys2);
 
 			tbl.setRowSorter(tableSorter);
+			
+			tbl.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
+				private static final long serialVersionUID = 1L;
+				
+			    @Override
+			    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			    	this.setHorizontalAlignment( JLabel.CENTER );
+			    	Float d = (Float)value;
+			        String s = String.valueOf(d.floatValue()) + " din.";
+			        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+			        return c;
+			    }
+			});
 		}
 
 	private void initTFFilter() {

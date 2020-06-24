@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -50,7 +52,7 @@ public class CreateTableKorpa extends JPanel{
 	private Object[] columns = new Object[] { "Sifra",
 			"Ime",
 			"Proizvodjac",
-			"Izdaje se na recept", 
+			"Na recept", 
 			"Cena",
 			"Kolicina",
 			"Ukupna cena"};
@@ -75,8 +77,6 @@ public class CreateTableKorpa extends JPanel{
 		initTable();
 		initTFFilter();
 
-		// Zaglavlje kolone se ne mora ruÄ?no ubacivati. JScrollPane Ä‡e odraditi
-		// taj posao.
 		cs.gridx = 0;
 		cs.gridy = 1;
 		cs.gridwidth = 3;
@@ -117,12 +117,13 @@ public class CreateTableKorpa extends JPanel{
 			rowData[brojac][1] = l.getIme();
 			rowData[brojac][2] = l.getProizvodjac();
 			rowData[brojac][3] = l.getIzdajeSeNaRecept();
-			rowData[brojac][4] = l.getCena() + " din.";
+			rowData[brojac][4] = l.getCena();
 			rowData[brojac][5] = lekoviUKorpi.get(l);
 			
-			float cena = l.getCena() * lekoviUKorpi.get(l);
+			DecimalFormat twoDForm = new DecimalFormat("######.##");
+			float cena = BigDecimal.valueOf( l.getCena() * lekoviUKorpi.get(l) ).setScale(1, BigDecimal.ROUND_HALF_UP).floatValue();
 			
-			rowData[brojac][6] = cena + " din.";
+			rowData[brojac][6] = cena;
 			
 			brojac++;
 		}
@@ -141,11 +142,11 @@ public class CreateTableKorpa extends JPanel{
 		        case 3:
 		          return Boolean.class;
 		        case 4:
-		          return String.class;
+		          return Float.class;
 		        case 5:
 			      return Integer.class;
 		        case 6:
-			      return String.class;
+			      return Float.class;
 
 		          default:
 		            return String.class;
@@ -187,23 +188,17 @@ public class CreateTableKorpa extends JPanel{
 		header.setPreferredSize(new Dimension(650,30));
 		header.setFont(new Font("Arial", Font.ITALIC, 14));
 		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
-		
-		tbl.setRowHeight(23);
+		header.setReorderingAllowed(false);
 		
 		centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-		tbl.getColumnModel().getColumn(4).setCellRenderer( centerRenderer );
+		tbl.getColumnModel().getColumn(5).setCellRenderer( centerRenderer );
 		
 		tableSorter = new TableRowSorter<DefaultTableModel>(model);
-		tableSorter.setComparator(0, new Comparator<String>() {
-			
-			@Override
-			public int compare(String o1, String o2) {
-				// Case sensitive.
-				return o1.compareTo(o2);
-			}
-
-		});
+		tbl.setGridColor(new Color(141, 191, 165));
+		
+		tbl.setRowHeight(23);
+		
 
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		sortKeys.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
@@ -220,9 +215,34 @@ public class CreateTableKorpa extends JPanel{
 		tbl.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
-		tbl.setPreferredScrollableViewportSize(new Dimension(650,283));
+		tbl.setPreferredScrollableViewportSize(new Dimension(650,250));
 
 		tbl.setFillsViewportHeight(true);
+		
+		tbl.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		    	this.setHorizontalAlignment( JLabel.CENTER );
+		    	Float d = (Float)value;
+		        String s = String.valueOf(d.floatValue()) + " din.";
+		        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+		        return c;
+		    }
+		});
+		tbl.getColumnModel().getColumn(6).setCellRenderer(new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+		    @Override
+		    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		    	this.setHorizontalAlignment( JLabel.CENTER );
+		    	Float d = (Float)value;
+		        String s = String.valueOf(d.floatValue()) + " din.";
+		        Component c = super.getTableCellRendererComponent(table, s, isSelected, hasFocus, row, column);
+		        return c;
+		    }
+		});
 	}
 	
 	private void initTFFilter() {

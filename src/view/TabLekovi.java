@@ -34,7 +34,7 @@ public class TabLekovi extends JPanel{
 	
 	public TabLekovi(String text, Korisnik logedOn) throws ClassNotFoundException, IOException {
 		CreateTableLek ct = new CreateTableLek();
-		ct.CreateTableLek();
+		ct.CreateTableLek(logedOn);
 		
 		this.tabName = text;
 		
@@ -61,7 +61,7 @@ public class TabLekovi extends JPanel{
 					DodajLek dkDlg = new DodajLek(frame);
 					dkDlg.setVisible(true);
 				
-					ct.TableUpdate();
+					ct.TableUpdate(logedOn);
 					
 					System.out.println("Poslednji dodat "+ ct.model.getValueAt(ct.model.getRowCount()-1, 0));
 					
@@ -88,8 +88,10 @@ public class TabLekovi extends JPanel{
 	    	@Override
 			public void actionPerformed(ActionEvent e) {
 	    		try {
-	    			//ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
-					ct.TableUpdate();
+	    			if (ct.tbl.getSelectedRow() != -1 ) {
+		    			ObrisiIzTabele.ObrisiLek(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
+						ct.TableUpdate(logedOn);
+	    			}
 					
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
@@ -120,7 +122,7 @@ public class TabLekovi extends JPanel{
 						dkDlg = new IzmeniLek(frame, (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
 						dkDlg.setVisible(true);
 					
-						ct.TableUpdate();
+						ct.TableUpdate(logedOn);
 					}
 					
 				} catch (ClassNotFoundException | IOException e1) {

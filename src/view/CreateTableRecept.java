@@ -186,7 +186,7 @@ public class CreateTableRecept extends JPanel{
 		header.setBackground(new Color(141, 191, 165));
 		header.setPreferredSize(new Dimension(650,30));
 		header.setFont(new Font("Arial", Font.ITALIC, 14));
-		header.setBorder(BorderFactory.createMatteBorder(1,1,3,1,new Color(56, 97, 76)));
+		header.setBorder(BorderFactory.createMatteBorder(0,0,3,0,new Color(56, 97, 76)));
 		header.setReorderingAllowed(false);
 		
 		TableColumnModel columnModel = tbl.getColumnModel();
