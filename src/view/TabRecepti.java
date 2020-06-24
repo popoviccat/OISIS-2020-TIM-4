@@ -78,7 +78,7 @@ public class TabRecepti extends JPanel{
 		cs.gridy = 0;
 	    topPanel.add(addDrug, cs);
 	    
-	    JButton delDrug = new JButton("Obrisi recept");
+	   /* JButton delDrug = new JButton("Obrisi recept");
 	    delDrug.setBackground(peach);
 	    delDrug.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 	    delDrug.setPreferredSize(new Dimension(150,26));
@@ -100,7 +100,7 @@ public class TabRecepti extends JPanel{
 	    cs.insets = new Insets(20, 20, 0, 0);
 	    cs.gridx = 1;
 		cs.gridy = 0;
-	    topPanel.add(delDrug, cs);
+	    topPanel.add(delDrug, cs);*/
 	    
 		cs.insets = new Insets(10, 0, 0, 0);
 		cs.gridx = 0;
@@ -116,7 +116,7 @@ public class TabRecepti extends JPanel{
 		
 		if(logedOn.getTipKorisnika() == TipKorisnika.APOTEKAR || logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
 			addDrug.setVisible(false);
-			delDrug.setVisible(false);
+			//delDrug.setVisible(false);
 			ct.setPreferredSize(new Dimension(700,440));
 			ct.tbl.setPreferredScrollableViewportSize(new Dimension(650,330));
 		}
