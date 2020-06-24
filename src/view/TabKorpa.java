@@ -57,7 +57,60 @@ public class TabKorpa extends JPanel{
 		
 		Korpa korpa =  main.getInstance().getKorpa();
 		
+		JButton btnDodajLek = new JButton("Dodaj lek");
+		btnDodajLek.setBackground(peach);
+		btnDodajLek.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		btnDodajLek.setPreferredSize(new Dimension(150,26));
+		btnDodajLek.addMouseListener(new MyMouseListener(btnDodajLek));
+		btnDodajLek.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					DodajLekUKorpu dlukDlg = new DodajLekUKorpu(main.getInstance(), TabKorpa.this);
+					dlukDlg.setVisible(true);
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}
+		});
 		
+		cs.gridx = 0;
+		cs.gridy = 0;
+		cs.anchor = GridBagConstraints.WEST;
+		cs.insets = new Insets(5, 20, 5, 0);
+		mainPanel.add(btnDodajLek,cs);
+		
+		JButton btnDodajRecept = new JButton("Dodaj recept");
+		btnDodajRecept.setBackground(peach);
+		btnDodajRecept.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		btnDodajRecept.setPreferredSize(new Dimension(150,26));
+		btnDodajRecept.addMouseListener(new MyMouseListener(btnDodajRecept));
+		btnDodajRecept.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					DodajLekoveIzReceptaUKorpu dlirukDlg = new DodajLekoveIzReceptaUKorpu(main.getInstance(), TabKorpa.this);
+					dlirukDlg.setVisible(true);
+				} catch (ClassNotFoundException | IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		cs.gridx = 1;
+		cs.gridy = 0;
+		mainPanel.add(btnDodajRecept,cs);
+		
+		cs.insets = new Insets(0, 0, 0, 0);
+		cs.gridx = 0;
+		cs.gridy = 1;
+		cs.weighty = 1;
+		cs.gridwidth = 2;
+		cs.anchor = GridBagConstraints.CENTER;
 		//Prikazi da je korpa prazna u slucaju da nema nijednog artikla u njoj
 		if (korpa.getLekoviUKorpi().isEmpty()) {
 			
