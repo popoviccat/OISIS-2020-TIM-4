@@ -41,7 +41,7 @@ public class DodajLekoveIzReceptaUKorpu extends JDialog{
     private JButton btnCancel;
     
  
-    public DodajLekoveIzReceptaUKorpu(Frame parent) throws ClassNotFoundException, IOException {
+    public DodajLekoveIzReceptaUKorpu(Frame parent, TabKorpa tabKorpa) throws ClassNotFoundException, IOException {
         super(parent, "Dodaj lekove iz recepta u korpu", true);
         
         ArrayList<Recept> recepti = readFromFile.readFromFileRec();
@@ -126,6 +126,12 @@ public class DodajLekoveIzReceptaUKorpu extends JDialog{
         					}        					
         				}
         				
+        				try {
+							tabKorpa.initTabKorpa();
+						} catch (ClassNotFoundException | IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
         				dispose();
         				return;
         			}

@@ -31,7 +31,6 @@ import model.Korisnik;
 import model.Korpa;
 import model.TipKorisnika;
 import view.LoginDialog;
-import view.OdaberiNacinDodavanjaUKorpu;
 import view.TabIzvestaj;
 import view.TabKorisnici;
 import view.TabKorpa;
@@ -216,20 +215,13 @@ public class main extends JFrame {
 		btn4.setPreferredSize(new Dimension(130, 40));
 		btn4.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		btn4.addMouseListener(new MyMouseListener(btn4));
-
-		JButton btn5 = new JButton("Dodaj u korpu");
+		
+		JButton btn5 = new JButton("Korpa", icon);
 		btn5.setFont(btn5.getFont().deriveFont(f));
 		btn5.setBackground(peach);
 		btn5.setPreferredSize(new Dimension(130, 40));
 		btn5.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 		btn5.addMouseListener(new MyMouseListener(btn5));
-		
-		JButton btn6 = new JButton("Korpa", icon);
-		btn6.setFont(btn6.getFont().deriveFont(f));
-		btn6.setBackground(peach);
-		btn6.setPreferredSize(new Dimension(130, 40));
-		btn6.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		btn6.addMouseListener(new MyMouseListener(btn6));
 
 		if (logedOn.getTipKorisnika() == TipKorisnika.LEKAR || logedOn.getTipKorisnika() == TipKorisnika.APOTEKAR) {
 			btn1.setVisible(false);
@@ -243,13 +235,6 @@ public class main extends JFrame {
 			btn5.setContentAreaFilled(false);
 			btn5.setBorderPainted(false);
 			btn5.setText("");
-			
-			btn6.setIcon(null);
-			btn6.setEnabled(false);
-			btn6.setOpaque(false);
-			btn6.setContentAreaFilled(false);
-			btn6.setBorderPainted(false);
-			btn6.setText("");
 		}
 
 		btn1.addActionListener(new ActionListener() {
@@ -295,19 +280,8 @@ public class main extends JFrame {
 				}
 			}
 		});
-		
-		btn5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					openDlgAddToCart();
-				} catch (ClassNotFoundException | IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
 
-		btn6.addActionListener(new ActionListener() {
+		btn5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					addTab_KorpaToTabbedPane();
@@ -345,13 +319,8 @@ public class main extends JFrame {
 		gbc.gridy = 5;
 		gbc.weighty = 1.0;
 		gbc.anchor = GridBagConstraints.PAGE_END;
+		gbc.insets = new Insets(0, 0, 30, 0);
 		leftPanel.add(btn5, gbc);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 6;
-		gbc.weighty = 0;
-		gbc.insets = new Insets(10, 0, 30, 0);
-		leftPanel.add(btn6, gbc);
 	}
 
 	private void createTabbedPane() {
@@ -407,11 +376,6 @@ public class main extends JFrame {
 		ImageIcon icon = createImageIcon("images/cart.png", true);
 		TabKorpa mt = new TabKorpa(title);
 		tabbedPane.addTab(title, icon, mt);
-	}
-	
-	private void openDlgAddToCart() throws ClassNotFoundException, IOException {
-		OdaberiNacinDodavanjaUKorpu ondukDlg = new OdaberiNacinDodavanjaUKorpu(main.getInstance());
-		ondukDlg.setVisible(true);
 	}
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {

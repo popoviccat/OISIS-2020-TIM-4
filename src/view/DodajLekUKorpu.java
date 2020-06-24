@@ -14,9 +14,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,7 +36,7 @@ public class DodajLekUKorpu extends JDialog{
 	 * 
 	 */
 	private static final long serialVersionUID = -159924695243776854L;
-	private JTextField tfSifra;
+	private JComboBox<String> cbSifreLekova;
 	private JTextField tfKolicina;
 	private JLabel lbText;
     private JLabel lbSifra;
@@ -42,7 +45,7 @@ public class DodajLekUKorpu extends JDialog{
     private JButton btnCancel;
     
  
-    public DodajLekUKorpu(Frame parent) throws ClassNotFoundException, IOException {
+    public DodajLekUKorpu(Frame parent, TabKorpa tabKorpa) throws ClassNotFoundException, IOException {
         super(parent, "Dodaj Lek u korpu", true);
         
         ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
@@ -72,13 +75,13 @@ public class DodajLekUKorpu extends JDialog{
         cs.gridwidth = 1;
         panel.add(lbSifra, cs);
  
-        tfSifra = new JTextField(20);
-        tfSifra.setFont(new Font("Arial", Font.PLAIN, 14));
-        tfSifra.setBorder(BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK));
-        cs.gridx = 1;
-        cs.gridy = 1;
-        cs.gridwidth = 2;
-        panel.add(tfSifra, cs);
+        Vector<String> sifreLekova = new Vector<>();
+        
+        for (Lek l : lekovi) {
+        	sifreLekova.add(l.getSifra());
+        }
+        
+        Collections.sort(sifreLekova);
         
         lbKolicina = new JLabel("Kolicina:  ");
         lbKolicina.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -157,12 +160,16 @@ public class DodajLekUKorpu extends JDialog{
 							e1.printStackTrace();
 						}
         				
+        				try {
+							tabKorpa.initTabKorpa();
+						} catch (ClassNotFoundException | IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
         				dispose();
         				return;
         			}
         		}
-        		
-        		JOptionPane.showMessageDialog(DodajLekUKorpu.this, "Lek sa unetom sifrom ne postoji!", "Error", JOptionPane.ERROR_MESSAGE);
         	}
         });
         btnCancel = new JButton("Cancel");
@@ -200,7 +207,7 @@ public class DodajLekUKorpu extends JDialog{
     }
  
     public String getSifra() {
-        return tfSifra.getText().trim();
+        return (String) cbSifreLekova.getSelectedItem();
     }
     
     public int getKolicina() {

@@ -32,40 +32,55 @@ public class TabKorpa extends JPanel{
 
 	private static final long serialVersionUID = -853959313304993533L;
 	private String tabName;
-	private JPanel topPanel;
+	private JPanel mainPanel;
 	private GridBagConstraints cs;
+	
+	Color peach = new Color(249, 229, 222);
 	
 	public TabKorpa(String text) throws ClassNotFoundException, IOException {
 		this.tabName = text;
 		
-		Color peach = new Color(249, 229, 222);
-		
 		setLayout(new BorderLayout());
-		topPanel = new JPanel();
-		add(BorderLayout.PAGE_START, topPanel);
+		mainPanel = new JPanel();
 		
-		topPanel.setLayout(new GridBagLayout());
+		mainPanel.setLayout(new GridBagLayout());
 		cs = new GridBagConstraints();
-		topPanel.setBorder(new LineBorder(Color.white, 0));
-		topPanel.setBackground(Color.white);
-		add(topPanel, BorderLayout.CENTER);
+		mainPanel.setBorder(new LineBorder(Color.white, 0));
+		mainPanel.setBackground(Color.white);
+		add(mainPanel, BorderLayout.CENTER);
+		
+		initTabKorpa();
+	}
+	
+	public void initTabKorpa() throws ClassNotFoundException, IOException {
+		mainPanel.removeAll();
 		
 		Korpa korpa =  main.getInstance().getKorpa();
 		
+		
 		//Prikazi da je korpa prazna u slucaju da nema nijednog artikla u njoj
 		if (korpa.getLekoviUKorpi().isEmpty()) {
+			
+			JPanel centerPanel = new JPanel();
+			centerPanel.setLayout(new GridBagLayout());
+			centerPanel.setBackground(Color.white);
+			
+			GridBagConstraints centerPanelConstr = new GridBagConstraints();
+			
 			JLabel lbPraznaKorpa1 = new JLabel("Korpa je prazna!");
 			lbPraznaKorpa1.setFont(new Font("Arial", Font.BOLD, 35));
-			cs.gridx = 0;
-			cs.gridy = 0;
-			topPanel.add(lbPraznaKorpa1,cs);
+			centerPanelConstr.gridx = 0;
+			centerPanelConstr.gridy = 0;
+			centerPanel.add(lbPraznaKorpa1,centerPanelConstr);
 			
-			JLabel lbPraznaKorpa2 = new JLabel("Zapocnite prodaju lekova klikom na dugme Dodaj u korpu.");
-			lbPraznaKorpa2.setFont(new Font("Arial", Font.PLAIN, 25));
-			cs.insets = new Insets(20, 0, 0, 0);
-			cs.gridx = 0;
-			cs.gridy = 1;
-			topPanel.add(lbPraznaKorpa2,cs);
+			JLabel lbPraznaKorpa2 = new JLabel("Zapocnite prodaju lekova dodavanjem jednog leka ili svih lekova sa recepta.");
+			lbPraznaKorpa2.setFont(new Font("Arial", Font.PLAIN, 20));
+			centerPanelConstr.insets = new Insets(20, 0, 0, 0);
+			centerPanelConstr.gridx = 0;
+			centerPanelConstr.gridy = 2;
+			centerPanel.add(lbPraznaKorpa2,centerPanelConstr);
+			
+			mainPanel.add(centerPanel, cs);
 		} else {
 			CreateTableKorpa ct = new CreateTableKorpa();
 			try {
@@ -75,125 +90,95 @@ public class TabKorpa extends JPanel{
 				e1.printStackTrace();
 			}
 					
-			cs.gridx = 0;
-			cs.gridy = 0;
-			cs.weightx = 1.0;
-			cs.weighty = 1.0;
-			cs.gridwidth = 2;
-			cs.anchor = GridBagConstraints.NORTH;
-			topPanel.add(ct,cs);
+			mainPanel.add(ct,cs);
 			ct.setBackground(Color.white);
-			ct.setPreferredSize(new Dimension(700,380));
-			ct.setVisible(true);
 			
 			JLabel lbUkupnaCena = new JLabel("Ukupna cena artikala u korpi: " + main.getInstance().getKorpa().getCenaSvihLekovaUKorpi());
-			lbUkupnaCena.setFont(new Font("Arial", Font.BOLD, 25));
+			lbUkupnaCena.setFont(new Font("Arial", Font.BOLD, 22));
 			cs.anchor = GridBagConstraints.EAST;
-			cs.insets = new Insets(0, 0, 10, 10);
-			cs.gridx = 0;
-			cs.gridy = 1;
-			topPanel.add(lbUkupnaCena,cs);
-			
-			JButton btnZavrsiProdaju = new JButton("Potvrdi kupovinu");
-			btnZavrsiProdaju.setBackground(peach);
-			btnZavrsiProdaju.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-			btnZavrsiProdaju.setPreferredSize(new Dimension(150,26));
-			btnZavrsiProdaju.addMouseListener(new MyMouseListener(btnZavrsiProdaju));
-			btnZavrsiProdaju.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int rezultat = JOptionPane.showConfirmDialog(TabKorpa.this, "Da li ste sigurni da zelite da zavrsite kupovinu?", "Potvrda kupovine", JOptionPane.YES_NO_OPTION);
-					if (rezultat == JOptionPane.YES_OPTION) {
-						try {
-							Korpa korpa = main.getInstance().getKorpa();
-							HashMap<Lek, Integer> lekoviUKorpi = korpa.getLekoviUKorpi();
-							Racun noviRacun = new Racun(main.getInstance().getKorisnickoImeUlogovanogKorisnika());
-							
-							for (Lek l : lekoviUKorpi.keySet()) {
-								Stavka s = new Stavka(l, lekoviUKorpi.get(l));
-								noviRacun.getProdatiLekovi().add(s);
-							}
-							
-							writeToFile.writeToFileProdajaAddRacun(noviRacun);
-							
-							main.getInstance().isprazniKorpu();
-							
-							topPanel.removeAll();
-							
-							JLabel lbPraznaKorpa1 = new JLabel("Korpa je prazna!");
-							lbPraznaKorpa1.setFont(new Font("Arial", Font.BOLD, 35));
-							cs = new GridBagConstraints();
-							cs.gridx = 0;
-							cs.gridy = 0;
-							topPanel.add(lbPraznaKorpa1,cs);
-							
-							JLabel lbPraznaKorpa2 = new JLabel("Zapocnite prodaju lekova klikom na dugme Dodaj u korpu.");
-							lbPraznaKorpa2.setFont(new Font("Arial", Font.PLAIN, 25));
-							cs.insets = new Insets(20, 0, 0, 0);
-							cs.gridx = 0;
-							cs.gridy = 1;
-							topPanel.add(lbPraznaKorpa2,cs);
-							
-							SwingUtilities.updateComponentTreeUI(topPanel);
-							
-						} catch (ClassNotFoundException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-				}
-			});
-			
+			cs.insets = new Insets(0, 0, 10, 20);
 			cs.gridx = 0;
 			cs.gridy = 2;
-			cs.gridwidth = 1;
-			topPanel.add(btnZavrsiProdaju, cs);
-			
-			JButton btnBrisanjeKorpe = new JButton("Obrisi korpu");
-			btnBrisanjeKorpe.setBackground(peach);
-			btnBrisanjeKorpe.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-			btnBrisanjeKorpe.setPreferredSize(new Dimension(150,26));
-			btnBrisanjeKorpe.addMouseListener(new MyMouseListener(btnBrisanjeKorpe));
-			btnBrisanjeKorpe.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int rezultat = JOptionPane.showConfirmDialog(TabKorpa.this, "Da li ste sigurni da zelite da obrisete sve artikle iz korpe?", "Brisanje artikala iz korpe", JOptionPane.YES_NO_OPTION);
-					if (rezultat == JOptionPane.YES_OPTION) {
-						try {
-							main.getInstance().isprazniKorpu();
-							
-							topPanel.removeAll();
-							
-							JLabel lbPraznaKorpa1 = new JLabel("Korpa je prazna!");
-							lbPraznaKorpa1.setFont(new Font("Arial", Font.BOLD, 35));
-							cs = new GridBagConstraints();
-							cs.gridx = 0;
-							cs.gridy = 0;
-							topPanel.add(lbPraznaKorpa1,cs);
-							
-							JLabel lbPraznaKorpa2 = new JLabel("Zapocnite prodaju lekova klikom na dugme Dodaj u korpu.");
-							lbPraznaKorpa2.setFont(new Font("Arial", Font.PLAIN, 25));
-							cs.insets = new Insets(20, 0, 0, 0);
-							cs.gridx = 0;
-							cs.gridy = 1;
-							topPanel.add(lbPraznaKorpa2,cs);
-							
-							SwingUtilities.updateComponentTreeUI(topPanel);
-							
-						} catch (ClassNotFoundException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-				}
-			});
-			cs.gridx = 1;
-			cs.gridy = 2;
-			cs.weightx = 0;
-			topPanel.add(btnBrisanjeKorpe, cs);
+			cs.weighty = 0;
+			mainPanel.add(lbUkupnaCena,cs);
 		}
+		
+		JButton btnBrisanjeKorpe = new JButton("Obrisi korpu");
+		btnBrisanjeKorpe.setBackground(peach);
+		btnBrisanjeKorpe.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		btnBrisanjeKorpe.setPreferredSize(new Dimension(150,26));
+		btnBrisanjeKorpe.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int rezultat = JOptionPane.showConfirmDialog(TabKorpa.this, "Da li ste sigurni da zelite da obrisete sve artikle iz korpe?", "Brisanje artikala iz korpe", JOptionPane.YES_NO_OPTION);
+				if (rezultat == JOptionPane.YES_OPTION) {
+					try {
+						main.getInstance().isprazniKorpu();						
+						initTabKorpa();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		cs.gridx = 0;
+		cs.gridy = 3;
+		cs.gridwidth = 1;
+		cs.weighty = 0;
+		cs.anchor = GridBagConstraints.WEST;
+		cs.insets = new Insets(0, 20, 5, 0);
+		mainPanel.add(btnBrisanjeKorpe, cs);
+		
+		
+		JButton btnZavrsiProdaju = new JButton("Potvrdi kupovinu");
+		btnZavrsiProdaju.setBackground(peach);
+		btnZavrsiProdaju.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		btnZavrsiProdaju.setPreferredSize(new Dimension(150,26));
+		btnZavrsiProdaju.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int rezultat = JOptionPane.showConfirmDialog(TabKorpa.this, "Da li ste sigurni da zelite da zavrsite kupovinu?", "Potvrda kupovine", JOptionPane.YES_NO_OPTION);
+				if (rezultat == JOptionPane.YES_OPTION) {
+					try {
+						Korpa korpa = main.getInstance().getKorpa();
+						HashMap<Lek, Integer> lekoviUKorpi = korpa.getLekoviUKorpi();
+						Racun noviRacun = new Racun(main.getInstance().getKorisnickoImeUlogovanogKorisnika());
+						
+						for (Lek l : lekoviUKorpi.keySet()) {
+							Stavka s = new Stavka(l, lekoviUKorpi.get(l));
+							noviRacun.getProdatiLekovi().add(s);
+						}
+						
+						writeToFile.writeToFileProdajaAddRacun(noviRacun);
+						
+						main.getInstance().isprazniKorpu();
+						initTabKorpa();
+					} catch (ClassNotFoundException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		
+		cs.gridx = 1;
+		cs.gridy = 3;
+		cs.anchor = GridBagConstraints.EAST;
+		cs.insets = new Insets(0, 0, 5, 20);
+		mainPanel.add(btnZavrsiProdaju, cs);
+		
+		if (korpa.getLekoviUKorpi().isEmpty()) {
+			btnBrisanjeKorpe.setEnabled(false);
+			btnZavrsiProdaju.setEnabled(false);
+		} else {
+			btnBrisanjeKorpe.addMouseListener(new MyMouseListener(btnBrisanjeKorpe));
+			btnZavrsiProdaju.addMouseListener(new MyMouseListener(btnZavrsiProdaju));
+		}
+		
+		SwingUtilities.updateComponentTreeUI(mainPanel);
 	}
 	
 	public String getName() {
