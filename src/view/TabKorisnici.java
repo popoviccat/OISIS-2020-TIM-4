@@ -13,7 +13,6 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -61,8 +60,6 @@ public class TabKorisnici extends JPanel {
 					dkDlg.setVisible(true);
 				
 					ct.TableUpdate();
-					
-					System.out.println("Poslednji dodat "+ ct.model.getValueAt(ct.model.getRowCount()-1, 0));
 					
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block

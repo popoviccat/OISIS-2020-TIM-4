@@ -9,7 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -26,8 +25,6 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -77,8 +74,6 @@ public class CreateTableLek extends JPanel{
 		initTable(logedOn);
 		initTFFilter();
 
-		// Zaglavlje kolone se ne mora ručno ubacivati. JScrollPane će odraditi
-		// taj posao.
 		cs.gridx = 0;
 		cs.gridy = 1;
 		cs.gridwidth = 3;
@@ -231,11 +226,8 @@ public class CreateTableLek extends JPanel{
 		tbl.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
 
-		// Poželjna veličina pogleda tabele u okviru scrollpane-a. Layout
-		// manager uzima ovu osobinu u obzir.
 		tbl.setPreferredScrollableViewportSize(new Dimension(650,283));
 
-		// Širenje tabele kompletno po visini pogleda scrollpane-a.
 		tbl.setFillsViewportHeight(true);
 		
 		tbl.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {

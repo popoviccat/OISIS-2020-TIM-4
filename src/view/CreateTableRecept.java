@@ -76,8 +76,6 @@ public class CreateTableRecept extends JPanel{
 		initTable();
 		initTFFilter();
 
-		// Zaglavlje kolone se ne mora ručno ubacivati. JScrollPane će odraditi
-		// taj posao.
 		cs.gridx = 0;
 		cs.gridy = 1;
 		cs.gridwidth = 3;
@@ -110,24 +108,17 @@ public class CreateTableRecept extends JPanel{
 		
 		ArrayList<Recept> recepti = readFromFile.readFromFileRec();
 		int size = recepti.size();
-		int rows = 0;
-		/*for (int b=0; b<size; b++) {
-			if(recepti.get(b).getLogickiObrisan() == false) {
-				rows ++;
-			}
-		}*/
+		
 		Object[][] rowData = new Object[size][10];
 		for (int i=0; i<size; i++) {
-			//if(recepti.get(i).getLogickiObrisan() == false) {
-				//System.out.println("USAO");
 			rowData[i][0] = recepti.get(i).getSifra();
 			rowData[i][1] = recepti.get(i).getIdLekara();
 			rowData[i][2] = recepti.get(i).getJmbgPacijenta();
 			rowData[i][3] = getLekovi(i);
 			rowData[i][4] = formatter.format(recepti.get(i).getDatumVreme());
 			rowData[i][5] = recepti.get(i).getUkupnaCena();
-			//}
 		}
+		
 		model = new DefaultTableModel(rowData,columns){
 			@Override
 		      public Class<?> getColumnClass(int column)
@@ -221,11 +212,8 @@ public class CreateTableRecept extends JPanel{
 		tbl.setRowSorter(tableSorter);
 		tbl.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		// Poželjna veličina pogleda tabele u okviru scrollpane-a. Layout
-		// manager uzima ovu osobinu u obzir.
 		tbl.setPreferredScrollableViewportSize(new Dimension(650,283));
 
-		// Širenje tabele kompletno po visini pogleda scrollpane-a.
 		tbl.setFillsViewportHeight(true);
 		
 		tbl.getColumnModel().getColumn(3).setCellRenderer(new LineWrapCellRenderer());

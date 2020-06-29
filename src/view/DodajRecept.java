@@ -350,7 +350,6 @@ public class DodajRecept extends JDialog{
 			        	for(int i=0; i<dodatiLek.size(); i++) {
 							newRec.dodajLek(dodatiLek.get(i), dodatiKol.get(i));
 						}
-			        	System.out.println(newRec);
 						writeToFile.writeToFileRec(newRec);
 			        	JOptionPane.showMessageDialog(DodajRecept.this, "Uspešno ste dodali novi recept.", "Dodat recept", JOptionPane.INFORMATION_MESSAGE);
 			            dispose();
@@ -406,7 +405,6 @@ public class DodajRecept extends JDialog{
     		ID = 1;
     	} else {
     		int last = recepti.get(recepti.size()-1).getSifra();
-    		System.out.println(last);
     		ID = last + 1;
     	}
     	return ID;

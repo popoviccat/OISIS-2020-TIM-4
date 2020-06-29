@@ -9,7 +9,6 @@ import javax.swing.WindowConstants;
 
 import model.Korisnik;
 import model.Lek;
-import view.CreateTableKorisnik;
 import java.lang.String;
 
 public class ObrisiIzTabele {
@@ -20,7 +19,7 @@ public class ObrisiIzTabele {
 		 if (ct != -1 ) {
 	        int size = korisnici.size();
 	        for (int i = 0; i < size; i++) {
-	        	if (name.equals((String)korisnici.get(i).getKorisnickoIme())) { //trazi isto ime
+	        	if (name.equals((String)korisnici.get(i).getKorisnickoIme())) {
 	        		
 	        		JFrame frame= new JFrame();
 	        		int code=JOptionPane.showConfirmDialog(frame, "Da li ste sigurni da zelite da obrisete korisnika " + "\n" +
@@ -28,7 +27,7 @@ public class ObrisiIzTabele {
 	        				korisnici.get(i).getPrezime() + "?",
 	        				"Obrisi korisnika?",JOptionPane.YES_NO_OPTION);
 	        				 
-	        		if (code == JOptionPane.YES_OPTION){ //brisanje
+	        		if (code == JOptionPane.YES_OPTION){
 	        				
 	        			korisnici.get(i).setLogickiObrisan(true);
 	        			writeToFile.updateDatabaseKor(korisnici);
@@ -51,7 +50,7 @@ public class ObrisiIzTabele {
 		 if (ct != -1 ) {
 	        int size = lekovi.size();
 	        for (int i = 0; i < size; i++) {
-	        	if (name.equals((String)lekovi.get(i).getSifra())) { //trazi istu sifru
+	        	if (name.equals((String)lekovi.get(i).getSifra())) {
 	        		
 	        		JFrame frame= new JFrame();
 	        		int code=JOptionPane.showConfirmDialog(frame, "Da li ste sigurni da zelite da obrisete lek " + "\n" +
@@ -60,7 +59,7 @@ public class ObrisiIzTabele {
 	        				lekovi.get(i).getProizvodjac() + "?",
 	        				"Obrisi lek?",JOptionPane.YES_NO_OPTION);
 	        				 
-	        		if (code == JOptionPane.YES_OPTION){ //brisanje
+	        		if (code == JOptionPane.YES_OPTION){
 	        				
 	        			lekovi.get(i).setLogickiObrisan(true);
 	        			writeToFile.updateDatabaseLek(lekovi);

@@ -272,7 +272,7 @@ public class IzmeniLek extends JDialog{
 		
 		ArrayList<Lek> lekovi = readFromFile.readFromFileLek();
 		for(int i=0; i<lekovi.size(); i++) {
-			if (selSifra.equals((String)lekovi.get(i).getSifra())) { //trazi isto ime
+			if (selSifra.equals((String)lekovi.get(i).getSifra())) {
 				selLek = new Lek(lekovi.get(i).getSifra(),
 						lekovi.get(i).getIme(), 
 						lekovi.get(i).getProizvodjac(),  

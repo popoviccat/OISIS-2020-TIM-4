@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import controlers.MyMouseListener;
-import controlers.ObrisiIzTabele;
 import model.Korisnik;
 import model.TipKorisnika;
 
@@ -63,8 +62,6 @@ public class TabRecepti extends JPanel{
 				
 					ct.TableUpdate();
 					
-					System.out.println("Poslednji dodat "+ ct.model.getValueAt(ct.model.getRowCount()-1, 0));
-					
 				} catch (ClassNotFoundException | IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -77,30 +74,6 @@ public class TabRecepti extends JPanel{
 	    cs.gridx = 0;
 		cs.gridy = 0;
 	    topPanel.add(addDrug, cs);
-	    
-	   /* JButton delDrug = new JButton("Obrisi recept");
-	    delDrug.setBackground(peach);
-	    delDrug.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
-	    delDrug.setPreferredSize(new Dimension(150,26));
-	    delDrug.addMouseListener(new MyMouseListener(delDrug));
-	    
-	    delDrug.addActionListener(new ActionListener() {
-	    	@Override
-			public void actionPerformed(ActionEvent e) {
-	    		try {
-	    			//ObrisiIzTabele.ObrisiKor(ct.tbl.getSelectedRow(), (String) ct.tbl.getValueAt(ct.tbl.getSelectedRow(), 0));
-					ct.TableUpdate();
-					
-				} catch (ClassNotFoundException | IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-	    	}
-		});
-	    cs.insets = new Insets(20, 20, 0, 0);
-	    cs.gridx = 1;
-		cs.gridy = 0;
-	    topPanel.add(delDrug, cs);*/
 	    
 		cs.insets = new Insets(10, 0, 0, 0);
 		cs.gridx = 0;
@@ -116,7 +89,6 @@ public class TabRecepti extends JPanel{
 		
 		if(logedOn.getTipKorisnika() == TipKorisnika.APOTEKAR || logedOn.getTipKorisnika() == TipKorisnika.ADMINISTRATOR) {
 			addDrug.setVisible(false);
-			//delDrug.setVisible(false);
 			ct.setPreferredSize(new Dimension(700,440));
 			ct.tbl.setPreferredScrollableViewportSize(new Dimension(650,330));
 		}

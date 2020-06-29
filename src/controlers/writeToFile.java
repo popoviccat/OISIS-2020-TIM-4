@@ -31,7 +31,7 @@ public class writeToFile {
 	
 	public static void updateDatabaseKor(ArrayList<Korisnik> zapisiKorisnike) throws ClassNotFoundException, IOException {
 		/*ArrayList<Korisnik> zapisiKorisnike1 = new ArrayList<Korisnik>();
-		Korisnik kor1 = new Korisnik("admin", "admin", "Administrator", "Adminović", TipKorisnika.ADMINISTRATOR, false);
+		Korisnik kor1 = new Korisnik("admin", "admin", "Administrator", "Adminovic", TipKorisnika.ADMINISTRATOR, false);
 		zapisiKorisnike1.add(kor1);*/		// obnavlja bazu
 		
 		File f = new File("Korisnici.txt");
@@ -59,14 +59,6 @@ public class writeToFile {
 	}
 	
 	public static void updateDatabaseLek(ArrayList<Lek> Lekovi) throws ClassNotFoundException, IOException {
-		/*ArrayList<Lek> zapisiLekovi = new ArrayList<Lek>();
-		Lek lek1 = new Lek("N0000", "Brufen", "Galenika", true, 249, false);
-		Lek lek2 = new Lek("N0001", "Kafetin", "Alkaloid", false, 169, false);
-		Lek lek3 = new Lek("N0002", "Lorazepam", "Hemofarm", true, 409, false);
-		zapisiLekovi.add(lek1);		
-		zapisiLekovi.add(lek2);
-		zapisiLekovi.add(lek3);	*/		// obnavlja bazu
-		
 		
 		File f = new File("Lekovi.txt");
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
@@ -93,22 +85,6 @@ public class writeToFile {
 	}
 	
 	public static void updateDatabaseRec(ArrayList<Recept> Recepti) throws ClassNotFoundException, IOException {
-		/*ArrayList<Recept> zapisiRecepti = new ArrayList<Recept>();
-		ArrayList<Korisnik> ucitanikor = readFromFile.readFromFileKor();
-		ArrayList<Lek> ucitanilek = readFromFile.readFromFileLek();
-		Date date = new Date(System.currentTimeMillis());
-		
-		Recept rec1 = new Recept(1, ucitanikor.get(0).getKorisnickoIme(), "0501668836978", date);
-		rec1.dodajLek(ucitanilek.get(0), 1);
-		rec1.dodajLek(ucitanilek.get(6), 2);
-		Recept rec2 = new Recept(2, ucitanikor.get(1).getKorisnickoIme(), "3018668836978", date);
-		rec2.dodajLek(ucitanilek.get(0), 3);
-		Recept rec3 = new Recept(3, ucitanikor.get(2).getKorisnickoIme(), "1605668836978", date);
-		rec3.dodajLek(ucitanilek.get(2), 2);
-		zapisiRecepti.add(rec1);		
-		zapisiRecepti.add(rec2);
-		zapisiRecepti.add(rec3);		*/	// obnavlja bazu
-		
 		
 		File f = new File("Recepti.txt");
 		ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(f)));

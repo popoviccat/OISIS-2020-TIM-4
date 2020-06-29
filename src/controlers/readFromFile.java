@@ -37,18 +37,6 @@ public class readFromFile {
 		try {
 			ArrayList<Lek> ucitaniLekovi = new ArrayList<Lek>(); 
 			ucitaniLekovi = (ArrayList<Lek>)ois.readObject();
-	
-			/*System.out.println(ucitaniLekovi.get(ucitaniLekovi.size()-1));/*
-			System.out.println(ucitaniKorisnici.get(1));
-			System.out.println(ucitaniKorisnici.get(2));
-			System.out.println(ucitaniKorisnici.get(2).getLozinka());
-			int br = ucitaniKorisnici.size();
-			System.out.println(br);
-			for (int i = 0; i < br; i++) {
-				if (ucitaniKorisnici.get(i).getTipKorisnika() == TipKorisnika.LEKAR) {
-					System.out.println(ucitaniKorisnici.get(i).getIme());
-				}
-			}*/
 				
 			return ucitaniLekovi;
 		} finally {

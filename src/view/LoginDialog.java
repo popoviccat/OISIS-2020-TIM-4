@@ -48,7 +48,7 @@ public class LoginDialog extends JDialog{
 	        cs.gridwidth = 3;
 	        panel.add(lbText, cs);
 	 
-	        lbUsername = new JLabel("Korisničko ime: ");
+	        lbUsername = new JLabel("Korisnicko ime: ");
 	        cs.insets = new Insets(20, 0, 20, 0);
 	        cs.gridx = 0;
 	        cs.gridy = 1;
@@ -96,7 +96,7 @@ public class LoginDialog extends JDialog{
 							            "Netačno korisničko ime ili lozinka!",
 							            "Login to Apoteka",
 							            JOptionPane.ERROR_MESSAGE);
-							    // reset username and password
+							    
 							    tfUsername.setText("");
 							    pfPassword.setText("");
 							    succeeded = false;
@@ -151,17 +151,12 @@ public class LoginDialog extends JDialog{
 	        setLocationRelativeTo(parent);
 	    }
 	    
-	    /*private Korisnik logedOn;
-		  private LoginDialog loginDlg;
-	      logedOn = loginDlg.getLogedOnKor();
-	     */
-	    
 	    public Korisnik getLogedOnKor() throws ClassNotFoundException, IOException {
 			
 			ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
 			String korIme = tfUsername.getText();
 			for(int i=0; i<korisnici.size(); i++) {
-				if (korIme.equals((String)korisnici.get(i).getKorisnickoIme())) { //trazi isto ime
+				if (korIme.equals((String)korisnici.get(i).getKorisnickoIme())) {
 					logedOn = new Korisnik(korisnici.get(i).getKorisnickoIme(),
 							korisnici.get(i).getLozinka(), 
 							korisnici.get(i).getIme(), 

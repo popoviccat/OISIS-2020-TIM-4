@@ -27,10 +27,8 @@ import javax.swing.WindowConstants;
 import controlers.JTabbedPaneCloseButton;
 import controlers.MyMouseListener;
 import controlers.MyWindowListener;
-import controlers.writeToFile;
 import model.Korisnik;
 import model.Korpa;
-import model.Prodaja;
 import model.TipKorisnika;
 import view.LoginDialog;
 import view.TabIzvestaj;
@@ -46,19 +44,15 @@ public class main extends JFrame {
 	private JPanel mainToolbar;
 	private JPanel leftPanel;
 	private static JTabbedPaneCloseButton tabbedPane;
-	private Korisnik logedOn; //= new Korisnik("admin", "admin", "Admin", "Adminovic", TipKorisnika.ADMINISTRATOR, false);
-//	private Korisnik logedOn = new Korisnik("ana", "ana", "Ana", "Anic", TipKorisnika.APOTEKAR, false);
-//	private Korisnik logedOn = new Korisnik("laza", "laza", "Laza", "Lazic", TipKorisnika.APOTEKAR, false);
+	private Korisnik logedOn;
 	public static LoginDialog loginDlg;
+
+	private Korpa korpa;
+	private static main instance = null;
 
 	int tabNumber = 0;
 	Color peach = new Color(249, 229, 222);
 	Color mint = new Color(140, 208, 172);
-	
-	private Korpa korpa;
-
-	// ========================= Singleton obrazac
-	private static main instance = null;
 
 	private main() throws ClassNotFoundException, IOException {
 		this.createToolbar();
@@ -72,7 +66,6 @@ public class main extends JFrame {
 		}
 		return instance;
 	}
-	// =========================
 
 	private void createToolbar() throws ClassNotFoundException, IOException {
 		
@@ -82,14 +75,6 @@ public class main extends JFrame {
 		Icon logOut = new ImageIcon("images/logout.png");
 		logedOn = loginDlg.getLogedOnKor();
 
-		// ArrayList<Korisnik> korisnici = readFromFile.readFromFileKor();
-		// ArrayList<Lek> lek = new ArrayList<Lek>();
-		//ArrayList<Recept> rec = new ArrayList<Recept>();
-		//Prodaja prodaja = new Prodaja();
-		// writeToFile.updateDatabaseKor(korisnici);
-		// writeToFile.updateDatabaseLek(lek);
-		//writeToFile.updateDatabaseRec(rec);
-		//writeToFile.writeToFileProdaja(prodaja);
 		mainToolbar.setBackground(Color.WHITE);
 		mainToolbar.setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, Color.BLACK));
 		JLabel helloMessage = new JLabel("Zdravo, " + logedOn.getIme() + " " + logedOn.getPrezime() + "!");
@@ -156,9 +141,6 @@ public class main extends JFrame {
 
 	class ImagePanel extends JPanel {
 
-		/**
-		* 
-		*/
 		private static final long serialVersionUID = 1L;
 		private Image img;
 
@@ -346,14 +328,10 @@ public class main extends JFrame {
 		setResizable(false);
 	}
 
-	// dodavanje taba u TabbedPaned
 	private void addTab_KorisniciToTabbedPane() throws ClassNotFoundException, IOException {
 		String title = "Korisnici";
-		// ucitavanje ikonice
 		ImageIcon icon = createImageIcon("images/users.png", true);
-		// kreiranje instance MyTab
 		TabKorisnici mt = new TabKorisnici(title);
-		// dodavanje taba
 		tabbedPane.addTab(title, icon, mt);
 		tabbedPane.setSelectedIndex(tabbedPane.getTabCount()-1);
 	}
@@ -391,7 +369,6 @@ public class main extends JFrame {
 	}
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		//main.getInstance();
 		 login();
 	}
 
@@ -408,7 +385,7 @@ public class main extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				loginDlg = new LoginDialog(frame);
 				loginDlg.setVisible(true);
-				// if logon successfully
+				
 				if (loginDlg.isSucceeded()) {
 					try {
 						main.getInstance();
@@ -462,10 +439,10 @@ public class main extends JFrame {
 
 	protected static ImageIcon createImageIcon(String path, boolean scaleImage) {
 		if (scaleImage) {
-			ImageIcon imageIcon = new ImageIcon(path); // load the image to a imageIcon
-			Image image = imageIcon.getImage(); // transform it
-			Image newimg = image.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
-			imageIcon = new ImageIcon(newimg); // transform it back
+			ImageIcon imageIcon = new ImageIcon(path);
+			Image image = imageIcon.getImage();
+			Image newimg = image.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
 			return imageIcon;
 
 		} else {
