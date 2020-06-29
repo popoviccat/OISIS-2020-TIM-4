@@ -86,14 +86,14 @@ public class LoginDialog extends JDialog{
 		                try {
 							if (Login.authenticate(getUsername(), getPassword())) {
 							    JOptionPane.showMessageDialog(LoginDialog.this,
-							            "Zdravo " + getUsername() + "! Uspešno ste se ulogovali.",
+							            "Zdravo " + getUsername() + "! Uspesno ste se ulogovali.",
 							            "Login to Apoteka",
 							            JOptionPane.INFORMATION_MESSAGE);
 							    succeeded = true;
 							    dispose();
 							} else {
 							    JOptionPane.showMessageDialog(LoginDialog.this,
-							            "Netačno korisničko ime ili lozinka!",
+							            "Netacno korisnicko ime ili lozinka!",
 							            "Login to Apoteka",
 							            JOptionPane.ERROR_MESSAGE);
 							    
