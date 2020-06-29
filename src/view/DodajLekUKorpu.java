@@ -25,8 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import application.main;
 import controlers.readFromFile;
@@ -197,13 +195,7 @@ public class DodajLekUKorpu extends JDialog{
         				try {
 							main.getInstance().getKorpa().dodajLekUKorpu(l, getKolicina());
 						} catch (ClassNotFoundException | IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-        				
-        				try {
-							tabKorpa.initTabKorpa();
-						} catch (ClassNotFoundException | IOException e1) {
+							
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}

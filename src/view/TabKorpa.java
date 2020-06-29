@@ -112,7 +112,6 @@ public class TabKorpa extends JPanel{
 		cs.weighty = 1;
 		cs.gridwidth = 2;
 		cs.anchor = GridBagConstraints.CENTER;
-		//Prikazi da je korpa prazna u slucaju da nema nijednog artikla u njoj
 		if (korpa.getLekoviUKorpi().isEmpty()) {
 			
 			JPanel centerPanel = new JPanel();
